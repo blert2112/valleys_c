@@ -1,0 +1,18 @@
+Valleys Mapgen and much of the material in this project are distributed
+under the GNU GPL (http://www.gnu.org/licenses/gpl-3.0.en.html).
+The original source code can be found at the Valleys Mapgen project:
+https://github.com/Gael-de-Sailly/valleys_mapgen
+
+
+[ Note: If we want this to be a part of the minetest base code, this
+must be relicensed to be compatible. ]
+
+
+Parts of this project are distributed under the WTFPL license
+(https://en.wikipedia.org/wiki/WTFPL):
+ - all ferns_* image files in the textures directory
+ - most fern related code (deco_ferns.lua)
+
+All original work by Duane Robertson is distributed under the BSD
+license (https://en.wikipedia.org/wiki/Bsd_license), except where it
+would conflict with the GPL license of the original Valleys Mapgen.
