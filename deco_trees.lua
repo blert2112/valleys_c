@@ -73,11 +73,11 @@ for _, tree in ipairs(vmg.treelist) do
 			fixed = { {-radius, -0.5, -radius, radius, 0.5, radius}, }
 		}
 	end
-	minetest.register_node("valleys_mapgen:"..tree.name.."_tree", node_d)
+	minetest.register_node("valleys_c:"..tree.name.."_tree", node_d)
 
 	if tree.name ~= "banana" then
 		-- planks that come from the tree
-		minetest.register_node("valleys_mapgen:"..tree.name.."_wood", {
+		minetest.register_node("valleys_c:"..tree.name.."_wood", {
 			description = tree.desc.." Planks",
 			tiles = {"vmg_"..tree.name.."_wood.png"},
 			is_ground_content = true,
@@ -87,9 +87,9 @@ for _, tree in ipairs(vmg.treelist) do
 
 		-- how to get the planks
 		minetest.register_craft({
-			output = "valleys_mapgen:"..tree.name.."_wood 5",
+			output = "valleys_c:"..tree.name.."_wood 5",
 			recipe = {
-				{"valleys_mapgen:"..tree.name.."_tree"}
+				{"valleys_c:"..tree.name.."_tree"}
 			}
 		})
 
@@ -97,7 +97,7 @@ for _, tree in ipairs(vmg.treelist) do
 		if minetest.get_modpath("stairs") then
 			stairs.register_stair_and_slab(
 				"vmg_"..tree.name.."_tree",
-				"valleys_mapgen:"..tree.name.."_tree",
+				"valleys_c:"..tree.name.."_tree",
 				{snappy=1, choppy=2, oddly_breakable_by_hand=1, flammable=2 },
 				{	"vmg_"..tree.name.."_tree_top.png",
 					"vmg_"..tree.name.."_tree_top.png",
@@ -109,7 +109,7 @@ for _, tree in ipairs(vmg.treelist) do
 			)
 			stairs.register_stair_and_slab(
 				"vmg_"..tree.name.."_wood",
-				"valleys_mapgen:"..tree.name.."_wood",
+				"valleys_c:"..tree.name.."_wood",
 				{ snappy=1, choppy=2, oddly_breakable_by_hand=2, flammable=3 },
 				{"vmg_"..tree.name.."_wood.png" },
 				tree.desc.." Planks Stair",
@@ -120,7 +120,7 @@ for _, tree in ipairs(vmg.treelist) do
 	end
 
 	-- the tree's sapling form
-	minetest.register_node("valleys_mapgen:"..tree.name.."_sapling", {
+	minetest.register_node("valleys_c:"..tree.name.."_sapling", {
 		description = tree.desc.." Sapling",
 		drawtype = "plantlike",
 		visual_scale = 1.0,
@@ -139,7 +139,7 @@ for _, tree in ipairs(vmg.treelist) do
 	})
 
 	-- leaves for the tree
-	minetest.register_node("valleys_mapgen:"..tree.name.."_"..tree.leaf.."", {
+	minetest.register_node("valleys_c:"..tree.name.."_"..tree.leaf.."", {
 		description = tree.desc.." "..tree.leaf_desc.."",
 		drawtype = "allfaces_optional",
 		waving = 1,
@@ -151,8 +151,8 @@ for _, tree in ipairs(vmg.treelist) do
 		drop = {
 			max_items = 1,
 			items = {
-				{items = {"valleys_mapgen:"..tree.name.."_sapling"}, rarity = tree.drop_rarity },
-				{items = {"valleys_mapgen:"..tree.name.."_"..tree.leaf..""} }
+				{items = {"valleys_c:"..tree.name.."_sapling"}, rarity = tree.drop_rarity },
+				{items = {"valleys_c:"..tree.name.."_"..tree.leaf..""} }
 			}
 		},
 		sounds = default.node_sound_leaves_defaults(),
@@ -161,7 +161,7 @@ for _, tree in ipairs(vmg.treelist) do
 
 	-- appropriate fruit
 	if tree.fruit then
-		minetest.register_node("valleys_mapgen:"..tree.fruit.."", {
+		minetest.register_node("valleys_c:"..tree.fruit.."", {
 			description = tree.fruit_desc,
 			drawtype = "plantlike",
 			visual_scale = 1.0,
@@ -182,7 +182,7 @@ for _, tree in ipairs(vmg.treelist) do
 			sounds = default.node_sound_leaves_defaults(),
 			after_place_node = function(pos, placer, itemstack)
 				if placer:is_player() then
-					minetest.set_node(pos, {name="valleys_mapgen:"..tree.fruit.."", param2=1})
+					minetest.set_node(pos, {name="valleys_c:"..tree.fruit.."", param2=1})
 				end
 			end,
 		})
@@ -192,11 +192,11 @@ end
 
 -- list of all vmg-specific saplings
 vmg.saplings = {
-	{sapling="valleys_mapgen:banana_sapling",
+	{sapling="valleys_c:banana_sapling",
 	 schematics=vmg.schematics.banana_plants},
-	{sapling="valleys_mapgen:cherry_blossom_sapling",
+	{sapling="valleys_c:cherry_blossom_sapling",
 	 schematics=vmg.schematics.cherry_trees},
-	{sapling="valleys_mapgen:birch_sapling",
+	{sapling="valleys_c:birch_sapling",
 	 schematics=vmg.schematics.birch_trees},
  }
 

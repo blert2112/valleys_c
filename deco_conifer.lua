@@ -5,11 +5,11 @@
 -- Create different colored needles with the same properties.
 newnode = vmg.clone_node("default:pine_needles")
 newnode.tiles = {"default_pine_needles.png^[colorize:#FF0000:20"}
-minetest.register_node("valleys_mapgen:pine_needles2", newnode)
+minetest.register_node("valleys_c:pine_needles2", newnode)
 newnode.tiles = {"default_pine_needles.png^[colorize:#FFFF00:20"}
-minetest.register_node("valleys_mapgen:pine_needles3", newnode)
+minetest.register_node("valleys_c:pine_needles3", newnode)
 newnode.tiles = {"default_pine_needles.png^[colorize:#00FF00:20"}
-minetest.register_node("valleys_mapgen:pine_needles4", newnode)
+minetest.register_node("valleys_c:pine_needles4", newnode)
 
 
 -- similar to the general tree schematic, but basically vertical
@@ -66,7 +66,7 @@ end
 
 -- generic conifers
 vmg.schematics.conifer_trees = {}
-leaves = {"default:pine_needles", "valleys_mapgen:pine_needles2", "valleys_mapgen:pine_needles3", "valleys_mapgen:pine_needles4"}
+leaves = {"default:pine_needles", "valleys_c:pine_needles2", "valleys_c:pine_needles3", "valleys_c:pine_needles4"}
 for i = 1,#leaves do
 	local max_r = 4
 	for r = 2,max_r do

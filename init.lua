@@ -39,7 +39,7 @@ vmg.version = "1.0"
 
 
 -- path to all Valleys Mapgen code
-vmg.path = minetest.get_modpath("valleys_mapgen")
+vmg.path = minetest.get_modpath("valleys_c")
 
 
 -- Modify a node to add a group

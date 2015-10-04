@@ -1,5 +1,6 @@
 # valleys_c
 support code for the Valleys C++ mapgen
+
 https://github.com/duane-r/valleys_c
 
 This mod exists to support the C++ version of Valleys Mapgen for
@@ -18,4 +19,5 @@ systems (such as biomes and decorations).
 ## Changelog
 20151003 Moved the code to a separate repository, since it no longer
           shares any lua files with the original.
+
 20150922 Copied my working files up. It's a mess.

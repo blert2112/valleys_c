@@ -6,9 +6,9 @@
 
 newnode = vmg.clone_node("default:jungleleaves")
 newnode.tiles = {"default_jungleleaves.png^[colorize:#FF0000:10"}
-minetest.register_node("valleys_mapgen:jungleleaves2", newnode)
+minetest.register_node("valleys_c:jungleleaves2", newnode)
 newnode.tiles = {"default_jungleleaves.png^[colorize:#FFFF00:40"}
-minetest.register_node("valleys_mapgen:jungleleaves3", newnode)
+minetest.register_node("valleys_c:jungleleaves3", newnode)
 
 
 -- Create a schematic for a jungle tree.
@@ -92,7 +92,7 @@ end
 
 -- generic jungle trees
 vmg.schematics.jungle_trees = {}
-leaves = {"default:jungleleaves", "valleys_mapgen:jungleleaves2", "valleys_mapgen:jungleleaves3"}
+leaves = {"default:jungleleaves", "valleys_c:jungleleaves2", "valleys_c:jungleleaves3"}
 for i = 1,#leaves do
 	local max_h = 10
 	for h = 6,max_h do

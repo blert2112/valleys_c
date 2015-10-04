@@ -65,7 +65,7 @@ for _, plant in ipairs(vmg.plantlist) do
 		groups.color_white = 1
 	end
 
-	minetest.register_node("valleys_mapgen:"..plant.name, {
+	minetest.register_node("valleys_c:"..plant.name, {
 		description = plant.desc,
 		drawtype = "plantlike",
 		tiles = {"vmg_"..plant.name..".png"},
@@ -83,11 +83,11 @@ for _, plant in ipairs(vmg.plantlist) do
 	})
 
 	if plant.water then
-		minetest.register_node("valleys_mapgen:"..plant.name.."_water", {
+		minetest.register_node("valleys_c:"..plant.name.."_water", {
 			description = plant.desc,
 			drawtype = "nodebox",
 			node_box = {type='fixed', fixed={{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}, {-0.5, 0.5, -0.001, 0.5, 1.5, 0.001}, {-0.001, 0.5, -0.5, 0.001, 1.5, 0.5}}},
-			drop = "valleys_mapgen:"..plant.name,
+			drop = "valleys_c:"..plant.name,
 			tiles = { "default_sand.png", "vmg_"..plant.name..".png",},
 			sunlight_propagates = plant.light,
 			paramtype = "light",
@@ -115,7 +115,7 @@ local function register_flower(name, seed, biomes)
 		biomes = biomes,
 		y_min = 6,
 		y_max = 31000,
-		decoration = "valleys_mapgen:"..name,
+		decoration = "valleys_c:"..name,
 	}
 
 	-- Let rainforest plants show up more often.
@@ -146,7 +146,7 @@ do
 	-- Water Plant: Arrow Arum
 	vmg.register_water_plant({
 		fill_ratio = 0.1,
-		decoration = {"valleys_mapgen:arrow_arum_water",},
+		decoration = {"valleys_c:arrow_arum_water",},
 		biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
 		y_max = 60,
 	})

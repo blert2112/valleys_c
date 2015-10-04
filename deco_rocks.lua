@@ -80,7 +80,7 @@ do
 		--local stone = tiles[math.random(#tiles)]
 		local stone = tiles[(grid_count % #tiles) + 1]
 
-		minetest.register_node("valleys_mapgen:small_rocks"..grid_count, {
+		minetest.register_node("valleys_c:small_rocks"..grid_count, {
 			description = "Small Rocks",
 			tiles = {stone},
 			is_ground_content = true,
@@ -92,13 +92,13 @@ do
 			selection_box = { type = "fixed", 
 			                  fixed = {-0.5,-0.5,-0.5,0.5,-0.4,0.5} },
 			groups = {stone=1, oddly_breakable_by_hand=3},
-			drop = "valleys_mapgen:small_rocks",
+			drop = "valleys_c:small_rocks",
 			sounds = default.node_sound_stone_defaults(),
 		})
 
 		minetest.register_decoration({
 			deco_type = "simple",
-			decoration = "valleys_mapgen:small_rocks"..grid_count,
+			decoration = "valleys_c:small_rocks"..grid_count,
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass", "default:dirt_with_dry_grass", "default:dirt", "default:sand"},
 			fill_ratio = 0.002,
@@ -111,7 +111,7 @@ do
 	end
 
 	-- This is the inventory item, so we don't have six different stacks.
-	minetest.register_node("valleys_mapgen:small_rocks", {
+	minetest.register_node("valleys_c:small_rocks", {
 		description = "Small Rocks",
 		tiles = {"default_stone.png"},
 		inventory_image = "vmg_small_rocks.png",
@@ -137,7 +137,7 @@ do
 	for count = 1,9 do
 		local stone = tiles[(count % #tiles) + 1]
 
-		minetest.register_node("valleys_mapgen:medium_rock"..count, {
+		minetest.register_node("valleys_c:medium_rock"..count, {
 			description = "Medium Rock",
 			tiles = {stone},
 			is_ground_content = true,
@@ -153,7 +153,7 @@ do
 
 		minetest.register_decoration({
 			deco_type = "simple",
-			decoration = "valleys_mapgen:medium_rock"..count,
+			decoration = "valleys_c:medium_rock"..count,
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass", "default:dirt_with_dry_grass", "default:dirt", "default:sand"},
 			fill_ratio = 0.001,
@@ -170,8 +170,8 @@ minetest.register_craft({
 	output = "default:cobble",
 	recipe = {
 		{"", "", ""},
-		{"valleys_mapgen:small_rocks", "valleys_mapgen:small_rocks", ""},
-		{"valleys_mapgen:small_rocks", "valleys_mapgen:small_rocks", ""},
+		{"valleys_c:small_rocks", "valleys_c:small_rocks", ""},
+		{"valleys_c:small_rocks", "valleys_c:small_rocks", ""},
 	},
 })
 

@@ -12,7 +12,7 @@ function vmg.generate_banana_schematic(trunk_height)
 	-- the main trunk
 	for y = 0,trunk_height do
 		local i = (0+radius)*width*height + y*width + (0+radius) + 1
-		s.data[i].name = "valleys_mapgen:banana_tree"
+		s.data[i].name = "valleys_c:banana_tree"
 		s.data[i].param1 = 255
 	end
 
@@ -22,17 +22,17 @@ function vmg.generate_banana_schematic(trunk_height)
 			for z = -1,1 do
 				local i = (x+radius)*width*height + y*width + (z+radius) + 1
 				if y > height - 2 then
-					s.data[i].name = "valleys_mapgen:banana_leaves"
+					s.data[i].name = "valleys_c:banana_leaves"
 					if x == 0 and z == 0 then
 						s.data[i].param1 = 255
 					else
 						s.data[i].param1 = 127
 					end
 				elseif x == 0 and z == 0 then
-					s.data[i].name = "valleys_mapgen:banana_leaves"
+					s.data[i].name = "valleys_c:banana_leaves"
 					s.data[i].param1 = 255
 				elseif x ~= 0 or z ~= 0 then
-					s.data[i].name = "valleys_mapgen:banana"
+					s.data[i].name = "valleys_c:banana"
 					s.data[i].param1 = 75
 				end
 			end

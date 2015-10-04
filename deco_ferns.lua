@@ -18,7 +18,7 @@ if not abstract_ferns then
 	local sizes = {1,2,2.2}
 
 	for s = 1,max_s do
-		local fern_name = "valleys_mapgen:fern_"..string.format("%02d", s)
+		local fern_name = "valleys_c:fern_"..string.format("%02d", s)
 		minetest.register_node(fern_name, {
 			description = "Lady-fern (Athyrium)",
 			inventory_image = "ferns_fern.png",
@@ -34,7 +34,7 @@ if not abstract_ferns then
 				type = "fixed",
 				fixed = {-7/16, -1/2, -7/16, 7/16, 0, 7/16},
 			},
-			drop = "valleys_mapgen:fern_01",
+			drop = "valleys_c:fern_01",
 		})
 
 		minetest.register_decoration({
@@ -81,11 +81,11 @@ if not abstract_ferns then
 	}
 
 	for i = 1, 4 do
-		local node_name = "valleys_mapgen:horsetail_" .. string.format("%02d", i)
+		local node_name = "valleys_c:horsetail_" .. string.format("%02d", i)
 		local node_img = "ferns_horsetail_" .. string.format("%02d", i) .. ".png"
 		local node_desc
 		local node_on_use = nil
-		local node_drop = "valleys_mapgen:horsetail_04"
+		local node_drop = "valleys_c:horsetail_04"
 
 		if i == 1 then
 			node_desc = "Young Horsetail (Equisetum)"
@@ -132,37 +132,37 @@ if not abstract_ferns then
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = "valleys_mapgen:fiddlehead 3",
-		recipe = {"valleys_mapgen:fern_01"},
+		output = "valleys_c:fiddlehead 3",
+		recipe = {"valleys_c:fern_01"},
 		replacements = {
-			{"valleys_mapgen:fern_01", "valleys_mapgen:ferntuber"}
+			{"valleys_c:fern_01", "valleys_c:ferntuber"}
 		},
 	})
 
 	minetest.register_craft({
 		type = "shapeless",
-		output = "valleys_mapgen:fiddlehead 3",
-		recipe = {"valleys_mapgen:tree_fern_leaves"},
+		output = "valleys_c:fiddlehead 3",
+		recipe = {"valleys_c:tree_fern_leaves"},
 		replacements = {
-			{"valleys_mapgen:tree_fern_leaves", "valleys_mapgen:sapling_tree_fern"}
+			{"valleys_c:tree_fern_leaves", "valleys_c:sapling_tree_fern"}
 		},
 	})
 
 	-----------------------
 	-- FIDDLEHEAD
 	-----------------------
-	minetest.register_craftitem("valleys_mapgen:fiddlehead", {
+	minetest.register_craftitem("valleys_c:fiddlehead", {
 		description = "Fiddlehead",
 		inventory_image = "ferns_fiddlehead.png",
 		on_use = minetest.item_eat(-1), -- slightly poisonous when raw
 	})
 	minetest.register_craft({
 		type = "cooking",
-		output = "valleys_mapgen:fiddlehead_roasted",
-		recipe = "valleys_mapgen:fiddlehead",
+		output = "valleys_c:fiddlehead_roasted",
+		recipe = "valleys_c:fiddlehead",
 		cooktime = 1,
 	})
-	minetest.register_craftitem("valleys_mapgen:fiddlehead_roasted", {
+	minetest.register_craftitem("valleys_c:fiddlehead_roasted", {
 		description = "Roasted Fiddlehead",
 		inventory_image = "ferns_fiddlehead_roasted.png",
 		on_use = minetest.item_eat(1), -- edible when cooked
@@ -171,22 +171,22 @@ if not abstract_ferns then
 	------------------
 	-- FERN TUBER
 	------------------
-	minetest.register_alias("archaeplantae:ferntuber",      "valleys_mapgen:ferntuber")
+	minetest.register_alias("archaeplantae:ferntuber",      "valleys_c:ferntuber")
 
-	minetest.register_craftitem("valleys_mapgen:ferntuber", {
+	minetest.register_craftitem("valleys_c:ferntuber", {
 		description = "Fern Tuber",
 		inventory_image = "ferns_ferntuber.png",
 	})
 	minetest.register_craft({
 		type = "cooking",
-		output = "valleys_mapgen:ferntuber_roasted",
-		recipe = "valleys_mapgen:ferntuber",
+		output = "valleys_c:ferntuber_roasted",
+		recipe = "valleys_c:ferntuber",
 		cooktime = 3,
 	})
 
-	minetest.register_alias("archaeplantae:ferntuber_roasted",      "valleys_mapgen:ferntuber_roasted")
+	minetest.register_alias("archaeplantae:ferntuber_roasted",      "valleys_c:ferntuber_roasted")
 
-	minetest.register_craftitem("valleys_mapgen:ferntuber_roasted", {
+	minetest.register_craftitem("valleys_c:ferntuber_roasted", {
 		description = "Roasted Fern Tuber",
 		inventory_image = "ferns_ferntuber_roasted.png",
 		on_use = minetest.item_eat(3),

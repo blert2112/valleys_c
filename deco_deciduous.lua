@@ -5,13 +5,13 @@
 -- Make some leaves of different colors (but the same properties).
 local newnode = vmg.clone_node("default:leaves")
 newnode.tiles = {"default_leaves.png^[colorize:#FF0000:20"}
-minetest.register_node("valleys_mapgen:leaves2", newnode)
+minetest.register_node("valleys_c:leaves2", newnode)
 newnode.tiles = {"default_leaves.png^[colorize:#FFFF00:20"}
-minetest.register_node("valleys_mapgen:leaves3", newnode)
+minetest.register_node("valleys_c:leaves3", newnode)
 newnode.tiles = {"default_leaves.png^[colorize:#00FFFF:20"}
-minetest.register_node("valleys_mapgen:leaves4", newnode)
+minetest.register_node("valleys_c:leaves4", newnode)
 newnode.tiles = {"default_leaves.png^[colorize:#00FF00:20"}
-minetest.register_node("valleys_mapgen:leaves5", newnode)
+minetest.register_node("valleys_c:leaves5", newnode)
 
 
 -- create a schematic for a spherical tree.
@@ -102,7 +102,7 @@ end
 
 -- generic deciduous trees
 vmg.schematics.deciduous_trees = {}
-local leaves = {"default:leaves", "valleys_mapgen:leaves2", "valleys_mapgen:leaves3", "valleys_mapgen:leaves4", "valleys_mapgen:leaves5"}
+local leaves = {"default:leaves", "valleys_c:leaves2", "valleys_c:leaves3", "valleys_c:leaves4", "valleys_c:leaves5"}
 for i = 1,#leaves do
 	local max_r = 6
 	local fruit = nil
@@ -145,7 +145,7 @@ do
 	local fruit = nil
 
 	for r = 2,max_r do
-		local schem = vmg.generate_tree_schematic(2, {x=r, y=r, z=r}, "valleys_mapgen:cherry_blossom_tree", "valleys_mapgen:cherry_blossom_leaves", fruit)
+		local schem = vmg.generate_tree_schematic(2, {x=r, y=r, z=r}, "valleys_c:cherry_blossom_tree", "valleys_c:cherry_blossom_leaves", fruit)
 
 		push(vmg.schematics.cherry_trees, schem)
 
@@ -168,7 +168,7 @@ do
 	local max_h = 4
 
 	for h = 2,max_h do
-		local schem = vmg.generate_tree_schematic(h, {x=2, y=3, z=2}, "valleys_mapgen:birch_tree", "valleys_mapgen:birch_leaves")
+		local schem = vmg.generate_tree_schematic(h, {x=2, y=3, z=2}, "valleys_c:birch_tree", "valleys_c:birch_leaves")
 
 		push(vmg.schematics.birch_trees, schem)
 
