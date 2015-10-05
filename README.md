@@ -5,7 +5,7 @@ https://github.com/duane-r/valleys_c
 
 This mod exists to support the C++ version of Valleys Mapgen for
 Minetest, written by Duane Robertson as a port of Gael-de-Sailly's
-lua-based mapgen. (https://github.com/duane-r/minetest)
+lua-based mapgen. (https://github.com/duane-r/minetest/tree/valleys_c)
 
 The goal of the combined project is not to replicate Valleys Mapgen,
 but to use the remarkable algorithms Gael-de-Sailly created to make
