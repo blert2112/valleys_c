@@ -7,7 +7,7 @@
 newnode = vmg.clone_node("default:jungleleaves")
 newnode.tiles = {"default_jungleleaves.png^[colorize:#FF0000:10"}
 minetest.register_node("valleys_c:jungleleaves2", newnode)
-newnode.tiles = {"default_jungleleaves.png^[colorize:#FFFF00:40"}
+newnode.tiles = {"default_jungleleaves.png^[colorize:#FFFF00:30"}
 minetest.register_node("valleys_c:jungleleaves3", newnode)
 
 
@@ -94,8 +94,8 @@ end
 vmg.schematics.jungle_trees = {}
 leaves = {"default:jungleleaves", "valleys_c:jungleleaves2", "valleys_c:jungleleaves3"}
 for i = 1,#leaves do
-	local max_h = 10
-	for h = 6,max_h do
+	local max_h = 7
+	for h = 5,max_h do
 		local schem = vmg.generate_jungle_tree_schematic(h*2, "default:jungletree", leaves[i])
 
 		push(vmg.schematics.jungle_trees, schem)
@@ -104,7 +104,7 @@ for i = 1,#leaves do
 			deco_type = "schematic",
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass",},
-			fill_ratio = (max_h-h+1)/1500,
+			fill_ratio = (max_h-h+1)/1200,
 			biomes = {"rainforest", "rainforest_swamp",},
 			schematic = schem,
 			flags = "place_center_x, place_center_z",

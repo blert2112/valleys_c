@@ -4,11 +4,11 @@
 
 -- Create different colored needles with the same properties.
 newnode = vmg.clone_node("default:pine_needles")
-newnode.tiles = {"default_pine_needles.png^[colorize:#FF0000:20"}
+newnode.tiles = {"default_pine_needles.png^[colorize:#FF0000:15"}
 minetest.register_node("valleys_c:pine_needles2", newnode)
-newnode.tiles = {"default_pine_needles.png^[colorize:#FFFF00:20"}
+newnode.tiles = {"default_pine_needles.png^[colorize:#FFFF00:15"}
 minetest.register_node("valleys_c:pine_needles3", newnode)
-newnode.tiles = {"default_pine_needles.png^[colorize:#00FF00:20"}
+newnode.tiles = {"default_pine_needles.png^[colorize:#00FF00:15"}
 minetest.register_node("valleys_c:pine_needles4", newnode)
 
 

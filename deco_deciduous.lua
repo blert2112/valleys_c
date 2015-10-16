@@ -4,13 +4,13 @@
 
 -- Make some leaves of different colors (but the same properties).
 local newnode = vmg.clone_node("default:leaves")
-newnode.tiles = {"default_leaves.png^[colorize:#FF0000:20"}
+newnode.tiles = {"default_leaves.png^[colorize:#FF0000:15"}
 minetest.register_node("valleys_c:leaves2", newnode)
-newnode.tiles = {"default_leaves.png^[colorize:#FFFF00:20"}
+newnode.tiles = {"default_leaves.png^[colorize:#FFFF00:15"}
 minetest.register_node("valleys_c:leaves3", newnode)
-newnode.tiles = {"default_leaves.png^[colorize:#00FFFF:20"}
+newnode.tiles = {"default_leaves.png^[colorize:#00FFFF:15"}
 minetest.register_node("valleys_c:leaves4", newnode)
-newnode.tiles = {"default_leaves.png^[colorize:#00FF00:20"}
+newnode.tiles = {"default_leaves.png^[colorize:#00FF00:15"}
 minetest.register_node("valleys_c:leaves5", newnode)
 
 
@@ -120,7 +120,7 @@ for i = 1,#leaves do
 			deco_type = "schematic",
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass", "default:dirt_with_dry_grass"},
-			fill_ratio = (max_r-r+1)/1500,
+			fill_ratio = (max_r-r+1)/1700,
 			biomes = {"deciduous_forest",},
 			schematic = schem,
 			flags = "place_center_x, place_center_z",

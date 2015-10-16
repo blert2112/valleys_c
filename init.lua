@@ -35,6 +35,7 @@ end
 
 -- the mod object
 vmg = {}
+vmg.branch = "c"
 vmg.version = "1.0"
 
 
