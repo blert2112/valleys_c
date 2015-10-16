@@ -12,7 +12,7 @@ but to use the remarkable algorithms Gael-de-Sailly created to make
 a more traditional mapgen, compatible with the standard Minetest
 systems (such as biomes and decorations).
 
-![Screenshot](http://duanerobertson.com/img/c-demo-14.jpg)
+![Screenshot](https://github.com/duane-r/valleys_c/raw/master/screenshots/screenshot-01.jpg)
 
 [Discussion on Minetest Forums](https://forum.minetest.net/viewtopic.php?f=9&t=11430)
 
