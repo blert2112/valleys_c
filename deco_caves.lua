@@ -61,10 +61,14 @@ minetest.register_craft({
 })
 
 -- Caps can be cooked and eaten.
-minetest.register_craftitem("valleys_c:mushroom_steak", {
+minetest.register_node("valleys_c:mushroom_steak", {
 	description = "Mushroom Steak",
+	drawtype = "plantlike",
+	paramtype = "light",
+	tiles = {"vmg_mushroom_steak.png"},
 	inventory_image = "vmg_mushroom_steak.png",
 	on_use = minetest.item_eat(4),
+	groups = {dig_immediate = 3, attached_node = 1},
 })
 
 minetest.register_craft({
@@ -94,13 +98,22 @@ minetest.register_node("valleys_c:glowing_fungal_stone", {
 
 minetest.register_node("valleys_c:glowing_fungus", {
 	description = "Glowing Fungus",
+	drawtype = "plantlike",
+	paramtype = "light",
+	tiles = {"vmg_glowing_fungus.png"},
 	inventory_image = "vmg_glowing_fungus.png",
+	groups = {dig_immediate = 3, attached_node = 1},
 })
 
 -- The fungus can be made into juice and then into glowing glass.
 minetest.register_node("valleys_c:moon_juice", {
 	description = "Moon Juice",
+	drawtype = "plantlike",
+	paramtype = "light",
+	tiles = {"vmg_moon_juice.png"},
 	inventory_image = "vmg_moon_juice.png",
+	groups = {dig_immediate = 3, attached_node = 1},
+	sounds = default.node_sound_glass_defaults(),
 })
 
 minetest.register_node("valleys_c:moon_glass", {
@@ -108,7 +121,7 @@ minetest.register_node("valleys_c:moon_glass", {
 	drawtype = "glasslike",
 	tiles = {"default_glass.png",},
 	is_ground_content = true,
-	light_source = 14,
+	light_source = default.LIGHT_MAX,
 	groups = {cracky=3},
 	sounds = default.node_sound_glass_defaults(),
 })
