@@ -8,20 +8,6 @@
 --    https://github.com/duane-r/minetest
 
 
--- Debugging code. Remove this.
-if false then
-	print("biome_id test")
-	local i = minetest.get_biome_id()
-	print(type(i))
-	if i == nil then
-		print("= nil")
-	end
-	print((minetest.get_biome_id("ienasiten")))
-	print(minetest.get_biome_id("coniferous_forest"))
-	return
-end
-
-
 -- Check for necessary mod functions and abort if they aren't available.
 if not minetest.get_biome_id then
 	print()
@@ -34,13 +20,13 @@ end
 
 
 -- the mod object
-vmg = {}
-vmg.branch = "c"
-vmg.version = "1.0"
+valc = {}
+valc.version = "1.0"
+valc.noleafdecay = false
 
 
 -- path to all Valleys Mapgen code
-vmg.path = minetest.get_modpath("valleys_c")
+valc.path = minetest.get_modpath("valleys_c")
 
 
 -- Modify a node to add a group
@@ -100,7 +86,7 @@ function push(t, x)
 	t[#t+1] = x
 end
 
-function vmg.clone_node(name)
+function valc.clone_node(name)
 	local node = minetest.registered_nodes[name]
 	local node2 = table.copy(node)
 	return node2
@@ -113,14 +99,14 @@ minetest.override_item("default:river_water_source", {is_ground_content = true})
 
 
 -- Execute each section of the code.
---dofile(vmg.path.."/biomes.lua")
-dofile(vmg.path.."/deco.lua")
-dofile(vmg.path.."/voxel.lua")
+--dofile(valc.path.."/biomes.lua")
+dofile(valc.path.."/deco.lua")
+dofile(valc.path.."/voxel.lua")
 
 
--- Call the mapgen function vmg.generate on mapgen.
+-- Call the mapgen function valc.generate on mapgen.
 --  (located in voxel.lua)
-minetest.register_on_generated(vmg.generate)
+minetest.register_on_generated(valc.generate)
 
 
 print("Valleys Mapgen C++ Helper loaded")

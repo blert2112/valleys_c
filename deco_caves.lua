@@ -120,6 +120,7 @@ minetest.register_node("valleys_c:moon_glass", {
 	description = "Moon Glass",
 	drawtype = "glasslike",
 	tiles = {"default_glass.png",},
+	inventory_image = minetest.inventorycube("default_glass.png"),
 	is_ground_content = true,
 	light_source = default.LIGHT_MAX,
 	groups = {cracky=3},
@@ -137,10 +138,11 @@ minetest.register_craft({
 
 minetest.register_craft({
 	output = "valleys_c:moon_glass",
+	type = "shapeless",
 	recipe = {
-		{"", "valleys_c:moon_juice", ""},
-		{"", "valleys_c:moon_juice", ""},
-		{"", "default:glass", ""},
+		"valleys_c:moon_juice",
+		"valleys_c:moon_juice",
+		"default:glass",
 	},
 })
 

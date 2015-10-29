@@ -1,12 +1,12 @@
 -- Greatly abbreviated...
--- This file is a shell which can be used to adapt the existing vmg code to
+-- This file is a shell which can be used to adapt the existing valc code to
 --  the C++ version, using voxelmanip to place everything.
 -- This is NOT a good strategy for the long run, as it ignores all the
 --  existing systems in the game, but it's easier. Our goal should be
 --  to avoid this method.
 
 -- THE MAPGEN FUNCTION
-function vmg.generate(minp, maxp, seed)
+function valc.generate(minp, maxp, seed)
 	-- minp and maxp strings, used by logs
 	local minps, maxps = minetest.pos_to_string(minp), minetest.pos_to_string(maxp)
 
@@ -70,7 +70,7 @@ function vmg.generate(minp, maxp, seed)
 			end
 			if y >= minp.y and y < maxp.y then
 				if data[ivm] == c_dirt_with_grass or data[ivm] == c_dirt then
-					vmg.decorate(vm, x, y, z, heatmap[i], humiditymap[i])
+					valc.decorate(vm, x, y, z, heatmap[i], humiditymap[i])
 				else
 -- 					local s = minetest.get_name_from_content_id(data[ivm])
 -- 					if s ~= "air" then
@@ -88,6 +88,6 @@ function vmg.generate(minp, maxp, seed)
 	vm:write_to_map()
 end
 
-function vmg.decorate(vm, x, y, z, heat, humidity)
+function valc.decorate(vm, x, y, z, heat, humidity)
 		print(x..","..y..","..z..", heat: "..heat..", humidity: "..humidity)
 end

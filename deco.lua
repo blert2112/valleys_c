@@ -15,7 +15,7 @@ minetest.register_ore({ore_type="sheet", ore="default:desert_stone", wherein="de
 -- Some sand with rocks for the river beds.
 --  This drops small rocks as well.
 do
-	local newnode = vmg.clone_node("default:sand")
+	local newnode = valc.clone_node("default:sand")
 	newnode.tiles = {"vmg_sand_with_rocks.png"}
 	newnode.drop = {max_items=2, items={{items={"valleys_c:small_rocks"}, rarity=1}, {items={"default:sand"}, rarity=1}}}
 	minetest.register_node("valleys_c:sand_with_rocks", newnode)
@@ -51,7 +51,7 @@ end
 
 
 -- Create and initialize a table for a schematic.
-function vmg.schematic_array(width, height, depth)
+function valc.schematic_array(width, height, depth)
 	-- Dimensions of data array.
 	local s = {size={x=width, y=height, z=depth}}
 	s.data = {}
@@ -77,15 +77,15 @@ end
 minetest.clear_registered_decorations()
 
 -- A list of all schematics, for re-use.
-vmg.schematics = {}
+valc.schematics = {}
 
 
 -- Specific decoration code.
-dofile(vmg.path.."/deco_trees.lua")
-dofile(vmg.path.."/deco_plants.lua")
-dofile(vmg.path.."/deco_rocks.lua")
-dofile(vmg.path.."/deco_caves.lua")
-dofile(vmg.path.."/deco_ferns.lua")
+dofile(valc.path.."/deco_trees.lua")
+dofile(valc.path.."/deco_plants.lua")
+dofile(valc.path.."/deco_rocks.lua")
+dofile(valc.path.."/deco_caves.lua")
+dofile(valc.path.."/deco_ferns.lua")
 
 
 	-- biomes = {"sandstone_grassland", "glacier", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},

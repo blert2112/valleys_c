@@ -4,7 +4,7 @@
 
 -- Create different colored leaves with the same properties.
 
-newnode = vmg.clone_node("default:jungleleaves")
+newnode = valc.clone_node("default:jungleleaves")
 newnode.tiles = {"default_jungleleaves.png^[colorize:#FF0000:10"}
 minetest.register_node("valleys_c:jungleleaves2", newnode)
 newnode.tiles = {"default_jungleleaves.png^[colorize:#FFFF00:30"}
@@ -12,13 +12,13 @@ minetest.register_node("valleys_c:jungleleaves3", newnode)
 
 
 -- Create a schematic for a jungle tree.
-function vmg.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
+function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 	local height = trunk_height * 2
 	local radius = 6
 	local width = 2 * radius + 1
 	local trunk_top = height - 4
 
-	local s = vmg.schematic_array(width, height, width)
+	local s = valc.schematic_array(width, height, width)
 
 	-- roots, trunk, and extra leaves
 	for x = -1,1 do
@@ -51,7 +51,7 @@ function vmg.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 				local i = (j*x + radius)*width*height + y*width + (j*z + radius) + 1
 				s.data[i].name = trunk
 				s.data[i].param1 = 255
-				vmg.generate_canopy(s, leaf, {x=j*x, y=y, z=j*z})
+				valc.generate_canopy(s, leaf, {x=j*x, y=y, z=j*z})
 			end
 		end
 	end
@@ -60,7 +60,7 @@ function vmg.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 end
 
 -- Create a canopy of leaves.
-function vmg.generate_canopy(s, leaf, pos)
+function valc.generate_canopy(s, leaf, pos)
 	local height = s.size.y
 	local width = s.size.x
 	local rx = math.floor(s.size.x / 2)
@@ -91,14 +91,14 @@ function vmg.generate_canopy(s, leaf, pos)
 end
 
 -- generic jungle trees
-vmg.schematics.jungle_trees = {}
+valc.schematics.jungle_trees = {}
 leaves = {"default:jungleleaves", "valleys_c:jungleleaves2", "valleys_c:jungleleaves3"}
 for i = 1,#leaves do
 	local max_h = 7
 	for h = 5,max_h do
-		local schem = vmg.generate_jungle_tree_schematic(h*2, "default:jungletree", leaves[i])
+		local schem = valc.generate_jungle_tree_schematic(h*2, "default:jungletree", leaves[i])
 
-		push(vmg.schematics.jungle_trees, schem)
+		push(valc.schematics.jungle_trees, schem)
 
 		minetest.register_decoration({
 			deco_type = "schematic",
@@ -115,7 +115,7 @@ end
 
 -- Place the schematic when a sapling grows.
 function default.grow_new_jungle_tree(pos, bad)
-	local schem = vmg.schematics.jungle_trees[math.random(1,#vmg.schematics.jungle_trees)]
+	local schem = valc.schematics.jungle_trees[math.random(1,#valc.schematics.jungle_trees)]
 	local adj = {x = pos.x - math.floor(schem.size.x / 2),
 	             y = pos.y - 1,
 	             z = pos.z - math.floor(schem.size.z / 2)}

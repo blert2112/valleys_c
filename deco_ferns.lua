@@ -32,7 +32,7 @@ if not abstract_ferns then
 			sounds = default.node_sound_leaves_defaults(),
 			selection_box = {
 				type = "fixed",
-				fixed = {-7/16, -1/2, -7/16, 7/16, 0, 7/16},
+				fixed = {-0.5, -0.5, -0.5, 0.5, -5/16, 0.5},
 			},
 			drop = "valleys_c:fern_01",
 		})
@@ -73,13 +73,6 @@ if not abstract_ferns then
 
 	local node_names = {}
 
-	local selection_boxes = {
-		{ -0.15, -1/2, -0.15, 0.15, -1/16, 0.15 },
-		{ -0.15, -1/2, -0.15, 0.15, 1/16, 0.15 },
-		{ -0.15, -1/2, -0.15, 0.15, 4/16, 0.15 },
-		{ -0.15, -1/2, -0.15, 0.15, 7/16, 0.15 },
-	}
-
 	for i = 1, 4 do
 		local node_name = "valleys_c:horsetail_" .. string.format("%02d", i)
 		local node_img = "ferns_horsetail_" .. string.format("%02d", i) .. ".png"
@@ -109,7 +102,7 @@ if not abstract_ferns then
 			sounds = default.node_sound_leaves_defaults(),
 			selection_box = {
 				type = "fixed",
-				fixed = selection_boxes[i],
+				fixed = {-0.5, -0.5, -0.5, 0.5, -5/16, 0.5},
 			},
 			on_use = node_on_use,
 			drop = node_drop,

@@ -3,7 +3,10 @@
 ---------------------
 
 -- Make some leaves of different colors (but the same properties).
-local newnode = vmg.clone_node("default:leaves")
+local newnode = valc.clone_node("default:leaves")
+if valc.noleafdecay then
+	newnode.groups.leafdecay = 0
+end
 newnode.tiles = {"default_leaves.png^[colorize:#FF0000:15"}
 minetest.register_node("valleys_c:leaves2", newnode)
 newnode.tiles = {"default_leaves.png^[colorize:#FFFF00:15"}
@@ -15,13 +18,13 @@ minetest.register_node("valleys_c:leaves5", newnode)
 
 
 -- create a schematic for a spherical tree.
-function vmg.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, limbs)
+function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, limbs)
 	-- trunk_height refers to the amount of trunk visible below any leaves.
 	local height = trunk_height + radii.y * 2 + 1
 	local width = 2 * radii.z + 1
 	local trunk_top = height-radii.y-1
 
-	local s = vmg.schematic_array(width, height, width)
+	local s = valc.schematic_array(width, height, width)
 
 	-- the main trunk
 	for y = 0,trunk_top do
@@ -31,7 +34,7 @@ function vmg.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, li
 	end
 
 	-- some leaves for free
-	vmg.generate_leaves(s, leaf, {x=0, y=trunk_top, z=0}, radii.x, fruit)
+	valc.generate_leaves(s, leaf, {x=0, y=trunk_top, z=0}, radii.x, fruit)
 
 	-- Specify a table of limb positions...
 	if radii.x > 3 and limbs then
@@ -39,7 +42,7 @@ function vmg.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, li
 			local i = (p.x+radii.x)*width*height + p.y*width + (p.z+radii.z) + 1
 			s.data[i].name = trunk
 			s.data[i].param1 = 255
-			vmg.generate_leaves(s, leaf, p, radii.x, fruit, true)
+			valc.generate_leaves(s, leaf, p, radii.x, fruit, true)
 		end
 		-- or just do it randomly.
 	elseif radii.x > 3 then
@@ -53,7 +56,7 @@ function vmg.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, li
 
 							s.data[i].name = trunk
 							s.data[i].param1 = 255
-							vmg.generate_leaves(s, leaf, {x=x, y=trunk_top+y, z=z}, radii.x, fruit, true)
+							valc.generate_leaves(s, leaf, {x=x, y=trunk_top+y, z=z}, radii.x, fruit, true)
 						end
 					end
 				end
@@ -65,7 +68,7 @@ function vmg.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, li
 end
 
 -- Create a spheroid of leaves.
-function vmg.generate_leaves(s, leaf, pos, radius, fruit, adjust)
+function valc.generate_leaves(s, leaf, pos, radius, fruit, adjust)
 	local height = s.size.y
 	local width = s.size.x
 	local rx = math.floor(s.size.x / 2)
@@ -101,7 +104,7 @@ function vmg.generate_leaves(s, leaf, pos, radius, fruit, adjust)
 end
 
 -- generic deciduous trees
-vmg.schematics.deciduous_trees = {}
+valc.schematics.deciduous_trees = {}
 local leaves = {"default:leaves", "valleys_c:leaves2", "valleys_c:leaves3", "valleys_c:leaves4", "valleys_c:leaves5"}
 for i = 1,#leaves do
 	local max_r = 6
@@ -112,9 +115,9 @@ for i = 1,#leaves do
 	end
 
 	for r = 3,max_r do
-		local schem = vmg.generate_tree_schematic(2, {x=r, y=r, z=r}, "default:tree", leaves[i], fruit)
+		local schem = valc.generate_tree_schematic(2, {x=r, y=r, z=r}, "default:tree", leaves[i], fruit)
 
-		push(vmg.schematics.deciduous_trees, schem)
+		push(valc.schematics.deciduous_trees, schem)
 
 		minetest.register_decoration({
 			deco_type = "schematic",
@@ -131,7 +134,7 @@ end
 
 -- Place the schematic when a sapling grows.
 function default.grow_new_apple_tree(pos, bad)
-	local schem = vmg.schematics.deciduous_trees[math.random(1,#vmg.schematics.deciduous_trees)]
+	local schem = valc.schematics.deciduous_trees[math.random(1,#valc.schematics.deciduous_trees)]
 	local adj = {x = pos.x - math.floor(schem.size.x / 2),
 	             y = pos.y - 1,
 	             z = pos.z - math.floor(schem.size.z / 2)}
@@ -139,15 +142,15 @@ function default.grow_new_apple_tree(pos, bad)
 end
 
 -- Cherries
-vmg.schematics.cherry_trees = {}
+valc.schematics.cherry_trees = {}
 do
 	local max_r = 3
 	local fruit = nil
 
 	for r = 2,max_r do
-		local schem = vmg.generate_tree_schematic(2, {x=r, y=r, z=r}, "valleys_c:cherry_blossom_tree", "valleys_c:cherry_blossom_leaves", fruit)
+		local schem = valc.generate_tree_schematic(2, {x=r, y=r, z=r}, "valleys_c:cherry_blossom_tree", "valleys_c:cherry_blossom_leaves", fruit)
 
-		push(vmg.schematics.cherry_trees, schem)
+		push(valc.schematics.cherry_trees, schem)
 
 		minetest.register_decoration({
 			deco_type = "schematic",
@@ -163,14 +166,14 @@ do
 end
 
 -- Birch trees
-vmg.schematics.birch_trees = {}
+valc.schematics.birch_trees = {}
 do
 	local max_h = 4
 
 	for h = 2,max_h do
-		local schem = vmg.generate_tree_schematic(h, {x=2, y=3, z=2}, "valleys_c:birch_tree", "valleys_c:birch_leaves")
+		local schem = valc.generate_tree_schematic(h, {x=2, y=3, z=2}, "valleys_c:birch_tree", "valleys_c:birch_leaves")
 
-		push(vmg.schematics.birch_trees, schem)
+		push(valc.schematics.birch_trees, schem)
 
 		minetest.register_decoration({
 			deco_type = "schematic",

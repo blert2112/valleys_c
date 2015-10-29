@@ -3,11 +3,11 @@
 -------------------
 
 -- A shock of leaves at the top and some fruit.
-function vmg.generate_banana_schematic(trunk_height)
+function valc.generate_banana_schematic(trunk_height)
 	local height = trunk_height + 3
 	local radius = 1
 	local width = 3
-	local s = vmg.schematic_array(width, height, width)
+	local s = valc.schematic_array(width, height, width)
 
 	-- the main trunk
 	for y = 0,trunk_height do
@@ -44,13 +44,13 @@ end
 
 
 -- banana plant (It's not a tree.)
-vmg.schematics.banana_plants = {}
+valc.schematics.banana_plants = {}
 do
 	local max_h = 4
 	for h = 2,max_h do
-		local schem = vmg.generate_banana_schematic(h)
+		local schem = valc.generate_banana_schematic(h)
 
-		push(vmg.schematics.banana_plants, schem)
+		push(valc.schematics.banana_plants, schem)
 
 		minetest.register_decoration({
 			deco_type = "schematic",

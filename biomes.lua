@@ -416,13 +416,13 @@ end
 if false then
 	-- This is grotesque, but I can't see any other way to get
 	--  the biome ids in lua. Bad devs!
-	vmg.biome_ids = {}
+	valc.biome_ids = {}
 	local biome_desc = {}
 	for name, desc in pairs(minetest.registered_biomes) do
 		push(biome_desc, desc)
 	end
 	minetest.clear_registered_biomes()
 	for _, desc in pairs(biome_desc) do
-		vmg.biome_ids[minetest.register_biome(desc)] = desc.name
+		valc.biome_ids[minetest.register_biome(desc)] = desc.name
 	end
 end

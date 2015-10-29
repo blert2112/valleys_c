@@ -7,7 +7,7 @@
 
 
 -- the mapgen function
-function vmg.generate(minp, maxp, seed)
+function valc.generate(minp, maxp, seed)
 	-- minp and maxp strings, used by logs
 	local minps, maxps = minetest.pos_to_string(minp), minetest.pos_to_string(maxp)
 
@@ -37,15 +37,15 @@ function vmg.generate(minp, maxp, seed)
 	local c_ignore = minetest.get_content_id("ignore")
 
 	-- Create a table of biome ids, so I can use the biomemap.
-	vmg.biome_ids = {}
+	valc.biome_ids = {}
 	local biome_desc = {}
 	for name, desc in pairs(minetest.registered_biomes) do
 		local i = minetest.get_biome_id(desc.name)
-		vmg.biome_ids[i] = desc.name
+		valc.biome_ids[i] = desc.name
 	end
 
 	-- Get the content ids for all registered water plants.
-	for _, desc in pairs(vmg.water_plants) do
+	for _, desc in pairs(valc.water_plants) do
 		if type(desc.decoration) == 'string' then
 			desc.content_id = minetest.get_content_id(desc.decoration)
 		elseif type(desc.decoration) == 'table' then
@@ -114,9 +114,9 @@ function vmg.generate(minp, maxp, seed)
 							end
 							-- Check the biomes and plant water plants, if called for.
 							if surround then
-								for _, desc in pairs(vmg.water_plants) do
+								for _, desc in pairs(valc.water_plants) do
 									if desc.fill_ratio and desc.content_id then
-										local biome = vmg.biome_ids[biomemap[map_index]]
+										local biome = valc.biome_ids[biomemap[map_index]]
 
 										if not desc.biomes or (biome and desc.biomes and table.contains(desc.biomes, biome)) then
 											if math.random() <= desc.fill_ratio then

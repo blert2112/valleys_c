@@ -4,56 +4,55 @@
 
 -- See textures/image-credits.txt
 
-vmg.water_plants = {}
-function vmg.register_water_plant(desc)
-	push(vmg.water_plants, desc)
+valc.water_plants = {}
+function valc.register_water_plant(desc)
+	push(valc.water_plants, desc)
 end
 
 
-vmg.plantlist = {
+valc.plantlist = {
 	{name="arrow_arum",
 	 desc="Arrow Arum",
 	 water=true,
 	 wave=true,
 	 group="plantnodye",
-	 selbox={-0.3, -0.5, -0.3, 0.3, 0.5, 0.3}},
+	},
 
 	{name="bird_of_paradise",
 	 desc="Bird of Paradise",
 	 light=true,
 	 group="flowernodye",
-	 selbox={-0.2, -0.5, -0.2, 0.2, 0.5, 0.2}},
+	},
 
 	{name="calla_lily",
 	 desc="Calla Lily",
 	 wave=true,
 	 light=true,
 	 group="flowerwhitedye",
-	 selbox={{-0.2, -0.3, -0.2, 0.0, 0.5, 0.2},
-	         {-0.35, -0.5, -0.35, 0.35, -0.3, 0.35}}},
+	},
 
 	{name="gerbera",
 	 desc="Gerbera",
 	 light=true,
 	 group="flowerpinkdye",
-	 selbox={-0.15, -0.5, -0.15, 0.15, 0.2, 0.15}},
+	},
 
 	{name="hibiscus",
 	 desc="Hibiscus",
 	 wave=true,
 	 group="flowerwhitedye",
-	 selbox={-0.35, -0.5, -0.35, 0.35, 0.35, 0.35}},
+	},
 
 	{name="orchid",
 	 desc="Orchid",
 	 wave=true,
 	 light=true,
 	 group="flowerwhitedye",
-	 selbox={-0.3, -0.5, -0.3, 0.2, 0.5, 0.3}},
+	},
 }
 
 
-for _, plant in ipairs(vmg.plantlist) do
+for _, plant in ipairs(valc.plantlist) do
 	groups = {snappy=3,flammable=2,flora=1,attached_node=1}
 	if plant.group == "flowernodye" then
 		groups.flower = 1
@@ -78,7 +77,7 @@ for _, plant in ipairs(vmg.plantlist) do
 		sounds = default.node_sound_leaves_defaults(),
 		selection_box = {
 			type = "fixed",
-			fixed = plant.selbox,
+			fixed = {-0.5, -0.5, -0.5, 0.5, -5/16, 0.5},
 		},
 	})
 
@@ -144,7 +143,7 @@ do
 	register_flower("gerbera", 1976, {"savanna", "rainforest",})
 
 	-- Water Plant: Arrow Arum
-	vmg.register_water_plant({
+	valc.register_water_plant({
 		fill_ratio = 0.1,
 		decoration = {"valleys_c:arrow_arum_water",},
 		biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},

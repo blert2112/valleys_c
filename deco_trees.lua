@@ -11,7 +11,7 @@ minetest.add_group("default:pine_needles", {leafdecay = 5})
 
 
 -- a list of tree descriptions
-vmg.treelist = {
+valc.treelist = {
 	{name="banana",
 	 desc="Banana",
 	 leaf="leaves",
@@ -49,7 +49,7 @@ vmg.treelist = {
 }
 
 
-for _, tree in ipairs(vmg.treelist) do
+for _, tree in ipairs(valc.treelist) do
 	-- a standard node description
 	local node_d = {
 		description = tree.desc.." Tree",
@@ -190,19 +190,19 @@ for _, tree in ipairs(vmg.treelist) do
 end
 
 
--- list of all vmg-specific saplings
-vmg.saplings = {
+-- list of all valc-specific saplings
+valc.saplings = {
 	{sapling="valleys_c:banana_sapling",
-	 schematics=vmg.schematics.banana_plants},
+	 schematics=valc.schematics.banana_plants},
 	{sapling="valleys_c:cherry_blossom_sapling",
-	 schematics=vmg.schematics.cherry_trees},
+	 schematics=valc.schematics.cherry_trees},
 	{sapling="valleys_c:birch_sapling",
-	 schematics=vmg.schematics.birch_trees},
+	 schematics=valc.schematics.birch_trees},
  }
 
 -- create a list of just the node names
 local sapling_list = {}
-for _, sap in pairs(vmg.saplings) do
+for _, sap in pairs(valc.saplings) do
 	push(sapling_list, sap.sapling)
 end
 
@@ -218,7 +218,7 @@ minetest.register_abm({
 			return
 		end
 
-		for _, sap in vmg.saplings do
+		for _, sap in valc.saplings do
 			if node.name == sap.sapling then
 				minetest.log("action", "A sapling grows into a tree at "..
 					minetest.pos_to_string(pos))
@@ -236,7 +236,7 @@ minetest.register_abm({
 
 
 -- tree creation code
-dofile(vmg.path.."/deco_deciduous.lua")
-dofile(vmg.path.."/deco_conifer.lua")
-dofile(vmg.path.."/deco_jungle.lua")
-dofile(vmg.path.."/deco_banana.lua")
+dofile(valc.path.."/deco_deciduous.lua")
+dofile(valc.path.."/deco_conifer.lua")
+dofile(valc.path.."/deco_jungle.lua")
+dofile(valc.path.."/deco_banana.lua")

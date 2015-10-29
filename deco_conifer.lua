@@ -3,7 +3,10 @@
 -------------------
 
 -- Create different colored needles with the same properties.
-newnode = vmg.clone_node("default:pine_needles")
+newnode = valc.clone_node("default:pine_needles")
+if valc.noleafdecay then
+	newnode.groups.leafdecay = 0
+end
 newnode.tiles = {"default_pine_needles.png^[colorize:#FF0000:15"}
 minetest.register_node("valleys_c:pine_needles2", newnode)
 newnode.tiles = {"default_pine_needles.png^[colorize:#FFFF00:15"}
@@ -13,11 +16,11 @@ minetest.register_node("valleys_c:pine_needles4", newnode)
 
 
 -- similar to the general tree schematic, but basically vertical
-function vmg.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
+function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 	local height = trunk_height + radius * 3 + 1
 	local width = 2 * radius + 1
 	local trunk_top = height - radius - 1
-	local s = vmg.schematic_array(width, height, width)
+	local s = valc.schematic_array(width, height, width)
 
 	-- the main trunk
 	local probs = {200,150,100,75,50,25}
@@ -65,14 +68,14 @@ function vmg.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 end
 
 -- generic conifers
-vmg.schematics.conifer_trees = {}
+valc.schematics.conifer_trees = {}
 leaves = {"default:pine_needles", "valleys_c:pine_needles2", "valleys_c:pine_needles3", "valleys_c:pine_needles4"}
 for i = 1,#leaves do
 	local max_r = 4
 	for r = 2,max_r do
-		local schem = vmg.generate_conifer_schematic(2, r, "default:pine_tree", leaves[i])
+		local schem = valc.generate_conifer_schematic(2, r, "default:pine_tree", leaves[i])
 
-		push(vmg.schematics.conifer_trees, schem)
+		push(valc.schematics.conifer_trees, schem)
 
 		minetest.register_decoration({
 			deco_type = "schematic",
@@ -89,7 +92,7 @@ end
 
 -- Place the schematic when a sapling grows.
 function default.grow_new_pine_tree(pos, bad)
-	local schem = vmg.schematics.conifer_trees[math.random(1,#vmg.schematics.conifer_trees)]
+	local schem = valc.schematics.conifer_trees[math.random(1,#valc.schematics.conifer_trees)]
 	local adj = {x = pos.x - math.floor(schem.size.x / 2),
 	             y = pos.y - 1,
 	             z = pos.z - math.floor(schem.size.z / 2)}
