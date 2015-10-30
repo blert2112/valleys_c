@@ -6,8 +6,20 @@
 --  such as water plants and cave decorations.
 
 
+local mapgen_times = {
+	liquid_lighting = {},
+	loops = {},
+	make_chunk = {},
+	noisemaps = {},
+	preparation = {},
+	writing = {},
+}
+
+
 -- the mapgen function
 function valc.generate(minp, maxp, seed)
+	local t0 = os.clock()
+
 	-- minp and maxp strings, used by logs
 	local minps, maxps = minetest.pos_to_string(minp), minetest.pos_to_string(maxp)
 
@@ -37,11 +49,12 @@ function valc.generate(minp, maxp, seed)
 	local c_ignore = minetest.get_content_id("ignore")
 
 	-- Create a table of biome ids, so I can use the biomemap.
-	valc.biome_ids = {}
-	local biome_desc = {}
-	for name, desc in pairs(minetest.registered_biomes) do
-		local i = minetest.get_biome_id(desc.name)
-		valc.biome_ids[i] = desc.name
+	if not valc.biome_ids then
+		valc.biome_ids = {}
+		for name, desc in pairs(minetest.registered_biomes) do
+			local i = minetest.get_biome_id(desc.name)
+			valc.biome_ids[i] = desc.name
+		end
 	end
 
 	-- Get the content ids for all registered water plants.
@@ -77,6 +90,7 @@ function valc.generate(minp, maxp, seed)
 
 	-- the mapgen algorithm
 	local map_index = 0
+	local write = false
 	for x = minp.x, maxp.x do -- for each YZ plane
 		for z = minp.z, maxp.z do -- for each vertical line in this plane
 			local underground = false
@@ -95,6 +109,7 @@ function valc.generate(minp, maxp, seed)
 						--  nodes would leave a bubble, so we just use a different tile.
 						if math.random(4) == 1 then
 							data[ivm] = c_sand_with_rocks
+							write = true
 						else
 							-- Check to make sure that a plant root is fully surrounded.
 							-- This is due to the kludgy way you have to make water plants
@@ -121,6 +136,7 @@ function valc.generate(minp, maxp, seed)
 										if not desc.biomes or (biome and desc.biomes and table.contains(desc.biomes, biome)) then
 											if math.random() <= desc.fill_ratio then
 												data[ivm] = desc.content_id
+												write = true
 											end
 										end
 									end
@@ -144,20 +160,25 @@ function valc.generate(minp, maxp, seed)
 					if air_count > 0 and r == 1 then
 						data[ivm + ystride] = c_mushroom_fertile_red
 						data[ivm] = c_dirt
+						write = true
 					elseif air_count > 0 and r == 2 then
 						data[ivm + ystride] = c_mushroom_fertile_brown
 						data[ivm] = c_dirt
+						write = true
 					elseif air_count > 1 and r == 4 then
 						data[ivm + ystride*2] = c_huge_mushroom_cap
 						data[ivm + ystride] = c_giant_mushroom_stem
 						data[ivm] = c_dirt
+						write = true
 					elseif air_count > 2 and r == 5 then
 						data[ivm + ystride*3] = c_giant_mushroom_cap
 						data[ivm + ystride*2] = c_giant_mushroom_stem
 						data[ivm + ystride] = c_giant_mushroom_stem
 						data[ivm] = c_dirt
+						write = true
 					elseif air_count > 0 and r <18 then
 						data[ivm + ystride] = c_stalagmite
+						write = true
 					end
 
 					air_count = 0
@@ -168,8 +189,10 @@ function valc.generate(minp, maxp, seed)
 						local r = math.random(20)
 						if r == 1 then
 							data[ivm + ystride] = c_glowing_fungal_stone
+							write = true
 						elseif r < 5 then
 							data[ivm] = c_stalactite
+							write = true
 						end
 					end
 				else
@@ -179,18 +202,81 @@ function valc.generate(minp, maxp, seed)
 		end
 	end
 
+	local t2 = os.clock()
+
 	-- execute voxelmanip boring stuff to write to the map...
-	vm:set_data(data)
+	if write then
+		vm:set_data(data)
+	end
 
-	-- probably not necessary
-	--vm:set_lighting({day = 0, night = 0})
+	local t3 = os.clock()
 
-	-- This seems to be necessary to avoid lighting problems.
-	vm:calc_lighting()
+	if write then
+		-- probably not necessary
+		--vm:set_lighting({day = 0, night = 0})
 
-	-- probably not necessary
-	--vm:update_liquids()
+		-- This seems to be necessary to avoid lighting problems.
+		vm:calc_lighting()
 
-	vm:write_to_map()
+		-- probably not necessary
+		--vm:update_liquids()
+	end
+
+	local t4 = os.clock()
+
+	if write then
+		vm:write_to_map()
+	end
+
+	local t5 = os.clock()
+
+	table.insert(mapgen_times.noisemaps, 0)
+	table.insert(mapgen_times.preparation, t1 - t0)
+	table.insert(mapgen_times.loops, t2 - t1)
+	table.insert(mapgen_times.writing, t3 - t2 + t5 - t4)
+	table.insert(mapgen_times.liquid_lighting, t4 - t3)
+	table.insert(mapgen_times.make_chunk, t5 - t0)
 end
 
+local function mean( t )
+  local sum = 0
+  local count= 0
+
+  for k,v in pairs(t) do
+    if type(v) == 'number' then
+      sum = sum + v
+      count = count + 1
+    end
+  end
+
+  return (sum / count)
+end
+
+minetest.register_on_shutdown(function()
+	if #mapgen_times.make_chunk == 0 then
+		return
+	end
+
+	local average, standard_dev
+	print("\nValleys_C lua Mapgen Times:")
+
+	average = mean(mapgen_times.liquid_lighting)
+	print("  liquid_lighting: - - - - - - - - - - - -  "..average)
+
+	average = mean(mapgen_times.loops)
+	print("  loops: - - - - - - - - - - - - - - - - -  "..average)
+
+	average = mean(mapgen_times.make_chunk)
+	print("  makeChunk: - - - - - - - - - - - - - - -  "..average)
+
+	average = mean(mapgen_times.noisemaps)
+	print("  noisemaps: - - - - - - - - - - - - - - -  "..average)
+
+	average = mean(mapgen_times.preparation)
+	print("  preparation: - - - - - - - - - - - - - -  "..average)
+
+	average = mean(mapgen_times.writing)
+	print("  writing: - - - - - - - - - - - - - - - -  "..average)
+
+	print()
+end)
