@@ -200,3 +200,53 @@ minetest.register_craft({
 	},
 })
 
+minetest.register_node("valleys_c:glowing_dirt", {
+	description = "Glowing Dirt",
+	tiles = {"default_dirt.png"},
+	groups = {crumbly = 3, soil = 1},
+	light_source = default.LIGHT_MAX,
+	sounds = default.node_sound_dirt_defaults(),
+	soil = {
+		base = "valleys_c:glowing_dirt",
+		dry = "valleys_c:glowing_soil",
+		wet = "valleys_c:glowing_soil_wet"
+	},
+})
+
+minetest.register_node("valleys_c:glowing_soil", {
+	description = "Glowing Soil",
+	tiles = {"default_dirt.png^farming_soil.png", "default_dirt.png"},
+	drop = "valleys_c:glowing_dirt",
+	groups = {crumbly=3, not_in_creative_inventory=1, soil=2, grassland = 1, field = 1},
+	sounds = default.node_sound_dirt_defaults(),
+	light_source = default.LIGHT_MAX,
+	soil = {
+		base = "valleys_c:glowing_dirt",
+		dry = "valleys_c:glowing_soil",
+		wet = "valleys_c:glowing_soil_wet"
+	},
+})
+
+minetest.register_node("valleys_c:glowing_soil_wet", {
+	description = "Wet Glowing Soil",
+	tiles = {"default_dirt.png^farming_soil_wet.png", "default_dirt.png^farming_soil_wet_side.png"},
+	drop = "valleys_c:glowing_dirt",
+	groups = {crumbly=3, not_in_creative_inventory=1, soil=3, wet = 1, grassland = 1, field = 1},
+	sounds = default.node_sound_dirt_defaults(),
+	light_source = default.LIGHT_MAX,
+	soil = {
+		base = "valleys_c:glowing_dirt",
+		dry = "valleys_c:glowing_soil",
+		wet = "valleys_c:glowing_soil_wet"
+	},
+})
+
+minetest.register_craft({
+	output = "valleys_c:glowing_dirt",
+	type = "shapeless",
+	recipe = {
+		"valleys_c:moon_juice",
+		"default:dirt",
+	},
+})
+

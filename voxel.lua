@@ -34,14 +34,6 @@ function valc.generate(minp, maxp, seed)
 	local c_sand = minetest.get_content_id("default:sand")
 	local c_river_water_source = minetest.get_content_id("default:river_water_source")
 
-	local c_mushroom_fertile_brown = minetest.get_content_id("flowers:mushroom_fertile_brown")
-	local c_mushroom_fertile_red = minetest.get_content_id("flowers:mushroom_fertile_red")
-	local c_huge_mushroom_cap = minetest.get_content_id("valleys_c:huge_mushroom_cap")
-	local c_giant_mushroom_cap = minetest.get_content_id("valleys_c:giant_mushroom_cap")
-	local c_giant_mushroom_stem = minetest.get_content_id("valleys_c:giant_mushroom_stem")
-	local c_glowing_fungal_stone = minetest.get_content_id("valleys_c:glowing_fungal_stone")
-	local c_stalactite = minetest.get_content_id("valleys_c:stalactite")
-	local c_stalagmite = minetest.get_content_id("valleys_c:stalagmite")
 	local c_sand_with_rocks = minetest.get_content_id("valleys_c:sand_with_rocks")
 
 	-- Air and Ignore
@@ -105,98 +97,38 @@ function valc.generate(minp, maxp, seed)
 					-- If there's river water above, it's a river.
 					local ivm2 = ivm + ystride
 					if data[ivm2] == c_river_water_source then
-						-- Place small rocks for decoration. The actual small rocks
-						--  nodes would leave a bubble, so we just use a different tile.
-						if math.random(4) == 1 then
-							data[ivm] = c_sand_with_rocks
-							write = true
-						else
-							-- Check to make sure that a plant root is fully surrounded.
-							-- This is due to the kludgy way you have to make water plants
-							--  in minetest, to avoid bubbles.
-							local surround = true
-							for x1 = -1,1,2 do
-								local n = data[ivm+x1] 
-								if n == c_river_water_source or n == c_air then
-									surround = false
-								end
+						-- Check to make sure that a plant root is fully surrounded.
+						-- This is due to the kludgy way you have to make water plants
+						--  in minetest, to avoid bubbles.
+						local surround = true
+						for x1 = -1,1,2 do
+							local n = data[ivm+x1] 
+							if n == c_river_water_source or n == c_air then
+								surround = false
 							end
-							for z1 = -zstride,zstride,2*zstride do
-								local n = data[ivm+z1] 
-								if n == c_river_water_source or n == c_air then
-									surround = false
-								end
+						end
+						for z1 = -zstride,zstride,2*zstride do
+							local n = data[ivm+z1] 
+							if n == c_river_water_source or n == c_air then
+								surround = false
 							end
-							-- Check the biomes and plant water plants, if called for.
-							if surround then
-								for _, desc in pairs(valc.water_plants) do
-									if desc.fill_ratio and desc.content_id then
-										local biome = valc.biome_ids[biomemap[map_index]]
+						end
+						-- Check the biomes and plant water plants, if called for.
+						if surround then
+							for _, desc in pairs(valc.water_plants) do
+								if desc.fill_ratio and desc.content_id then
+									local biome = valc.biome_ids[biomemap[map_index]]
 
-										if not desc.biomes or (biome and desc.biomes and table.contains(desc.biomes, biome)) then
-											if math.random() <= desc.fill_ratio then
-												data[ivm] = desc.content_id
-												write = true
-											end
+									if not desc.biomes or (biome and desc.biomes and table.contains(desc.biomes, biome)) then
+										if math.random() <= desc.fill_ratio then
+											data[ivm] = desc.content_id
+											write = true
 										end
 									end
 								end
 							end
 						end
 					end
-				end
-
-				-- Are we underground?
-				if y < -1 or data[ivm] == c_stone then
-					underground = true
-				end
-
-				-- Decorate any open, underground spaces with stone or dirt
-				-- This seems to exclude dungeons, which is good.
-				if underground and data[ivm] == c_stone or data[ivm] == c_dirt then
-					local r = math.random(50)
-
-					-- Plant mushrooms and speleothems.
-					if air_count > 0 and r == 1 then
-						data[ivm + ystride] = c_mushroom_fertile_red
-						data[ivm] = c_dirt
-						write = true
-					elseif air_count > 0 and r == 2 then
-						data[ivm + ystride] = c_mushroom_fertile_brown
-						data[ivm] = c_dirt
-						write = true
-					elseif air_count > 1 and r == 4 then
-						data[ivm + ystride*2] = c_huge_mushroom_cap
-						data[ivm + ystride] = c_giant_mushroom_stem
-						data[ivm] = c_dirt
-						write = true
-					elseif air_count > 2 and r == 5 then
-						data[ivm + ystride*3] = c_giant_mushroom_cap
-						data[ivm + ystride*2] = c_giant_mushroom_stem
-						data[ivm + ystride] = c_giant_mushroom_stem
-						data[ivm] = c_dirt
-						write = true
-					elseif air_count > 0 and r <18 then
-						data[ivm + ystride] = c_stalagmite
-						write = true
-					end
-
-					air_count = 0
-				elseif underground and data[ivm] == c_air then
-					-- This is how we look for ceiling voxels.
-					air_count = air_count + 1
-					if air_count == 1 and y < maxp.y and data[ivm + ystride] == c_stone then
-						local r = math.random(20)
-						if r == 1 then
-							data[ivm + ystride] = c_glowing_fungal_stone
-							write = true
-						elseif r < 5 then
-							data[ivm] = c_stalactite
-							write = true
-						end
-					end
-				else
-					air_count = 0
 				end
 			end
 		end

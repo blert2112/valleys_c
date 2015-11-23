@@ -101,12 +101,12 @@ minetest.override_item("default:river_water_source", {is_ground_content = true})
 -- Execute each section of the code.
 --dofile(valc.path.."/biomes.lua")
 dofile(valc.path.."/deco.lua")
-dofile(valc.path.."/voxel.lua")
+--dofile(valc.path.."/voxel.lua")
 
 
 -- Call the mapgen function valc.generate on mapgen.
 --  (located in voxel.lua)
-minetest.register_on_generated(valc.generate)
+-- minetest.register_on_generated(valc.generate)
 
 
 print("Valleys Mapgen C++ Helper loaded")

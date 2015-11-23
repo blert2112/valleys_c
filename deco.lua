@@ -12,6 +12,23 @@ minetest.register_ore({ore_type="sheet", ore="default:sandstone", wherein="defau
 minetest.register_ore({ore_type="sheet", ore="default:desert_stone", wherein="default:stone", clust_num_ores=250, clust_scarcity=60, clust_size=10, y_min=-1000, y_max=31000, noise_threshhold=0.1, noise_params={offset=0, scale=1, spread={x=256, y=256, z=256}, seed=163281090, octaves=5, persist=0.60}, random_factor=1.0})
 
 
+if false then
+	local newnode = valc.clone_node("default:water_source")
+	newnode.description = "Water"
+	newnode.alpha = 0
+	newnode.liquid_alternative_source = "valleys_c:water_source"
+	newnode.liquid_alternative_flowing = "valleys_c:water_flowing"
+	minetest.register_node("valleys_c:water_source", newnode)
+
+	newnode = valc.clone_node("default:water_flowing")
+	newnode.description = "Water"
+	newnode.alpha = 0
+	newnode.liquid_alternative_source = "valleys_c:water_source"
+	newnode.liquid_alternative_flowing = "valleys_c:water_flowing"
+	minetest.register_node("valleys_c:water_flowing", newnode)
+end
+
+
 -- Some sand with rocks for the river beds.
 --  This drops small rocks as well.
 do
@@ -86,6 +103,7 @@ dofile(valc.path.."/deco_plants.lua")
 dofile(valc.path.."/deco_rocks.lua")
 dofile(valc.path.."/deco_caves.lua")
 dofile(valc.path.."/deco_ferns.lua")
+dofile(valc.path.."/deco_ferns_tree.lua")
 
 
 	-- biomes = {"sandstone_grassland", "glacier", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
