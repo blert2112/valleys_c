@@ -240,3 +240,7 @@ dofile(valc.path.."/deco_deciduous.lua")
 dofile(valc.path.."/deco_conifer.lua")
 dofile(valc.path.."/deco_jungle.lua")
 dofile(valc.path.."/deco_banana.lua")
+
+if valc.glow then
+	dofile(valc.path.."/deco_lumin.lua")
+end

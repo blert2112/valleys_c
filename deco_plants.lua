@@ -154,3 +154,35 @@ do
 		y_max = 60,
 	})
 end
+
+if valc.glow then
+	minetest.register_node("valleys_c:moon_weed", {
+		description = "Moon Weed",
+		drawtype = "plantlike",
+		tiles = {"vmg_moon_weed.png"},
+		inventory_image = "vmg_moon_weed.png",
+		waving = false,
+		sunlight_propagates = true,
+		paramtype = "light",
+		light_source = 8,
+		walkable = false,
+		groups = groups,
+		sounds = default.node_sound_leaves_defaults(),
+		selection_box = {
+			type = "fixed",
+			fixed = {-0.5, -0.5, -0.5, 0.5, -5/16, 0.5},
+		},
+	})
+
+	local param = {
+		deco_type = "simple",
+		place_on = {"default:dirt_with_grass"},
+		sidelen = 80,
+		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",},
+		fill_ratio = 0.004,
+		y_min = 6,
+		y_max = 31000,
+		decoration = "valleys_c:moon_weed",
+	}
+	minetest.register_decoration(param)
+end

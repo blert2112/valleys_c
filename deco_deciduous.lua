@@ -16,6 +16,20 @@ minetest.register_node("valleys_c:leaves4", newnode)
 newnode.tiles = {"default_leaves.png^[colorize:#00FF00:15"}
 minetest.register_node("valleys_c:leaves5", newnode)
 
+if valc.glow then
+	minetest.register_node("valleys_c:tree_glowing_moss", {
+		description = "Tree with glowing moss",
+		tiles = {"default_tree_top.png", "default_tree_top.png", "default_tree.png^trunks_moss.png"},
+		paramtype2 = "facedir",
+		is_ground_content = false,
+		light_source = 4,
+		drop = 'default:tree',
+		groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
+		sounds = default.node_sound_wood_defaults(),
+
+		on_place = minetest.rotate_node
+	})
+end
 
 -- create a schematic for a spherical tree.
 function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, limbs)
@@ -29,7 +43,11 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 	-- the main trunk
 	for y = 0,trunk_top do
 		local i = radii.x*width*height + y*width + radii.z + 1
-		s.data[i].name = trunk
+		if trunk == "default:tree" and valc.glow and math.random(10) == 1 then
+			s.data[i].name = "valleys_c:tree_glowing_moss"
+		else
+			s.data[i].name = trunk
+		end
 		s.data[i].param1 = 255
 	end
 

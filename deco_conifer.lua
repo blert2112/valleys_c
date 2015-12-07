@@ -14,6 +14,22 @@ minetest.register_node("valleys_c:pine_needles3", newnode)
 newnode.tiles = {"default_pine_needles.png^[colorize:#00FF00:15"}
 minetest.register_node("valleys_c:pine_needles4", newnode)
 
+if valc.glow then
+	minetest.register_node("valleys_c:pine_tree_glowing_moss", {
+		description = "Pine tree with glowing moss",
+		tiles = {"default_pine_tree_top.png", "default_pine_tree_top.png",
+		"default_pine_tree.png^trunks_moss.png"},
+		paramtype2 = "facedir",
+		is_ground_content = false,
+		light_source = 4,
+		drop = 'default:pine_tree',
+		groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
+		sounds = default.node_sound_wood_defaults(),
+
+		on_place = minetest.rotate_node
+	})
+end
+
 
 -- similar to the general tree schematic, but basically vertical
 function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
@@ -37,7 +53,11 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 				local i = (x+radius)*width*height + y*width + (z+radius) + 1
 				local dist = math.round(math.sqrt(x^2 + z^2))
 				if x == 0 and z == 0 then
-					s.data[i].name = trunk
+					if trunk == "default:pine_tree" and valc.glow and math.random(10) == 1 then
+						s.data[i].name = "valleys_c:pine_tree_glowing_moss"
+					else
+						s.data[i].name = trunk
+					end
 					s.data[i].param1 = 255
 				elseif y > trunk_height and dist <= r1 then
 					s.data[i].name = leaf

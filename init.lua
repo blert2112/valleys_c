@@ -22,7 +22,9 @@ end
 -- the mod object
 valc = {}
 valc.version = "1.0"
-valc.noleafdecay = false
+
+valc.noleafdecay = not minetest.setting_getbool('valc_leaf_decay')
+valc.glow = minetest.setting_getbool('valc_glow')
 
 
 -- path to all Valleys Mapgen code
