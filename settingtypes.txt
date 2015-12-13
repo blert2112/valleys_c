@@ -12,6 +12,9 @@ mg_valleys_altitude_chill (Altitude Chill) int 90
 # patches of riverbed.
 valc_glow (Glowing Plants) bool false
 
+# Add an occasional, simple building
+valc_houses (Houses) bool false
+
 # Average humidity as a percentage.
 mg_valleys_humidity (Humidity) int 50
 

@@ -25,6 +25,7 @@ valc.version = "1.0"
 
 valc.noleafdecay = not minetest.setting_getbool('valc_leaf_decay')
 valc.glow = minetest.setting_getbool('valc_glow')
+valc.houses = minetest.setting_getbool('valc_houses')
 
 
 -- path to all Valleys Mapgen code
@@ -103,7 +104,7 @@ minetest.override_item("default:river_water_source", {is_ground_content = true})
 -- Execute each section of the code.
 --dofile(valc.path.."/biomes.lua")
 dofile(valc.path.."/deco.lua")
---dofile(valc.path.."/voxel.lua")
+-- dofile(valc.path.."/voxel.lua")
 
 
 -- Call the mapgen function valc.generate on mapgen.

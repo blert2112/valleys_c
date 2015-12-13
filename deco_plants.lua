@@ -179,7 +179,7 @@ if valc.glow then
 		place_on = {"default:dirt_with_grass"},
 		sidelen = 80,
 		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",},
-		fill_ratio = 0.004,
+		fill_ratio = 1/1000,
 		y_min = 6,
 		y_max = 31000,
 		decoration = "valleys_c:moon_weed",

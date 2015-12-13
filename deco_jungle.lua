@@ -21,10 +21,10 @@ function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 	local s = valc.schematic_array(width, height, width)
 
 	-- roots, trunk, and extra leaves
-	for x = -1,1 do
+	for z = -1,1 do
 		for y = 0,trunk_top do
-			for z = -1,1 do
-				local i = (x+radius)*width*height + y*width + (z+radius) + 1
+			for x = -1,1 do
+				local i = (z+radius)*width*height + y*width + (x+radius) + 1
 				if x == 0 and z == 0 then
 					s.data[i].name = trunk
 					s.data[i].param1 = 255
@@ -48,7 +48,7 @@ function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 				z = math.random(-1,1) * 2
 			end
 			for j = -1,1,2 do
-				local i = (j*x + radius)*width*height + y*width + (j*z + radius) + 1
+				local i = (j*z + radius)*width*height + y*width + (j*x + radius) + 1
 				s.data[i].name = trunk
 				s.data[i].param1 = 255
 				valc.generate_canopy(s, leaf, {x=j*x, y=y, z=j*z})
@@ -68,11 +68,11 @@ function valc.generate_canopy(s, leaf, pos)
 	local r1 = 4  -- leaf decay radius
 	local probs = {255,200,150,100,75}
 
-	for x = -r1,r1 do
+	for z = -r1,r1 do
 		for y = 0,1 do
-			for z = -r1,r1 do
+			for x = -r1,r1 do
 				if x+pos.x >= -rx and x+pos.x <= rx and y+pos.y >= 0 and y+pos.y < height and z+pos.z >= -rz and z+pos.z <= rz then
-					local i = (x+pos.x+rx)*width*height + (y+pos.y)*width + (z+pos.z+rz) + 1
+					local i = (z+pos.z+rz)*width*height + (y+pos.y)*width + (x+pos.x+rx) + 1
 					local dist1 = math.sqrt(x^2 + y^2 + z^2)
 					local dist2 = math.sqrt((x+pos.x)^2 + (z+pos.z)^2)
 					if dist1 <= r1 then

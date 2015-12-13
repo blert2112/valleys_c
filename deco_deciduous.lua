@@ -42,7 +42,7 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 
 	-- the main trunk
 	for y = 0,trunk_top do
-		local i = radii.x*width*height + y*width + radii.z + 1
+		local i = radii.z*width*height + y*width + radii.x + 1
 		if trunk == "default:tree" and valc.glow and math.random(10) == 1 then
 			s.data[i].name = "valleys_c:tree_glowing_moss"
 		else
@@ -57,20 +57,20 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 	-- Specify a table of limb positions...
 	if radii.x > 3 and limbs then
 		for _, p in pairs(limbs) do
-			local i = (p.x+radii.x)*width*height + p.y*width + (p.z+radii.z) + 1
+			local i = (p.z+radii.z)*width*height + p.y*width + (p.x+radii.x) + 1
 			s.data[i].name = trunk
 			s.data[i].param1 = 255
 			valc.generate_leaves(s, leaf, p, radii.x, fruit, true)
 		end
 		-- or just do it randomly.
 	elseif radii.x > 3 then
-		for x = -radii.x,radii.x do
+		for z = -radii.z,radii.z do
 			for y = -radii.y,radii.y do
-				for z = -radii.z,radii.z do
+				for x = -radii.x,radii.x do
 					-- a smaller spheroid inside the radii
 					if x^2/(radii.x-3)^2 + y^2/(radii.y-3)^2 + z^2/(radii.z-3)^2 <= 1 then
 						if math.random(6) == 1 then
-							local i = (x+radii.x)*width*height + (y+trunk_top)*width + (z+radii.z) + 1
+							local i = (z+radii.z)*width*height + (y+trunk_top)*width + (x+radii.x) + 1
 
 							s.data[i].name = trunk
 							s.data[i].param1 = 255
@@ -94,11 +94,11 @@ function valc.generate_leaves(s, leaf, pos, radius, fruit, adjust)
 	local r1 = math.min(3, radius)  -- leaf decay radius
 	local probs = {255,200,150,100,75}
 
-	for x = -r1,r1 do
+	for z = -r1,r1 do
 		for y = -r1,r1 do
-			for z = -r1,r1 do
+			for x = -r1,r1 do
 				if x+pos.x >= -rx and x+pos.x <= rx and y+pos.y >= 0 and y+pos.y < height and z+pos.z >= -rz and z+pos.z <= rz then
-					local i = (x+pos.x+rx)*width*height + (y+pos.y)*width + (z+pos.z+rz) + 1
+					local i = (z+pos.z+rz)*width*height + (y+pos.y)*width + (x+pos.x+rx) + 1
 					local dist1 = math.sqrt(x^2 + y^2 + z^2)
 					local dist2 = math.sqrt((x+pos.x)^2 + (z+pos.z)^2)
 					if dist1 <= r1 then

@@ -59,10 +59,10 @@ function valc.generate_luminous_schematic(trunk_height)
 		s.data[i].param1 = 255
 	end
 
-	for x = -1,1 do
+	for z = -1,1 do
 		for y = 3, height-1 do
-			for z = -1,1 do
-				local i = (x+radius)*width*height + y*width + (z+radius) + 1
+			for x = -1,1 do
+				local i = (z+radius)*width*height + y*width + (x+radius) + 1
 				if y > height then
 					s.data[i].name = "valleys_c:leaves_lumin"
 					if x == 0 and z == 0 then

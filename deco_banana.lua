@@ -14,13 +14,14 @@ function valc.generate_banana_schematic(trunk_height)
 		local i = (0+radius)*width*height + y*width + (0+radius) + 1
 		s.data[i].name = "valleys_c:banana_tree"
 		s.data[i].param1 = 255
+		s.data[i].force_place = true
 	end
 
 	-- leaves at the top
-	for x = -1,1 do
+	for z = -1,1 do
 		for y = trunk_height+1, height-1 do
-			for z = -1,1 do
-				local i = (x+radius)*width*height + y*width + (z+radius) + 1
+			for x = -1,1 do
+				local i = (z+radius)*width*height + y*width + (x+radius) + 1
 				if y > height - 2 then
 					s.data[i].name = "valleys_c:banana_leaves"
 					if x == 0 and z == 0 then

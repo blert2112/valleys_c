@@ -40,7 +40,7 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 
 	-- the main trunk
 	local probs = {200,150,100,75,50,25}
-	for x = -radius,radius do
+	for z = -radius,radius do
 		for y = 0,trunk_top do
 			-- Gives it a vaguely conical shape.
 			local r1 = math.ceil((height - y) / 4)
@@ -49,8 +49,8 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 				r1 = r1 -1 
 			end
 
-			for z = -radius,radius do
-				local i = (x+radius)*width*height + y*width + (z+radius) + 1
+			for x = -radius,radius do
+				local i = (z+radius)*width*height + y*width + (x+radius) + 1
 				local dist = math.round(math.sqrt(x^2 + z^2))
 				if x == 0 and z == 0 then
 					if trunk == "default:pine_tree" and valc.glow and math.random(10) == 1 then
@@ -68,10 +68,10 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 	end
 
 	-- leaves at the top
-	for x = -1,1 do
+	for z = -1,1 do
 		for y = trunk_top, height-1 do
-			for z = -1,1 do
-				local i = (x+radius)*width*height + y*width + (z+radius) + 1
+			for x = -1,1 do
+				local i = (z+radius)*width*height + y*width + (x+radius) + 1
 				if (x == 0 and z == 0) or y < height - 1 then
 					s.data[i].name = leaf
 					if x == 0 and z == 0 then

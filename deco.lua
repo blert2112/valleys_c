@@ -85,10 +85,10 @@ function valc.schematic_array(width, height, depth)
 	local s = {size={x=width, y=height, z=depth}}
 	s.data = {}
 
-	for x = 0,width-1 do
+	for z = 0,depth-1 do
 		for y = 0,height-1 do
-			for z = 0,depth-1 do
-				local i = x*width*height + y*width + z + 1
+			for x = 0,width-1 do
+				local i = z*width*height + y*width + x + 1
 				s.data[i] = {}
 				s.data[i].name = "air"
 				s.data[i].param1 = 000
@@ -110,6 +110,10 @@ valc.schematics = {}
 
 
 -- Specific decoration code.
+if valc.houses then
+	dofile(valc.path.."/deco_houses.lua")
+end
+
 dofile(valc.path.."/deco_trees.lua")
 dofile(valc.path.."/deco_plants.lua")
 dofile(valc.path.."/deco_rocks.lua")
