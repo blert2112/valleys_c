@@ -31,12 +31,10 @@ end
 
 -- Some sand with rocks for the river beds.
 --  This drops small rocks as well.
-do
-	local newnode = valc.clone_node("default:sand")
-	newnode.tiles = {"vmg_sand_with_rocks.png"}
-	newnode.drop = {max_items=2, items={{items={"valleys_c:small_rocks"}, rarity=1}, {items={"default:sand"}, rarity=1}}}
-	minetest.register_node("valleys_c:sand_with_rocks", newnode)
-end
+local newnode = valc.clone_node("default:sand")
+newnode.tiles = {"vmg_sand_with_rocks.png"}
+newnode.drop = {max_items=2, items={{items={"valleys_c:small_rocks"}, rarity=1}, {items={"default:sand"}, rarity=1}}}
+minetest.register_node("valleys_c:sand_with_rocks", newnode)
 
 if valc.glow then
 	minetest.register_node("valleys_c:glowing_sand", {

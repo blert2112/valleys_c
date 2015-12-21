@@ -103,11 +103,12 @@ for i = 1,#leaves do
 		minetest.register_decoration({
 			deco_type = "schematic",
 			sidelen = 80,
-			place_on = {"default:dirt_with_grass",},
+			place_on = {"default:dirt_with_grass", "default:dirt"},
 			fill_ratio = (max_h-h+1)/1200,
 			biomes = {"rainforest", "rainforest_swamp",},
 			schematic = schem,
 			flags = "place_center_x, place_center_z",
+			y_min = 0,
 			rotation = "random",
 		})
 	end
