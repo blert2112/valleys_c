@@ -139,21 +139,21 @@ local function register_flower(name, seed, biomes)
 	end
 end
 
-do
-	register_flower("bird_of_paradise", 8402, {"rainforest",})
-	register_flower("orchid", 3944, {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",})
-	register_flower("hibiscus", 7831, {"sandstone_grassland", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",})
-	register_flower("calla_lily", 7985, {"sandstone_grassland", "stone_grassland", "deciduous_forest", "rainforest",})
-	register_flower("gerbera", 1976, {"savanna", "rainforest",})
+register_flower("bird_of_paradise", 8402, {"rainforest",})
+register_flower("orchid", 3944, {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",})
+register_flower("hibiscus", 7831, {"sandstone_grassland", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",})
+register_flower("calla_lily", 7985, {"sandstone_grassland", "stone_grassland", "deciduous_forest", "rainforest",})
+register_flower("gerbera", 1976, {"savanna", "rainforest",})
 
-	-- Water Plant: Arrow Arum
-	valc.register_water_plant({
-		fill_ratio = 0.1,
-		decoration = {"valleys_c:arrow_arum_water",},
-		biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
-		y_max = 60,
-	})
-end
+-- Water Plant: Arrow Arum
+valc.register_water_plant({
+	fill_ratio = 0.1,
+	place_on = {"default:sand"},
+	decoration = {"valleys_c:arrow_arum_water",},
+	--biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
+	biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp","sandstone_grassland_ocean", "stone_grassland_ocean", "coniferous_forest_ocean", "deciduous_forest_ocean", "desert_ocean", "savanna_ocean",},
+	y_max = 60,
+})
 
 if valc.glow then
 	minetest.register_node("valleys_c:moon_weed", {
