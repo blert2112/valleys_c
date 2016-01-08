@@ -6,6 +6,47 @@
 --  such as water plants and cave decorations.
 
 
+-- Define perlin noises used in this mapgen by default
+valc.noises = {}
+
+-- Noise 13 : Clayey dirt noise						2D
+valc.noises[13] = {offset = 0, scale = 1, seed = 2835, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
+
+-- Noise 14 : Silty dirt noise						2D
+valc.noises[14] = {offset = 0, scale = 1, seed = 6674, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
+
+-- Noise 15 : Sandy dirt noise						2D
+valc.noises[15] = {offset = 0, scale = 1, seed = 6940, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
+
+-- Noise 16 : Beaches							2D
+valc.noises[16] = {offset = 2, scale = 8, seed = 2349, spread = {x = 256, y = 256, z = 256}, octaves = 3, persist = 0.5, lacunarity = 2}
+
+-- Noise 21 : Water plants							2D
+valc.noises[21] = {offset = 0.0, scale = 1.0, spread = {x = 200, y = 200, z = 200}, seed = 33, octaves = 3, persist = 0.7, lacunarity = 2.0}
+
+
+
+-- function to get noisemaps
+function valc.noisemap(i, minp, chulens)
+	local obj = minetest.get_perlin_map(valc.noises[i], chulens)
+	if minp.z then
+		return obj:get3dMap_flat(minp)
+	else
+		return obj:get2dMap_flat(minp)
+	end
+end
+
+-- useful function to convert a 3D pos to 2D
+function pos2d(pos)
+	if type(pos) == "number" then
+		return {x = pos, y = pos}
+	elseif pos.z then
+		return {x = pos.x, y = pos.z}
+	else
+		return {x = pos.x, y = pos.y}
+	end
+end
+
 local mapgen_times = {
 	liquid_lighting = {},
 	loops = {},
@@ -16,37 +57,35 @@ local mapgen_times = {
 }
 
 
--- Define content IDs
--- A content ID is a number that represents a node in the core of Minetest.
--- Every nodename has its ID.
--- The VoxelManipulator uses content IDs instead of nodenames.
-
+-- These variables hold the content IDs. They aren't available until
+-- the actual mapgen loop is run, but they can stay local to the
+-- file rather than having to load them for every map chunk.
+--
 -- Ground nodes
-local c_stone = minetest.get_content_id("default:stone")
-local c_dirt = minetest.get_content_id("default:dirt")
-local c_sand = minetest.get_content_id("default:sand")
-local c_sandstone = minetest.get_content_id("default:sandstone")
-local c_desertstone = minetest.get_content_id("default:desert_stone")
-local c_river_water_source = minetest.get_content_id("default:river_water_source")
-local c_water_source = minetest.get_content_id("default:water_source")
-
-local c_sand_with_rocks = minetest.get_content_id("valleys_c:sand_with_rocks")
-local c_glowing_sand = minetest.get_content_id("valleys_c:glowing_sand")
-local c_fungal_stone = minetest.get_content_id("valleys_c:glowing_fungal_stone")
-local c_stalactite = minetest.get_content_id("valleys_c:stalactite")
-local c_stalagmite = minetest.get_content_id("valleys_c:stalagmite")
-local c_mushroom_cap_giant = minetest.get_content_id("valleys_c:giant_mushroom_cap")
-local c_mushroom_cap_huge = minetest.get_content_id("valleys_c:huge_mushroom_cap")
-local c_mushroom_stem = minetest.get_content_id("valleys_c:giant_mushroom_stem")
-local c_mushroom_fertile_red = minetest.get_content_id("flowers:mushroom_fertile_red")
-local c_mushroom_fertile_brown = minetest.get_content_id("flowers:mushroom_fertile_brown")
-local c_waterlily = minetest.get_content_id("flowers:waterlily")
+local c_stone, c_dirt, c_dirt_with_grass, c_dirt_with_dry_grass, c_snow
+local c_sand, c_sandstone, c_desert_sand, c_gravel, c_desertstone
+local c_river_water_source, c_water_source
+local c_sand_with_rocks, c_glowing_sand, c_fungal_stone, c_stalactite
+local c_stalagmite, c_mushroom_cap_giant, c_mushroom_cap_huge, c_mushroom_stem
+local c_mushroom_fertile_red, c_mushroom_fertile_brown, c_waterlily
+local c_dirt_clay, c_lawn_clay, c_dry_clay, c_snow_clay, c_dirt_silt
+local c_lawn_silt, c_dry_silt, c_snow_silt, c_dirt_sand, c_lawn_sand
+local c_dry_sand, c_snow_sand, c_silt, c_clay
 
 -- Air and Ignore
-local c_air = minetest.get_content_id("air")
-local c_ignore = minetest.get_content_id("ignore")
+local c_air, c_ignore
 
 local water_lily_biomes = {"rainforest_swamp", "rainforest", "savanna_swamp", "savanna",  "deciduous_forest_swamp", "deciduous_forest"}
+
+local clay_threshold = 1
+local silt_threshold = 1
+local sand_threshold = 0.75
+local dirt_threshold = 0.5
+
+--local clay_threshold = vmg.define("clay_threshold", 1)
+--local silt_threshold = vmg.define("silt_threshold", 1)
+--local sand_threshold = vmg.define("sand_threshold", 0.75)
+--local dirt_threshold = vmg.define("dirt_threshold", 0.5)
 
 -- Create a table of biome ids, so I can use the biomemap.
 if not valc.biome_ids then
@@ -71,12 +110,63 @@ end
 function valc.generate(minp, maxp, seed)
 	local t0 = os.clock()
 
+	-- Define content IDs
+	-- A content ID is a number that represents a node in the core of Minetest.
+	-- Every nodename has its ID.
+	-- The VoxelManipulator uses content IDs instead of nodenames.
+	if not c_stone then
+		-- Ground nodes
+		c_stone = minetest.get_content_id("default:stone")
+		c_dirt = minetest.get_content_id("default:dirt")
+		c_dirt_with_grass = minetest.get_content_id("default:dirt_with_grass")
+		c_dirt_with_dry_grass = minetest.get_content_id("default:dirt_with_dry_grass")
+		c_snow = minetest.get_content_id("default:dirt_with_snow")
+		c_sand = minetest.get_content_id("default:sand")
+		c_sandstone = minetest.get_content_id("default:sandstone")
+		c_desert_sand = minetest.get_content_id("default:desert_sand")
+		c_gravel = minetest.get_content_id("default:gravel")
+		c_desertstone = minetest.get_content_id("default:desert_stone")
+		c_river_water_source = minetest.get_content_id("default:river_water_source")
+		c_water_source = minetest.get_content_id("default:water_source")
+
+		c_sand_with_rocks = minetest.get_content_id("valleys_c:sand_with_rocks")
+		c_glowing_sand = minetest.get_content_id("valleys_c:glowing_sand")
+		c_fungal_stone = minetest.get_content_id("valleys_c:glowing_fungal_stone")
+		c_stalactite = minetest.get_content_id("valleys_c:stalactite")
+		c_stalagmite = minetest.get_content_id("valleys_c:stalagmite")
+		c_mushroom_cap_giant = minetest.get_content_id("valleys_c:giant_mushroom_cap")
+		c_mushroom_cap_huge = minetest.get_content_id("valleys_c:huge_mushroom_cap")
+		c_mushroom_stem = minetest.get_content_id("valleys_c:giant_mushroom_stem")
+		c_mushroom_fertile_red = minetest.get_content_id("flowers:mushroom_fertile_red")
+		c_mushroom_fertile_brown = minetest.get_content_id("flowers:mushroom_fertile_brown")
+		c_waterlily = minetest.get_content_id("flowers:waterlily")
+
+		c_dirt_clay = minetest.get_content_id("valleys_c:dirt_clayey")
+		c_lawn_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_grass")
+		c_dry_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_dry_grass")
+		c_snow_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_snow")
+		c_dirt_silt = minetest.get_content_id("valleys_c:dirt_silty")
+		c_lawn_silt = minetest.get_content_id("valleys_c:dirt_silty_with_grass")
+		c_dry_silt = minetest.get_content_id("valleys_c:dirt_silty_with_dry_grass")
+		c_snow_silt = minetest.get_content_id("valleys_c:dirt_silty_with_snow")
+		c_dirt_sand = minetest.get_content_id("valleys_c:dirt_sandy")
+		c_lawn_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_grass")
+		c_dry_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_dry_grass")
+		c_snow_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_snow")
+		c_silt = minetest.get_content_id("valleys_c:silt")
+		c_clay = minetest.get_content_id("valleys_c:red_clay")
+
+		-- Air and Ignore
+		c_air = minetest.get_content_id("air")
+		c_ignore = minetest.get_content_id("ignore")
+	end
+
 	-- minp and maxp strings, used by logs
 	local minps, maxps = minetest.pos_to_string(minp), minetest.pos_to_string(maxp)
 
 	-- The VoxelManipulator, a complicated but speedy method to set many nodes at the same time
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
-	-- local heightmap = minetest.get_mapgen_object("heightmap")
+	local heightmap = minetest.get_mapgen_object("heightmap")
 	-- local heatmap = minetest.get_mapgen_object("heatmap")
 	local data = vm:get_data() -- data is the original array of content IDs (solely or mostly air)
 	-- Be careful: emin ≠ minp and emax ≠ maxp !
@@ -87,13 +177,21 @@ function valc.generate(minp, maxp, seed)
 	local ystride = a.ystride -- Tip : the ystride of a VoxelArea is the number to add to the array index to get the index of the position above. It's faster because it avoids to completely recalculate the index.
 	local zstride = a.zstride
 
+	local chulens = vector.add(vector.subtract(maxp, minp), 1) -- Size of the generated area, used by noisemaps
+	local minp2d = pos2d(minp)
+
 	-- The biomemap is a table of biome index numbers for each horizontal
 	--  location. It's created in the mapgen, and is right most of the time.
 	--  It's off in about 1% of cases, for various reasons.
 	-- Bear in mind that biomes can change from one voxel to the next.
 	local biomemap = minetest.get_mapgen_object("biomemap")
 
-	local plant_n = minetest.get_perlin_map({offset = 0.0, scale = 1.0, spread = {x = 200, y = 200, z = 200}, seed = 33, octaves = 3, persist = 0.7, lacunarity = 2.0}, vector.add(vector.subtract(maxp, minp), 1)):get2dMap_flat(minp)
+	-- Calculate the noise values
+	local n13 = valc.noisemap(13, minp2d, chulens)
+	local n14 = valc.noisemap(14, minp2d, chulens)
+	local n15 = valc.noisemap(15, minp2d, chulens)
+	local n16 = valc.noisemap(16, minp2d, chulens)
+	local n21 = valc.noisemap(21, minp2d, chulens)
 
 	-- Mapgen preparation is now finished. Check the timer to know the elapsed time.
 	local t1 = os.clock()
@@ -104,25 +202,13 @@ function valc.generate(minp, maxp, seed)
 	for x = minp.x, maxp.x do -- for each YZ plane
 		for z = minp.z, maxp.z do -- for each vertical line in this plane
 			local index_3d = a:index(x, maxp.y, z) -- index of the data array, matching the position {x, y, z}
-			local underground = false
 			local air_count = 0
 			index_2d = index_2d + 1
 
-			for y = maxp.y, minp.y, -1 do -- for each node in vertical line
-				if (y < 1 and data[index_3d] == c_air) or data[index_3d] == c_stone or data[index_3d] == c_sandstone or data[index_3d] == c_desertstone then
-					underground = true
-				end
+			local v13, v14, v15, v16 = n13[index_2d], n14[index_2d], n15[index_2d], n16[index_2d] -- take the noise values for 2D noises
 
-				if data[index_3d] == c_sand then
-					local sr = math.random(50)
-					if valc.glow and sr == 1 then
-						data[index_3d] = c_glowing_sand
-						write = true
-					elseif sr < 10 then
-						data[index_3d] = c_sand_with_rocks
-						write = true
-					end
-				end
+			for y = maxp.y, minp.y, -1 do -- for each node in vertical line
+				local ground = math.max(heightmap[index_2d], 0) - 5
 
 				-- Avoid the edges of the chunk, just to make things easier.
 				-- Look for river sand (or dirt, just in case).
@@ -189,7 +275,7 @@ function valc.generate(minp, maxp, seed)
 					end
 				end
 
-				if y > minp.y and underground and data[index_3d] == c_air then
+				if y > minp.y and y < ground and data[index_3d] == c_air then
 					air_count = air_count + 1
 					if data[index_3d - ystride] == c_stone then
 						local sr = math.random(100)
@@ -225,8 +311,70 @@ function valc.generate(minp, maxp, seed)
 					local biome = valc.biome_ids[biomemap[index_2d]]
 					-- I haven't figured out what the decoration manager is
 					--  doing with the noise functions, but this works ok.
-					if table.contains(water_lily_biomes, biome) and plant_n[index_2d] > 0.5 and math.random(5) == 1 then
+					if table.contains(water_lily_biomes, biome) and n21[index_2d] > 0.5 and math.random(5) == 1 then
 						data[index_3d] = c_waterlily
+						write = true
+					end
+				end
+
+				-- Choose biome, by default normal dirt
+				local dirt = c_dirt
+				local lawn = c_dirt_with_grass
+				local dry = c_dirt_with_dry_grass
+				local snow = c_snow
+				local max = math.max(v13, v14, v15) -- the biome is the maximal of these 3 values.
+				if max > dirt_threshold then -- if one of these values is bigger than dirt_threshold, make clayey, silty or sandy dirt, depending on the case. If none of clay, silt or sand is predominant, make normal dirt.
+					if v13 == max then
+						if v13 > clay_threshold then
+							dirt = c_clay
+							lawn = c_clay
+							dry = c_clay
+							snow = c_clay
+						else
+							dirt = c_dirt_clay
+							lawn = c_lawn_clay
+							dry = c_dry_clay
+							snow = c_snow_clay
+						end
+					elseif v14 == max then
+						if v14 > silt_threshold then
+							dirt = c_silt
+							lawn = c_silt
+							dry = c_silt
+							snow = c_silt
+						else
+							dirt = c_dirt_silt
+							lawn = c_lawn_silt
+							dry = c_dry_silt
+							snow = c_snow_silt
+						end
+					else
+						dirt = c_dirt_sand
+						lawn = c_lawn_sand
+						dry = c_dry_sand
+						snow = c_snow_sand
+					end
+				end
+
+				if data[index_3d] == c_dirt then
+					data[index_3d] = dirt
+					write = true
+				elseif data[index_3d] == c_snow then
+					data[index_3d] = snow
+					write = true
+				elseif data[index_3d] == c_dirt_with_grass then
+					data[index_3d] = lawn
+					write = true
+				elseif data[index_3d] == c_dirt_with_dry_grass then
+					data[index_3d] = dry
+					write = true
+				elseif data[index_3d] == c_sand then
+					local sr = math.random(50)
+					if valc.glow and sr == 1 then
+						data[index_3d] = c_glowing_sand
+						write = true
+					elseif sr < 10 then
+						data[index_3d] = c_sand_with_rocks
 						write = true
 					end
 				end

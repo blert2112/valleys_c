@@ -17,7 +17,7 @@ minetest.override_item("default:river_water_flowing", {liquid_range = waterflow}
 minetest.override_item("default:river_water_source", {is_ground_content = true})
 minetest.override_item("default:river_water_flowing", {is_ground_content = true})
 
-if true then
+if false then
 	minetest.override_item("default:river_water_source", {light_source = 14})
 	minetest.override_item("default:river_water_flowing", {light_source = 14})
 end
@@ -122,6 +122,7 @@ if valc.houses then
 	dofile(valc.path.."/deco_houses.lua")
 end
 
+dofile(valc.path.."/deco_dirt.lua")
 dofile(valc.path.."/deco_trees.lua")
 dofile(valc.path.."/deco_plants.lua")
 dofile(valc.path.."/deco_rocks.lua")

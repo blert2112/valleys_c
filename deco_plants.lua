@@ -88,6 +88,7 @@ for _, plant in ipairs(valc.plantlist) do
 			node_box = {type='fixed', fixed={{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}, {-0.5, 0.5, -0.001, 0.5, 1.5, 0.001}, {-0.001, 0.5, -0.5, 0.001, 1.5, 0.5}}},
 			drop = {max_items=2, items={{items={"valleys_c:"..plant.name}, rarity=1}, {items={"default:sand"}, rarity=1}}},
 			tiles = { "default_sand.png", "vmg_"..plant.name..".png",},
+			--tiles = { "default_dirt.png", "vmg_"..plant.name..".png",},
 			sunlight_propagates = plant.light,
 			paramtype = "light",
 			walkable = false,
