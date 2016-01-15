@@ -43,7 +43,7 @@ minetest.register_node("valleys_c:giant_mushroom_cap", {
 
 minetest.register_node("valleys_c:giant_mushroom_stem", {
 	description = "Giant Mushroom Stem",
-	tiles = {"vmg_mushroom_giant_under.png", "vmg_mushroom_giant_under.png", "vmg_mushroom_giant_stem.png"},
+	tiles = {"vmg_mushroom_giant_stem.png", "vmg_mushroom_giant_stem.png", "vmg_mushroom_giant_stem.png"},
 	is_ground_content = false,
 	groups = {tree=1,choppy=2,oddly_breakable_by_hand=1,flammable=2, plant=1},
 	sounds = default.node_sound_wood_defaults(),
