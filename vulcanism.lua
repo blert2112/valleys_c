@@ -6,7 +6,7 @@ minetest.register_node("valleys_c:lava_stone", newnode)
 
 
 default.cool_lava_flowing = function(pos)
-	sr = math.random(200)
+	local sr = math.random(200)
 	if sr == 1 then
 		minetest.place_node(pos, {name='default:stone_with_mese'})
 	elseif sr == 2 then
