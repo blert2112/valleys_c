@@ -201,10 +201,10 @@ do
 		minetest.register_decoration({
 			deco_type = "schematic",
 			sidelen = 80,
-			place_on = {"default:dirt_with_grass", "default:dirt_with_dry_grass"},
+			place_on = {"default:dirt_with_snow", "default:dirt_with_grass"},
 			y_min = 4,
 			fill_ratio = (max_h-h+1)/3000,
-			biomes = {"deciduous_forest",},
+			biomes = {"deciduous_forest", "coniferous_forest", "taiga",},
 			schematic = schem,
 			flags = "place_center_x, place_center_z",
 			rotation = "random",

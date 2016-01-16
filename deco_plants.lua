@@ -149,7 +149,7 @@ register_flower("gerbera", 1976, {"savanna", "rainforest",})
 -- Water Plant: Arrow Arum
 valc.register_water_plant({
 	fill_ratio = 0.1,
-	place_on = {"default:sand"},
+	place_on = {"group:sand"},
 	decoration = {"valleys_c:arrow_arum_water",},
 	--biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
 	biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp","sandstone_grassland_ocean", "stone_grassland_ocean", "coniferous_forest_ocean", "deciduous_forest_ocean", "desert_ocean", "savanna_ocean",},

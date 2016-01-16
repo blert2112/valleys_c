@@ -87,7 +87,7 @@ for i = 1,#leaves do
 		minetest.register_decoration({
 			deco_type = "schematic",
 			sidelen = 80,
-			place_on = {"default:dirt_with_grass", "default:dirt_with_dry_grass"},
+			place_on = {"group:soil"},
 			y_min = 4,
 			fill_ratio = (max_r-r+1)/5000,
 			biomes = {"coniferous_forest", "deciduous_forest", "rainforest", "rainforest_swamp",},

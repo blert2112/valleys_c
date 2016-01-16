@@ -106,7 +106,7 @@ do
 			minetest.register_decoration({
 				deco_type = "schematic",
 				sidelen = 80,
-				place_on = {"default:dirt_with_grass", "default:dirt_with_dry_grass"},
+				place_on = {"group:soil"},
 				-- noise_params = {
 				-- 	offset = -0.9,
 				-- 	scale = 1.0,
