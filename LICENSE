@@ -4,14 +4,11 @@ The original source code can be found at the Valleys Mapgen project:
 https://github.com/Gael-de-Sailly/valleys_mapgen
 
 
-[ Note: If we want this to be a part of the minetest base code, this
-must be relicensed to be compatible. ]
-
-
 Parts of this project are distributed under the WTFPL license
 (https://en.wikipedia.org/wiki/WTFPL):
  - all ferns_* image files in the textures directory
  - most fern related code (deco_ferns.lua)
+ - all textures by Duane Robertson
 
 All original work by Duane Robertson is distributed under the BSD
 license (https://en.wikipedia.org/wiki/Bsd_license), except where it

@@ -28,9 +28,11 @@ function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 				if x == 0 and z == 0 then
 					s.data[i].name = trunk
 					s.data[i].param1 = 255
+					s.data[i].force_place = true
 				elseif (x == 0 or z == 0) and y < 3 then
 					s.data[i].name = trunk
 					s.data[i].param1 = 255
+					s.data[i].force_place = true
 				elseif y > 3 then
 					s.data[i].name = leaf
 					s.data[i].param1 = 50
@@ -51,6 +53,7 @@ function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 				local i = (j*z + radius)*width*height + y*width + (j*x + radius) + 1
 				s.data[i].name = trunk
 				s.data[i].param1 = 255
+				s.data[i].force_place = true
 				valc.generate_canopy(s, leaf, {x=j*x, y=y, z=j*z})
 			end
 		end

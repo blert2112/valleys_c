@@ -44,6 +44,7 @@ function valc.generate_luminous_schematic(trunk_height)
 		local i = (0+radius)*width*height + y*width + (0+radius) + 1
 		s.data[i].name = "valleys_c:birch_tree"
 		s.data[i].param1 = 255
+		s.data[i].force_place = true
 	end
 
 	for z = -1,1 do

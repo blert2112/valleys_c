@@ -59,6 +59,7 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 						s.data[i].name = trunk
 					end
 					s.data[i].param1 = 255
+					s.data[i].force_place = true
 				elseif y > trunk_height and dist <= r1 then
 					s.data[i].name = leaf
 					s.data[i].param1 = probs[dist]
