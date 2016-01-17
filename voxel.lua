@@ -57,30 +57,62 @@ local mapgen_times = {
 }
 
 
--- These variables hold the content IDs. They aren't available until
--- the actual mapgen loop is run, but they can stay local to the
--- file rather than having to load them for every map chunk.
---
+-- Define content IDs
+-- A content ID is a number that represents a node in the core of Minetest.
+-- Every nodename has its ID.
+-- The VoxelManipulator uses content IDs instead of nodenames.
+
 -- Ground nodes
-local c_stone, c_dirt, c_dirt_with_grass, c_dirt_with_dry_grass, c_snow
-local c_sand, c_sandstone, c_desert_sand, c_gravel, c_desertstone
-local c_river_water_source, c_water_source
-local c_sand_with_rocks, c_glowing_sand, c_fungal_stone, c_stalactite
-local c_stalagmite, c_mushroom_cap_giant, c_mushroom_cap_huge, c_mushroom_stem
-local c_mushroom_fertile_red, c_mushroom_fertile_brown, c_waterlily
-local c_dirt_clay, c_lawn_clay, c_dry_clay, c_snow_clay, c_dirt_silt
-local c_lawn_silt, c_dry_silt, c_snow_silt, c_dirt_sand, c_lawn_sand
-local c_dry_sand, c_snow_sand, c_silt, c_clay
+local c_stone = minetest.get_content_id("default:stone")
+local c_dirt = minetest.get_content_id("default:dirt")
+local c_dirt_with_grass = minetest.get_content_id("default:dirt_with_grass")
+local c_dirt_with_dry_grass = minetest.get_content_id("default:dirt_with_dry_grass")
+local c_snow = minetest.get_content_id("default:dirt_with_snow")
+local c_sand = minetest.get_content_id("default:sand")
+local c_sandstone = minetest.get_content_id("default:sandstone")
+local c_desert_sand = minetest.get_content_id("default:desert_sand")
+local c_gravel = minetest.get_content_id("default:gravel")
+local c_desertstone = minetest.get_content_id("default:desert_stone")
+local c_river_water_source = minetest.get_content_id("default:river_water_source")
+local c_water_source = minetest.get_content_id("default:water_source")
+
+local c_sand_with_rocks = minetest.get_content_id("valleys_c:sand_with_rocks")
+local c_glowing_sand = minetest.get_content_id("valleys_c:glowing_sand")
+local c_fungal_stone = minetest.get_content_id("valleys_c:glowing_fungal_stone")
+local c_stalactite = minetest.get_content_id("valleys_c:stalactite")
+local c_stalagmite = minetest.get_content_id("valleys_c:stalagmite")
+local c_mushroom_cap_giant = minetest.get_content_id("valleys_c:giant_mushroom_cap")
+local c_mushroom_cap_huge = minetest.get_content_id("valleys_c:huge_mushroom_cap")
+local c_mushroom_stem = minetest.get_content_id("valleys_c:giant_mushroom_stem")
+local c_mushroom_fertile_red = minetest.get_content_id("flowers:mushroom_fertile_red")
+local c_mushroom_fertile_brown = minetest.get_content_id("flowers:mushroom_fertile_brown")
+local c_waterlily = minetest.get_content_id("flowers:waterlily")
+
+local c_dirt_clay = minetest.get_content_id("valleys_c:dirt_clayey")
+local c_lawn_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_grass")
+local c_dry_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_dry_grass")
+local c_snow_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_snow")
+local c_dirt_silt = minetest.get_content_id("valleys_c:dirt_silty")
+local c_lawn_silt = minetest.get_content_id("valleys_c:dirt_silty_with_grass")
+local c_dry_silt = minetest.get_content_id("valleys_c:dirt_silty_with_dry_grass")
+local c_snow_silt = minetest.get_content_id("valleys_c:dirt_silty_with_snow")
+local c_dirt_sand = minetest.get_content_id("valleys_c:dirt_sandy")
+local c_lawn_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_grass")
+local c_dry_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_dry_grass")
+local c_snow_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_snow")
+local c_silt = minetest.get_content_id("valleys_c:silt")
+local c_clay = minetest.get_content_id("valleys_c:red_clay")
 
 -- Air and Ignore
-local c_air, c_ignore
+local c_air = minetest.get_content_id("air")
+local c_ignore = minetest.get_content_id("ignore")
 
 local water_lily_biomes = {"rainforest_swamp", "rainforest", "savanna_swamp", "savanna",  "deciduous_forest_swamp", "deciduous_forest"}
 
 local clay_threshold = 1
 local silt_threshold = 1
 local sand_threshold = 0.75
-local dirt_threshold = 0.5
+local dirt_threshold = 0.75
 
 --local clay_threshold = vmg.define("clay_threshold", 1)
 --local silt_threshold = vmg.define("silt_threshold", 1)
@@ -109,57 +141,6 @@ end
 -- the mapgen function
 function valc.generate(minp, maxp, seed)
 	local t0 = os.clock()
-
-	-- Define content IDs
-	-- A content ID is a number that represents a node in the core of Minetest.
-	-- Every nodename has its ID.
-	-- The VoxelManipulator uses content IDs instead of nodenames.
-	if not c_stone then
-		-- Ground nodes
-		c_stone = minetest.get_content_id("default:stone")
-		c_dirt = minetest.get_content_id("default:dirt")
-		c_dirt_with_grass = minetest.get_content_id("default:dirt_with_grass")
-		c_dirt_with_dry_grass = minetest.get_content_id("default:dirt_with_dry_grass")
-		c_snow = minetest.get_content_id("default:dirt_with_snow")
-		c_sand = minetest.get_content_id("default:sand")
-		c_sandstone = minetest.get_content_id("default:sandstone")
-		c_desert_sand = minetest.get_content_id("default:desert_sand")
-		c_gravel = minetest.get_content_id("default:gravel")
-		c_desertstone = minetest.get_content_id("default:desert_stone")
-		c_river_water_source = minetest.get_content_id("default:river_water_source")
-		c_water_source = minetest.get_content_id("default:water_source")
-
-		c_sand_with_rocks = minetest.get_content_id("valleys_c:sand_with_rocks")
-		c_glowing_sand = minetest.get_content_id("valleys_c:glowing_sand")
-		c_fungal_stone = minetest.get_content_id("valleys_c:glowing_fungal_stone")
-		c_stalactite = minetest.get_content_id("valleys_c:stalactite")
-		c_stalagmite = minetest.get_content_id("valleys_c:stalagmite")
-		c_mushroom_cap_giant = minetest.get_content_id("valleys_c:giant_mushroom_cap")
-		c_mushroom_cap_huge = minetest.get_content_id("valleys_c:huge_mushroom_cap")
-		c_mushroom_stem = minetest.get_content_id("valleys_c:giant_mushroom_stem")
-		c_mushroom_fertile_red = minetest.get_content_id("flowers:mushroom_fertile_red")
-		c_mushroom_fertile_brown = minetest.get_content_id("flowers:mushroom_fertile_brown")
-		c_waterlily = minetest.get_content_id("flowers:waterlily")
-
-		c_dirt_clay = minetest.get_content_id("valleys_c:dirt_clayey")
-		c_lawn_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_grass")
-		c_dry_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_dry_grass")
-		c_snow_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_snow")
-		c_dirt_silt = minetest.get_content_id("valleys_c:dirt_silty")
-		c_lawn_silt = minetest.get_content_id("valleys_c:dirt_silty_with_grass")
-		c_dry_silt = minetest.get_content_id("valleys_c:dirt_silty_with_dry_grass")
-		c_snow_silt = minetest.get_content_id("valleys_c:dirt_silty_with_snow")
-		c_dirt_sand = minetest.get_content_id("valleys_c:dirt_sandy")
-		c_lawn_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_grass")
-		c_dry_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_dry_grass")
-		c_snow_sand = minetest.get_content_id("valleys_c:dirt_sandy_with_snow")
-		c_silt = minetest.get_content_id("valleys_c:silt")
-		c_clay = minetest.get_content_id("valleys_c:red_clay")
-
-		-- Air and Ignore
-		c_air = minetest.get_content_id("air")
-		c_ignore = minetest.get_content_id("ignore")
-	end
 
 	-- minp and maxp strings, used by logs
 	local minps, maxps = minetest.pos_to_string(minp), minetest.pos_to_string(maxp)
@@ -236,13 +217,13 @@ function valc.generate(minp, maxp, seed)
 								local placeable = false
 								local place = desc.place_on
 								if type(place) == 'string' then
-									if (place == "default:dirt" and data[index_3d] == c_dirt) or (place == "default:sand" and data[index_3d] == c_sand) then
+									if (place == "default:dirt" and data[index_3d] == c_dirt) or (place == "default:sand" and data[index_3d] == c_sand) or (place == "group:sand" and data[index_3d] == c_sand) then
 										placeable = true
 									end
 								elseif type(place) == 'table' then
 									for _, e in pairs(place) do
 										if type(e) == 'string' then
-											if (e == "default:dirt" and data[index_3d] == c_dirt) or (e == "default:sand" and data[index_3d] == c_sand) then
+											if (e == "default:dirt" and data[index_3d] == c_dirt) or (e == "default:sand" and data[index_3d] == c_sand or (e == "group:sand" and data[index_3d] == c_sand)) then
 												placeable = true
 											end
 										end
