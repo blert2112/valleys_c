@@ -64,21 +64,6 @@ function table.contains(table, element)
   return false
 end
 
-function table.copy(orig)
-	local orig_type = type(orig)
-	local copy_t
-	if orig_type == 'table' then
-		copy_t = {}
-		for orig_key, orig_value in next, orig, nil do
-			copy_t[table.copy(orig_key)] = table.copy(orig_value)
-		end
-		setmetatable(copy_t, table.copy(getmetatable(orig)))
-	else -- number, string, boolean, etc
-		copy_t = orig
-	end
-	return copy_t
-end
-
 -- This isn't already in the math library? Really?
 function math.round(i)
 	return math.floor(i + 0.5)

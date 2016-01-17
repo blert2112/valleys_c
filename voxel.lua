@@ -174,6 +174,8 @@ function valc.generate(minp, maxp, seed)
 	local n16 = valc.noisemap(16, minp2d, chulens)
 	local n21 = valc.noisemap(21, minp2d, chulens)
 
+	local node_match_cache = {}
+
 	-- Mapgen preparation is now finished. Check the timer to know the elapsed time.
 	local t1 = os.clock()
 
@@ -211,23 +213,28 @@ function valc.generate(minp, maxp, seed)
 								surround = false
 							end
 						end
+
 						-- Check the biomes and plant water plants, if called for.
 						if surround then
 							for _, desc in pairs(valc.water_plants) do
 								local placeable = false
-								local place = desc.place_on
-								if type(place) == 'string' then
-									if (place == "default:dirt" and data[index_3d] == c_dirt) or (place == "default:sand" and data[index_3d] == c_sand) or (place == "group:sand" and data[index_3d] == c_sand) then
+
+								if not node_match_cache[desc] then
+									node_match_cache[desc] = {}
+								end
+
+								if node_match_cache[desc][data[index_3d]] then
+									placeable = node_match_cache[desc][data[index_3d]]
+								else
+									-- This is a great way to match all node type strings
+									-- against a given node (or nodes). However, it's slow.
+									-- To speed it up, we cache the results for each plant
+									-- on each node, and avoid calling find_nodes every time.
+									local pos, count = minetest.find_nodes_in_area({x=x,y=y,z=z}, {x=x,y=y,z=z}, desc.place_on)
+									if #pos > 0 then
 										placeable = true
 									end
-								elseif type(place) == 'table' then
-									for _, e in pairs(place) do
-										if type(e) == 'string' then
-											if (e == "default:dirt" and data[index_3d] == c_dirt) or (e == "default:sand" and data[index_3d] == c_sand or (e == "group:sand" and data[index_3d] == c_sand)) then
-												placeable = true
-											end
-										end
-									end
+									node_match_cache[desc][data[index_3d]] = placeable 
 								end
 
 								if placeable and desc.fill_ratio and desc.content_id then

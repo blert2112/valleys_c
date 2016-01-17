@@ -82,7 +82,7 @@ for _, plant in ipairs(valc.plantlist) do
 	})
 
 	if plant.water then
-		minetest.register_node("valleys_c:"..plant.name.."_water", {
+		local def = {
 			description = plant.desc,
 			drawtype = "nodebox",
 			node_box = {type='fixed', fixed={{-0.5, -0.5, -0.5, 0.5, 0.5, 0.5}, {-0.5, 0.5, -0.001, 0.5, 1.5, 0.001}, {-0.001, 0.5, -0.5, 0.001, 1.5, 0.5}}},
@@ -98,7 +98,12 @@ for _, plant in ipairs(valc.plantlist) do
 				fixed = {-0.5, 0.5, -0.5, 0.5, 11/16, 0.5},
 			},
 			sounds = default.node_sound_leaves_defaults(),
-		})
+		}
+		minetest.register_node("valleys_c:"..plant.name.."_water_sand", def)
+		def2 = table.copy(def)
+		def2.tiles = { "default_dirt.png", "vmg_"..plant.name..".png",}
+		def2.drop = {max_items=2, items={{items={"valleys_c:"..plant.name}, rarity=1}, {items={"default:dirt"}, rarity=1}}}
+		minetest.register_node("valleys_c:"..plant.name.."_water_soil", def2)
 	end
 end
 
@@ -146,15 +151,24 @@ register_flower("hibiscus", 7831, {"sandstone_grassland", "deciduous_forest", "s
 register_flower("calla_lily", 7985, {"sandstone_grassland", "stone_grassland", "deciduous_forest", "rainforest",})
 register_flower("gerbera", 1976, {"savanna", "rainforest",})
 
--- Water Plant: Arrow Arum
-valc.register_water_plant({
-	fill_ratio = 0.1,
-	place_on = {"group:sand"},
-	decoration = {"valleys_c:arrow_arum_water",},
-	--biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
-	biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp","sandstone_grassland_ocean", "stone_grassland_ocean", "coniferous_forest_ocean", "deciduous_forest_ocean", "desert_ocean", "savanna_ocean",},
-	y_max = 60,
-})
+do
+	-- Water Plant: Arrow Arum
+	local arrow_def_sand = {
+		fill_ratio = 0.1,
+		place_on = {"group:sand"},
+		decoration = {"valleys_c:arrow_arum_water_sand",},
+		--biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
+		biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp","sandstone_grassland_ocean", "stone_grassland_ocean", "coniferous_forest_ocean", "deciduous_forest_ocean", "desert_ocean", "savanna_ocean",},
+		y_max = 60,
+	}
+	local arrow_def_soil = table.copy(arrow_def_sand)
+	arrow_def_soil.place_on = {"group:soil"}
+	arrow_def_soil.decoration = {"valleys_c:arrow_arum_water_soil",}
+
+	valc.register_water_plant(arrow_def_sand)
+	valc.register_water_plant(arrow_def_soil)
+end
+
 
 if valc.glow then
 	minetest.register_node("valleys_c:moon_weed", {
