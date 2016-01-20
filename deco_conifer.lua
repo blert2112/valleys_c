@@ -7,11 +7,11 @@ newnode = valc.clone_node("default:pine_needles")
 if valc.noleafdecay then
 	newnode.groups.leafdecay = 0
 end
-newnode.tiles = {"default_pine_needles.png^[colorize:#FF0000:15"}
+newnode.tiles = {"default_pine_needles.png^[colorize:#FF0000:20"}
 minetest.register_node("valleys_c:pine_needles2", newnode)
-newnode.tiles = {"default_pine_needles.png^[colorize:#FFFF00:15"}
+newnode.tiles = {"default_pine_needles.png^[colorize:#FFFF00:20"}
 minetest.register_node("valleys_c:pine_needles3", newnode)
-newnode.tiles = {"default_pine_needles.png^[colorize:#00FF00:15"}
+newnode.tiles = {"default_pine_needles.png^[colorize:#00FF00:20"}
 minetest.register_node("valleys_c:pine_needles4", newnode)
 
 if valc.glow then

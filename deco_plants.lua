@@ -90,6 +90,7 @@ for _, plant in ipairs(valc.plantlist) do
 			tiles = { "default_sand.png", "vmg_"..plant.name..".png",},
 			--tiles = { "default_dirt.png", "vmg_"..plant.name..".png",},
 			sunlight_propagates = plant.light,
+			--light_source = 14,
 			paramtype = "light",
 			walkable = false,
 			groups = groups,
@@ -154,7 +155,7 @@ register_flower("gerbera", 1976, {"savanna", "rainforest",})
 do
 	-- Water Plant: Arrow Arum
 	local arrow_def_sand = {
-		fill_ratio = 0.1,
+		fill_ratio = 0.05,
 		place_on = {"group:sand"},
 		decoration = {"valleys_c:arrow_arum_water_sand",},
 		--biomes = {"sandstone_grassland", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
@@ -181,7 +182,7 @@ if valc.glow then
 		paramtype = "light",
 		light_source = 8,
 		walkable = false,
-		groups = groups,
+		groups = {snappy=3,flammable=2,flora=1,attached_node=1},
 		sounds = default.node_sound_leaves_defaults(),
 		selection_box = {
 			type = "fixed",

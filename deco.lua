@@ -20,6 +20,8 @@ minetest.override_item("default:river_water_flowing", {is_ground_content = true}
 if false then
 	minetest.override_item("default:river_water_source", {light_source = 14})
 	minetest.override_item("default:river_water_flowing", {light_source = 14})
+	minetest.override_item("default:water_source", {light_source = 14})
+	minetest.override_item("default:water_flowing", {light_source = 14})
 end
 
 if false then
@@ -133,6 +135,7 @@ if valc.houses then
 	dofile(valc.path.."/deco_houses.lua")
 end
 
+dofile(valc.path.."/deco_coral.lua")
 dofile(valc.path.."/deco_dirt.lua")
 dofile(valc.path.."/deco_trees.lua")
 dofile(valc.path.."/deco_plants.lua")
@@ -140,6 +143,7 @@ dofile(valc.path.."/deco_rocks.lua")
 dofile(valc.path.."/deco_caves.lua")
 dofile(valc.path.."/deco_ferns.lua")
 dofile(valc.path.."/deco_ferns_tree.lua")
+dofile(valc.path.."/deco_water.lua")
 
 
 	-- biomes = {"sandstone_grassland", "glacier", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},

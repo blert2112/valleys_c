@@ -7,13 +7,13 @@ local newnode = valc.clone_node("default:leaves")
 if valc.noleafdecay then
 	newnode.groups.leafdecay = 0
 end
-newnode.tiles = {"default_leaves.png^[colorize:#FF0000:15"}
+newnode.tiles = {"default_leaves.png^[colorize:#FF0000:20"}
 minetest.register_node("valleys_c:leaves2", newnode)
-newnode.tiles = {"default_leaves.png^[colorize:#FFFF00:15"}
+newnode.tiles = {"default_leaves.png^[colorize:#FFFF00:20"}
 minetest.register_node("valleys_c:leaves3", newnode)
-newnode.tiles = {"default_leaves.png^[colorize:#00FFFF:15"}
+newnode.tiles = {"default_leaves.png^[colorize:#00FFFF:20"}
 minetest.register_node("valleys_c:leaves4", newnode)
-newnode.tiles = {"default_leaves.png^[colorize:#00FF00:15"}
+newnode.tiles = {"default_leaves.png^[colorize:#00FF00:20"}
 minetest.register_node("valleys_c:leaves5", newnode)
 
 if valc.glow then

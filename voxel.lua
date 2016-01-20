@@ -87,6 +87,10 @@ local c_mushroom_stem = minetest.get_content_id("valleys_c:giant_mushroom_stem")
 local c_mushroom_fertile_red = minetest.get_content_id("flowers:mushroom_fertile_red")
 local c_mushroom_fertile_brown = minetest.get_content_id("flowers:mushroom_fertile_brown")
 local c_waterlily = minetest.get_content_id("flowers:waterlily")
+local c_brain_coral = minetest.get_content_id("valleys_c:brain_coral")
+local c_dragon_eye = minetest.get_content_id("valleys_c:dragon_eye")
+local c_pillar_coral = minetest.get_content_id("valleys_c:pillar_coral")
+local c_staghorn_coral = minetest.get_content_id("valleys_c:staghorn_coral")
 
 local c_dirt_clay = minetest.get_content_id("valleys_c:dirt_clayey")
 local c_lawn_clay = minetest.get_content_id("valleys_c:dirt_clayey_with_grass")
@@ -108,6 +112,7 @@ local c_air = minetest.get_content_id("air")
 local c_ignore = minetest.get_content_id("ignore")
 
 local water_lily_biomes = {"rainforest_swamp", "rainforest", "savanna_swamp", "savanna",  "deciduous_forest_swamp", "deciduous_forest"}
+local coral_biomes = {"stone_grassland_ocean", "coniferous_forest_ocean", "sandstone_grassland_ocean", "deciduous_forest_ocean", "desert_ocean", "savanna_ocean", "rainforest_ocean", }
 
 local clay_threshold = 1
 local silt_threshold = 1
@@ -118,6 +123,8 @@ local dirt_threshold = 0.75
 --local silt_threshold = vmg.define("silt_threshold", 1)
 --local sand_threshold = vmg.define("sand_threshold", 0.75)
 --local dirt_threshold = vmg.define("dirt_threshold", 0.5)
+
+local light_depth = -13
 
 -- Create a table of biome ids, so I can use the biomemap.
 if not valc.biome_ids then
@@ -215,7 +222,19 @@ function valc.generate(minp, maxp, seed)
 						end
 
 						-- Check the biomes and plant water plants, if called for.
-						if surround then
+						local biome = valc.biome_ids[biomemap[index_2d]]
+						if y >= light_depth and y < -1 and data[index_3d + ystride] == c_water_source and table.contains(coral_biomes, biome) and n21[index_2d] < -0.05 and math.random(3) ~= 1 then
+							local sr = math.random(100)
+							if sr < 5 then
+								data[index_3d + ystride] = c_brain_coral
+							elseif sr < 10 then
+								data[index_3d + ystride] = c_dragon_eye
+							elseif sr < 35 then
+								data[index_3d + ystride] = c_staghorn_coral
+							elseif sr < 100 then
+								data[index_3d + ystride] = c_pillar_coral
+							end
+						elseif y >= light_depth and surround then
 							for _, desc in pairs(valc.water_plants) do
 								local placeable = false
 
@@ -299,7 +318,7 @@ function valc.generate(minp, maxp, seed)
 					local biome = valc.biome_ids[biomemap[index_2d]]
 					-- I haven't figured out what the decoration manager is
 					--  doing with the noise functions, but this works ok.
-					if table.contains(water_lily_biomes, biome) and n21[index_2d] > 0.5 and math.random(5) == 1 then
+					if table.contains(water_lily_biomes, biome) and n21[index_2d] > 0.5 and math.random(15) == 1 then
 						data[index_3d] = c_waterlily
 						write = true
 					end
@@ -357,6 +376,8 @@ function valc.generate(minp, maxp, seed)
 					data[index_3d] = dry
 					write = true
 				elseif data[index_3d] == c_sand then
+
+				--if data[index_3d] == c_sand then
 					local sr = math.random(50)
 					if valc.glow and sr == 1 then
 						data[index_3d] = c_glowing_sand
