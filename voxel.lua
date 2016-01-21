@@ -223,11 +223,11 @@ function valc.generate(minp, maxp, seed)
 
 						-- Check the biomes and plant water plants, if called for.
 						local biome = valc.biome_ids[biomemap[index_2d]]
-						if y >= light_depth and y < -1 and data[index_3d + ystride] == c_water_source and table.contains(coral_biomes, biome) and n21[index_2d] < -0.05 and math.random(3) ~= 1 then
+						if y >= light_depth and y < -1 and data[index_3d + ystride] == c_water_source and table.contains(coral_biomes, biome) and n21[index_2d] < -0.1 and math.random(3) ~= 1 then
 							local sr = math.random(100)
-							if sr < 5 then
+							if sr < 4 then
 								data[index_3d + ystride] = c_brain_coral
-							elseif sr < 10 then
+							elseif sr < 6 then
 								data[index_3d + ystride] = c_dragon_eye
 							elseif sr < 35 then
 								data[index_3d + ystride] = c_staghorn_coral

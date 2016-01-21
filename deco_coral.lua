@@ -1,38 +1,40 @@
 
 
 
-local grid = {}
-local pillars = 5
-for x = 1,pillars do
-	for z = 1,pillars do
-		local d2 = (2 / (pillars + 2)) / (pillars - 1)
-		local d1 = (1 + d2) / pillars
-		local g = {}
-		g[#g + 1] = (x - 1) * d1 - 0.5
-		g[#g + 1] = -0.5 
-		g[#g + 1] = (z - 1) * d1 - 0.5
-		g[#g + 1] = x * d1 - d2 - 0.5
-		g[#g + 1] = 0.5 - (math.random(4) + math.random(4)) * 0.1 
-		g[#g + 1] = z * d1 - d2 - 0.5
-		grid[#grid + 1] = g
-	end
-end
+-- The pillars are neat, but a huge fps killer en masse.
+--local grid = {}
+--local pillars = 5
+--for x = 1,pillars do
+--	for z = 1,pillars do
+--		local d2 = (2 / (pillars + 2)) / (pillars - 1)
+--		local d1 = (1 + d2) / pillars
+--		local g = {}
+--		g[#g + 1] = (x - 1) * d1 - 0.5
+--		g[#g + 1] = -0.5 
+--		g[#g + 1] = (z - 1) * d1 - 0.5
+--		g[#g + 1] = x * d1 - d2 - 0.5
+--		g[#g + 1] = 0.5 - (math.random(4) + math.random(4)) * 0.1 
+--		g[#g + 1] = z * d1 - d2 - 0.5
+--		grid[#grid + 1] = g
+--	end
+--end
 
 minetest.register_node("valleys_c:pillar_coral", {
 	description = "Pillar Coral",
 	tiles = {"valc_pillar_coral.png"},
 	paramtype = "light",
-	drawtype = "nodebox",
+--	drawtype = "nodebox",
 	light_source = 2,
-	node_box = {
-		type = "fixed", 
-		fixed = grid,
-	},
+--	node_box = {
+--		type = "fixed", 
+--		fixed = grid,
+--	},
 --	selection_box = {
 --		type = "fixed", 
---		fixed = {-0.5, -0.5, -0.5, 0.5, -5/16, 0.5},
+--		fixed = {-0.5, -0.5, -0.5, 0.5, 0.5, 0.5},
 --	},
-	groups = {cracky = 3, stone=1, sea=1},
+--	groups = {cracky = 3, stone=1, sea=1},
+	groups = {cracky = 3, stone=1},
 	sounds = default.node_sound_stone_defaults(),
 })
 
