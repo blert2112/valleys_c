@@ -10,11 +10,11 @@
 
 -- Check for necessary mod functions and abort if they aren't available.
 if not minetest.get_biome_id then
-	print()
-	print("* Not loading Valleys Mapgen *")
-	print("Valleys Mapgen requires mod functions which are")
-	print(" not exposed by your Minetest build.")
-	print()
+	minetest.log()
+	minetest.log("* Not loading Valleys Mapgen *")
+	minetest.log("Valleys Mapgen requires mod functions which are")
+	minetest.log(" not exposed by your Minetest build.")
+	minetest.log()
 	return
 end
 
@@ -92,6 +92,15 @@ dofile(valc.path.."/deco.lua")
 dofile(valc.path.."/vulcanism.lua")
 dofile(valc.path.."/voxel.lua")
 
+minetest.register_abm({
+	nodenames = {"bones:bones"},
+	interval = 10,
+	chance = 1,
+	action = function(pos)
+		minetest.log("*** Bones say: I'm at ("..pos.x..","..pos.y..","..pos.z..").")
+	end,
+})
 
-print("Valleys Mapgen C++ Helper loaded")
+
+minetest.log("Valleys Mapgen C++ Helper loaded")
 

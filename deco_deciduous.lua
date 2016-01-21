@@ -204,7 +204,7 @@ do
 			place_on = {"default:dirt_with_snow", "default:dirt_with_grass"},
 			y_min = 4,
 			fill_ratio = (max_h-h+1)/3000,
-			biomes = {"deciduous_forest", "coniferous_forest", "taiga",},
+			biomes = {"coniferous_forest", "taiga",},
 			schematic = schem,
 			flags = "place_center_x, place_center_z",
 			rotation = "random",

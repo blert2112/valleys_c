@@ -452,27 +452,25 @@ minetest.register_on_shutdown(function()
 	end
 
 	local average, standard_dev
-	print("\nValleys_C lua Mapgen Times:")
+	minetest.log("Valleys_C lua Mapgen Times:")
 
 	average = mean(mapgen_times.liquid_lighting)
-	print("  liquid_lighting: - - - - - - - - - - - -  "..average)
+	minetest.log("  liquid_lighting: - - - - - - - - - - - -  "..average)
 
 	average = mean(mapgen_times.loops)
-	print("  loops: - - - - - - - - - - - - - - - - -  "..average)
+	minetest.log("  loops: - - - - - - - - - - - - - - - - -  "..average)
 
 	average = mean(mapgen_times.make_chunk)
-	print("  makeChunk: - - - - - - - - - - - - - - -  "..average)
+	minetest.log("  makeChunk: - - - - - - - - - - - - - - -  "..average)
 
 	average = mean(mapgen_times.noisemaps)
-	print("  noisemaps: - - - - - - - - - - - - - - -  "..average)
+	minetest.log("  noisemaps: - - - - - - - - - - - - - - -  "..average)
 
 	average = mean(mapgen_times.preparation)
-	print("  preparation: - - - - - - - - - - - - - -  "..average)
+	minetest.log("  preparation: - - - - - - - - - - - - - -  "..average)
 
 	average = mean(mapgen_times.writing)
-	print("  writing: - - - - - - - - - - - - - - - -  "..average)
-
-	print()
+	minetest.log("  writing: - - - - - - - - - - - - - - - -  "..average)
 end)
 
 
