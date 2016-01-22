@@ -102,6 +102,7 @@ for grid_count = 1,6 do
 		walkable = false,
 		paramtype = "light",
 		drawtype = "nodebox",
+		buildable_to = true,
 		node_box = { type = "fixed", 
 								 fixed = grid },
 		selection_box = { type = "fixed", 
@@ -145,47 +146,47 @@ minetest.register_node("valleys_c:small_rocks", {
 })
 
 
--- Create some larger rocks that can be mined.
-local tiles = {"default_stone.png", "default_desert_stone.png", "default_sandstone.png"}
-local sel = {{-0.4,-0.5,-0.4,0.4,0.0,0.3}, {-0.4,-0.5,-0.4,0.2,-0.1,0.3}, {-0.3,-0.5,-0.3,0.2,-0.2,0.3}}
-
-for count = 1,9 do
-	local stone = tiles[(count % #tiles) + 1]
-	--local grid = {}
-	--step_sphere(grid, {x=-0.25,y=-0.5,z=-0.25}, {x=0.5, y=0.3, z=0.5})
-
-	minetest.register_node("valleys_c:medium_rock"..count, {
-		description = "Medium Rock",
-		tiles = {stone},
-		is_ground_content = true,
-		walkable = true,
-		paramtype = "light",
-		--drawtype = "mesh",
-		drawtype = "nodebox",
-		--mesh = "rock0"..math.ceil(count / 3)..".b3d",
-		node_box = {
-			type = "fixed", 
-			fixed = {
-				-0.25, -0.5, -0.25, 0.25, -0.25, 0.25,
-			},
-		},
-		selection_box = {type="fixed", fixed=sel[math.ceil(count / 3)]},
-		groups = {stone=1, cracky=3},
-		drop = "default:cobble",
-		sounds = default.node_sound_stone_defaults(),
-	})
-
-	minetest.register_decoration({
-		deco_type = "simple",
-		decoration = "valleys_c:medium_rock"..count,
-		sidelen = 80,
-		place_on = {"group:soil", "group:sand"},
-		fill_ratio = 0.001,
-		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest",},
-		flags = "place_center_x, place_center_z",
-		rotation = "random",
-	})
-end
+---- Create some larger rocks that can be mined.
+--local tiles = {"default_stone.png", "default_desert_stone.png", "default_sandstone.png"}
+--local sel = {{-0.4,-0.5,-0.4,0.4,0.0,0.3}, {-0.4,-0.5,-0.4,0.2,-0.1,0.3}, {-0.3,-0.5,-0.3,0.2,-0.2,0.3}}
+--
+--for count = 1,9 do
+--	local stone = tiles[(count % #tiles) + 1]
+--	--local grid = {}
+--	--step_sphere(grid, {x=-0.25,y=-0.5,z=-0.25}, {x=0.5, y=0.3, z=0.5})
+--
+--	minetest.register_node("valleys_c:medium_rock"..count, {
+--		description = "Medium Rock",
+--		tiles = {stone},
+--		is_ground_content = true,
+--		walkable = true,
+--		paramtype = "light",
+--		--drawtype = "mesh",
+--		drawtype = "nodebox",
+--		--mesh = "rock0"..math.ceil(count / 3)..".b3d",
+--		node_box = {
+--			type = "fixed", 
+--			fixed = {
+--				-0.25, -0.5, -0.25, 0.25, -0.25, 0.25,
+--			},
+--		},
+--		selection_box = {type="fixed", fixed=sel[math.ceil(count / 3)]},
+--		groups = {stone=1, cracky=3},
+--		drop = "default:cobble",
+--		sounds = default.node_sound_stone_defaults(),
+--	})
+--
+--	minetest.register_decoration({
+--		deco_type = "simple",
+--		decoration = "valleys_c:medium_rock"..count,
+--		sidelen = 80,
+--		place_on = {"group:soil", "group:sand"},
+--		fill_ratio = 0.001,
+--		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest",},
+--		flags = "place_center_x, place_center_z",
+--		rotation = "random",
+--	})
+--end
 
 
 -- Small rocks can be used to create cobblestone, if you like.

@@ -13,7 +13,7 @@ minetest.register_node("valleys_c:jungleleaves3", newnode)
 
 -- Create a schematic for a jungle tree.
 function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
-	local height = trunk_height * 2
+	local height = trunk_height * 2 + 1
 	local radius = 6
 	local width = 2 * radius + 1
 	local trunk_top = height - 4
@@ -22,7 +22,7 @@ function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 
 	-- roots, trunk, and extra leaves
 	for z = -1,1 do
-		for y = 0,trunk_top do
+		for y = 1,trunk_top do
 			for x = -1,1 do
 				local i = (z+radius)*width*height + y*width + (x+radius) + 1
 				if x == 0 and z == 0 then
@@ -42,7 +42,7 @@ function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 	end
 
 	-- canopies
-	for y = 0,trunk_top+2 do
+	for y = 1,trunk_top+2 do
 		if y > trunk_height and (y == trunk_top or math.random(height - y) == 1) then
 			local x, z = 0, 0
 			while x == 0 and z == 0 do

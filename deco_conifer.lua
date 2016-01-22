@@ -33,7 +33,7 @@ end
 
 -- similar to the general tree schematic, but basically vertical
 function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
-	local height = trunk_height + radius * 3 + 1
+	local height = trunk_height + radius * 3 + 2
 	local width = 2 * radius + 1
 	local trunk_top = height - radius - 1
 	local s = valc.schematic_array(width, height, width)
@@ -41,7 +41,7 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 	-- the main trunk
 	local probs = {200,150,100,75,50,25}
 	for z = -radius,radius do
-		for y = 0,trunk_top do
+		for y = 1,trunk_top do
 			-- Gives it a vaguely conical shape.
 			local r1 = math.ceil((height - y) / 4)
 			-- But rounded at the bottom.

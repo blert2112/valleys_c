@@ -34,14 +34,14 @@ end
 -- create a schematic for a spherical tree.
 function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, limbs)
 	-- trunk_height refers to the amount of trunk visible below any leaves.
-	local height = trunk_height + radii.y * 2 + 1
+	local height = trunk_height + radii.y * 2 + 2
 	local width = 2 * radii.z + 1
 	local trunk_top = height-radii.y-1
 
 	local s = valc.schematic_array(width, height, width)
 
 	-- the main trunk
-	for y = 0,trunk_top do
+	for y = 1,trunk_top do
 		local i = radii.z*width*height + y*width + radii.x + 1
 		if trunk == "default:tree" and valc.glow and math.random(10) == 1 then
 			s.data[i].name = "valleys_c:tree_glowing_moss"
