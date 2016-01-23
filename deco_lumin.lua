@@ -33,16 +33,37 @@ minetest.register_node("valleys_c:leaves_lumin", {
 	after_place_node = default.after_place_leaves,
 })
 
-function valc.generate_luminous_schematic(trunk_height)
+minetest.register_node("valleys_c:lumin_tree", {
+	description = "Lumin Tree",
+	tiles = {
+		"default_tree_top.png", "default_tree_top.png", "valc_lumin_tree.png"
+	},
+	paramtype = "light",
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed", 
+		fixed = { {-0.25, -0.5, -0.25, 0.25, 0.5, 0.25}, }
+	},
+	paramtype2 = "facedir",
+	is_ground_content = false,
+	groups = {tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2},
+	sounds = default.node_sound_wood_defaults(),
+
+	on_place = minetest.rotate_node
+})
+
+
+function valc.generate_luminous_schematic(trunk_height_in)
+	local trunk_height = trunk_height_in + 1
 	local height = trunk_height + 3
 	local radius = 1
 	local width = 3
 	local s = valc.schematic_array(width, height, width)
 
 	-- the main trunk
-	for y = 0,trunk_height do
+	for y = 1,trunk_height do
 		local i = (0+radius)*width*height + y*width + (0+radius) + 1
-		s.data[i].name = "valleys_c:birch_tree"
+		s.data[i].name = "valleys_c:lumin_tree"
 		s.data[i].param1 = 255
 		s.data[i].force_place = true
 	end
