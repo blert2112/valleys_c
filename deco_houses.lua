@@ -3,10 +3,15 @@
 
 local newnode = valc.clone_node("default:wood")
 newnode.tiles = {"default_wood.png^[colorize:#9F0000:150"}
+newnode.drop = "default:wood",
 minetest.register_node("valleys_c:wood_red", newnode)
+newnode = valc.clone_node("default:wood")
 newnode.tiles = {"default_wood.png^[colorize:#009F00:150"}
+newnode.drop = "default:wood",
 minetest.register_node("valleys_c:wood_green", newnode)
+newnode = valc.clone_node("default:wood")
 newnode.tiles = {"default_wood.png^[colorize:#00009F:150"}
+newnode.drop = "default:wood",
 minetest.register_node("valleys_c:wood_blue", newnode)
 
 local max_h = 8
