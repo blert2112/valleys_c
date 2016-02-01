@@ -88,6 +88,52 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 	return s
 end
 
+
+-- the default pine schematic
+function valc.generate_default_conifer_schematic(trunk, leaf)
+	local height = 13 + 1
+	local width = 5
+	local s = valc.schematic_array(width, height, width)
+
+	-- the main trunk
+	local probs = {255,220,190}
+
+	for p = 0,2 do
+		local c = math.floor(width / 2)
+		local y = height - p * 3 - 1
+		for r = 0,2 do
+			for z = c-r,c+r do
+				for x = c-r,c+r do
+					local i = z*width*height + (y-r)*width + x + 1
+					s.data[i].name = leaf
+					s.data[i].param1 = probs[r]
+				end
+			end
+		end
+
+		s.yslice_prob = {}
+		for y = 1,height-3 do
+			local i = 2*width*height + y*width + 2 + 1
+			if trunk == "default:pine_tree" and valc.glow and math.random(10) == 1 then
+				s.data[i].name = "valleys_c:pine_tree_glowing_moss"
+			else
+				s.data[i].name = trunk
+			end
+
+			s.data[i].param1 = 255
+			s.data[i].force_place = true
+
+			local j = (height - y - 1) / 3
+			if j == 0 or j == 1 or j == 2 or y <= height - 11 then
+				s.yslice_prob[#s.yslice_prob+1] = {ypos=y,prob=170}
+			end
+		end
+	end
+
+	return s
+end
+
+
 -- generic conifers
 valc.schematics.conifer_trees = {}
 leaves = {"default:pine_needles", "valleys_c:pine_needles2", "valleys_c:pine_needles3", "valleys_c:pine_needles4"}
@@ -103,6 +149,30 @@ for i = 1,#leaves do
 			sidelen = 80,
 			place_on = {"default:dirt_with_snow", "default:dirt_with_grass"},
 			fill_ratio = (max_r-r+1)/500,
+			biomes = {"coniferous_forest", "taiga",},
+			schematic = schem,
+			flags = "place_center_x, place_center_z",
+			y_min = 2,
+			rotation = "random",
+		})
+	end
+end
+
+
+if false then
+	-- generic conifers
+	valc.schematics.conifer_trees = {}
+	leaves = {"default:pine_needles", "valleys_c:pine_needles2", "valleys_c:pine_needles3", "valleys_c:pine_needles4"}
+	for i = 1,#leaves do
+		local schem = valc.generate_default_conifer_schematic("default:pine_tree", leaves[i])
+
+		push(valc.schematics.conifer_trees, schem)
+
+		minetest.register_decoration({
+			deco_type = "schematic",
+			sidelen = 80,
+			place_on = {"default:dirt_with_snow", "default:dirt_with_grass"},
+			fill_ratio = 6/500,
 			biomes = {"coniferous_forest", "taiga",},
 			schematic = schem,
 			flags = "place_center_x, place_center_z",
