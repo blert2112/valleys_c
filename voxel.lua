@@ -161,9 +161,9 @@ function valc.generate(minp, maxp, seed)
 	-- The data array is not limited by minp and maxp. It exceeds it by 16 nodes in the 6 directions.
 	-- The real limits of data array are emin and emax.
 	-- The VoxelArea is used to convert a position into an index for the array.
-	local a = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
-	local ystride = a.ystride -- Tip : the ystride of a VoxelArea is the number to add to the array index to get the index of the position above. It's faster because it avoids to completely recalculate the index.
-	local zstride = a.zstride
+	local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
+	local ystride = area.ystride -- Tip : the ystride of a VoxelArea is the number to add to the array index to get the index of the position above. It's faster because it avoids to completely recalculate the index.
+	local zstride = area.zstride
 
 	local chulens = vector.add(vector.subtract(maxp, minp), 1) -- Size of the generated area, used by noisemaps
 	local minp2d = pos2d(minp)
@@ -191,7 +191,7 @@ function valc.generate(minp, maxp, seed)
 	local write = false
 	for x = minp.x, maxp.x do -- for each YZ plane
 		for z = minp.z, maxp.z do -- for each vertical line in this plane
-			local index_3d = a:index(x, maxp.y, z) -- index of the data array, matching the position {x, y, z}
+			local index_3d = area:index(x, maxp.y, z) -- index of the data array, matching the position {x, y, z}
 			local air_count = 0
 			index_2d = index_2d + 1
 
