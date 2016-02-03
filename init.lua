@@ -19,6 +19,13 @@ if not minetest.get_biome_id then
 end
 
 
+minetest.register_on_mapgen_init(function(mgparams)
+	minetest.set_mapgen_params({mgname="valleys"})
+	minetest.setting_set("mg_valleys_lava_features", 0)
+	minetest.setting_set("mg_valleys_water_features", 0)
+end)
+
+
 -- the mod object
 valc = {}
 valc.version = "1.0"
