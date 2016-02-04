@@ -26,6 +26,10 @@ minetest.register_on_mapgen_init(function(mgparams)
 end)
 
 
+minetest.set_gen_notify("massive_cave_begin")
+minetest.set_gen_notify("massive_cave_end")
+
+
 -- the mod object
 valc = {}
 valc.version = "1.0"

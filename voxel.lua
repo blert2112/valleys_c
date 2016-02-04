@@ -209,6 +209,8 @@ function valc.generate(minp, maxp, seed)
 	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
 	local heightmap = minetest.get_mapgen_object("heightmap")
 	-- local heatmap = minetest.get_mapgen_object("heatmap")
+	local gennotify = minetest.get_mapgen_object("gennotify")
+	--print(dump(gennotify))
 	local water_level = 1
 
 	local data = vm:get_data() -- data is the original array of content IDs (solely or mostly air)
@@ -255,6 +257,12 @@ function valc.generate(minp, maxp, seed)
 	local index_2d = 0
 	local write = false
 	local relight = false
+	local huge_cave = false
+
+	if gennotify.massive_cave_begin then
+		huge_cave = true
+	end
+
 	for x = minp.x, maxp.x do -- for each YZ plane
 		for z = minp.z, maxp.z do -- for each vertical line in this plane
 			index_2d = index_2d + 1
@@ -423,11 +431,10 @@ function valc.generate(minp, maxp, seed)
 						local sr = math.random(1000)
 
 						-- fluids
-						if data[index_3d_below] == c_stone and sr < 3 then
-							data[index_3d_below] = c_lava
-						elseif data[index_3d_below] == c_moss and sr < 3 then
-							data[index_3d_below] = c_river_water_source
-							data[index_3d - 2 * ystride] = c_fungal_stone
+						if (not huge_cave) and data[index_3d_below] == c_stone and sr < 10 then
+								data[index_3d] = c_lava
+						elseif (not huge_cave) and data[index_3d_below] == c_moss and sr < 10 then
+								data[index_3d] = c_river_water_source
 						-- hanging down
 						elseif data[index_3d_above] == c_ice and sr < 80 then
 							data[index_3d] = c_icicle_down
@@ -476,7 +483,7 @@ function valc.generate(minp, maxp, seed)
 								data[index_3d] = c_mushroom_stem
 								data[index_3d_below] = c_dirt
 								write = true
-							elseif air_count > 5 and sr < 180 then
+							elseif huge_cave and air_count > 5 and sr < 180 then
 								valc.make_fungal_tree(data, area, index_3d, math.random(2,math.min(air_count, 8)), c_fungal_tree_leaves[math.random(#c_fungal_tree_leaves)], c_fungal_tree_fruit)
 								data[index_3d_below] = c_dirt
 							elseif sr < 300 then
