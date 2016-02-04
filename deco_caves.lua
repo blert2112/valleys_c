@@ -271,6 +271,7 @@ minetest.register_node("valleys_c:thin_ice", {
 	groups = {cracky=3},
 	sounds = default.node_sound_glass_defaults(),
 	use_texture_alpha = true,
+	light_source = 1,
 	drawtype = "glasslike",
 	sunlight_propagates = true,
 	freezemelt = "default:water_source",
@@ -281,8 +282,8 @@ minetest.register_node("valleys_c:stone_with_moss", {
 	description = "Cave Stone with Moss",
 	tiles = {"default_stone.png^valc_moss.png"},
 	is_ground_content = true,
-	--light_source = 10,
-	groups = {crumbly=3},
+	light_source = 1,
+	groups = {stone=1, crumbly=3},
 	drop = 'default:cobble',
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name="default_grass_footstep", gain=0.25},
@@ -293,7 +294,8 @@ minetest.register_node("valleys_c:stone_with_lichen", {
 	description = "Cave Stone with Lichen",
 	tiles = {"default_stone.png^valc_lichen.png"},
 	is_ground_content = true,
-	groups = {crumbly=3},
+	light_source = 1,
+	groups = {stone=1, crumbly=3},
 	drop = 'default:cobble',
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name="default_grass_footstep", gain=0.25},
@@ -305,7 +307,7 @@ minetest.register_node("valleys_c:stone_with_algae", {
 	tiles = {"default_stone.png^valc_algae.png"},
 	is_ground_content = true,
 	light_source = 1,
-	groups = {crumbly=3},
+	groups = {stone=1, crumbly=3},
 	drop = 'default:cobble',
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name="default_grass_footstep", gain=0.25},
@@ -321,7 +323,7 @@ minetest.register_node("valleys_c:stone_with_salt", {
 	drawtype = "glasslike",
 	sunlight_propagates = true,
 	is_ground_content = true,
-	groups = {crumbly=3},
+	groups = {stone=1, crumbly=3},
 	sounds = default.node_sound_glass_defaults(),
 })
 
@@ -330,7 +332,7 @@ minetest.register_node("valleys_c:glow_obsidian", {
 	description = "Glowing Obsidian",
 	tiles = {"caverealms_glow_obsidian.png"},
 	is_ground_content = true,
-	groups = {crumbly=1},
+	groups = {stone=2, crumbly=1},
 	light_source = 7,
 	sounds = default.node_sound_stone_defaults({
 		footstep = {name="default_stone_footstep", gain=0.25},
@@ -342,9 +344,59 @@ minetest.register_node("valleys_c:glow_obsidian_2", {
 	description = "Hot Glow Obsidian",
 	tiles = {"caverealms_glow_obsidian2.png"},
 	is_ground_content = true,
-	groups = {crumbly=1, hot=1},
+	groups = {stone=2, crumbly=1, hot=1},
 	damage_per_second = 1,
 	light_source = 9,
+	sounds = default.node_sound_stone_defaults({
+		footstep = {name="default_stone_footstep", gain=0.25},
+	}),
+})
+
+
+--minetest.register_node("valleys_c:bright_air", {
+--	drawtype = "glasslike",
+--	tiles = {"technic_light.png"},
+--	paramtype = "light",
+--	groups = {not_in_creative_inventory=1},
+--	drop = "",
+--	walkable = false,
+--	buildable_to = true,
+--	sunlight_propagates = true,
+--	light_source = LIGHT_MAX,
+--	pointable = false,
+--})
+
+--define special flame so that it does not expire
+minetest.register_node("valleys_c:constant_flame", {
+	description = "Fire",
+	drawtype = "plantlike",
+	tiles = {{
+		name="fire_basic_flame_animated.png",
+		animation={type="vertical_frames", aspect_w=16, aspect_h=16, length=1},
+	}},
+	inventory_image = "fire_basic_flame.png",
+	light_source = 14,
+	groups = {igniter=2,dig_immediate=3,hot=3, not_in_creative_inventory=1},
+	drop = '',
+	walkable = false,
+	buildable_to = true,
+	damage_per_second = 4,
+	
+	--after_place_node = function(pos, placer)
+	--	if pos.y > -7000 then
+	--		minetest.remove_node(pos)
+	--	end
+	--end,
+})
+
+--Hot Cobble - cobble with lava instead of mortar XD
+minetest.register_node("valleys_c:hot_cobble", {
+	description = "Hot Cobble",
+	tiles = {"caverealms_hot_cobble.png"},
+	is_ground_content = true,
+	groups = {crumbly=2, hot=1},
+	damage_per_second = 1,
+	light_source = 3,
 	sounds = default.node_sound_stone_defaults({
 		footstep = {name="default_stone_footstep", gain=0.25},
 	}),

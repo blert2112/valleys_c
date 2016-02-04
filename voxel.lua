@@ -27,6 +27,9 @@ valc.noises[21] = {offset = 0.0, scale = 1.0, spread = {x = 200, y = 200, z = 20
 -- Noise 22 : Cave blend							2D
 valc.noises[22] = {offset = 0.0, scale = 0.1, spread = {x = 8, y = 8, z = 8}, seed = 4023, octaves = 2, persist = 1.0, lacunarity = 2.0}
 
+-- Noise 23 : Cave noise							2D
+valc.noises[23] = {offset = 0.0, scale = 1.0, spread = {x = 400, y = 400, z = 400}, seed = 903, octaves = 3, persist = 0.5, lacunarity = 2.0}
+
 -- function to get noisemaps
 function valc.noisemap(i, minp, chulens)
 	local obj = minetest.get_perlin_map(valc.noises[i], chulens)
@@ -143,6 +146,7 @@ local c_salt = minetest.get_content_id("valleys_c:stone_with_salt")
 local c_gobsidian = minetest.get_content_id("valleys_c:glow_obsidian")
 local c_gobsidian2 = minetest.get_content_id("valleys_c:glow_obsidian_2")
 local c_coalblock = minetest.get_content_id("default:coalblock")
+local c_obsidian = minetest.get_content_id("default:obsidian")
 --local c_desand = minetest.get_content_id("default:desert_sand")
 --local c_coaldust = minetest.get_content_id("valleys_c:coal_dust")
 --local c_fungus = minetest.get_content_id("valleys_c:fungus")
@@ -150,7 +154,7 @@ local c_coalblock = minetest.get_content_id("default:coalblock")
 --local c_worm = minetest.get_content_id("valleys_c:glow_worm")
 local c_icicle_up = minetest.get_content_id("valleys_c:icicle_up")
 local c_icicle_down = minetest.get_content_id("valleys_c:icicle_down")
---local c_flame = minetest.get_content_id("valleys_c:constant_flame")
+local c_flame = minetest.get_content_id("valleys_c:constant_flame")
 --local c_fountain = minetest.get_content_id("valleys_c:s_fountain")
 --local c_fortress = minetest.get_content_id("valleys_c:s_fortress")
 
@@ -192,6 +196,12 @@ end
 function valc.generate(minp, maxp, seed)
 	local t0 = os.clock()
 
+	local c_fungal_tree_leaves = {}
+	for _, name in pairs(valc.fungal_tree_leaves) do
+		c_fungal_tree_leaves[#c_fungal_tree_leaves+1] = minetest.get_content_id(name)
+	end
+	local c_fungal_tree_fruit = minetest.get_content_id("valleys_c:fungal_tree_fruit")
+
 	-- minp and maxp strings, used by logs
 	local minps, maxps = minetest.pos_to_string(minp), minetest.pos_to_string(maxp)
 
@@ -226,6 +236,7 @@ function valc.generate(minp, maxp, seed)
 	local n16 = valc.noisemap(16, minp2d, chulens)
 	local n21 = valc.noisemap(21, minp2d, chulens)
 	local n22 = valc.noisemap(22, minp2d, chulens)
+	local n23 = valc.noisemap(23, minp2d, chulens)
 
 	local node_match_cache = {}
 	local soil_translate = {}
@@ -243,6 +254,7 @@ function valc.generate(minp, maxp, seed)
 	-- the mapgen algorithm
 	local index_2d = 0
 	local write = false
+	local relight = false
 	for x = minp.x, maxp.x do -- for each YZ plane
 		for z = minp.z, maxp.z do -- for each vertical line in this plane
 			index_2d = index_2d + 1
@@ -343,43 +355,14 @@ function valc.generate(minp, maxp, seed)
 
 				-- Handle caves.
 				if y < ground and (data[index_3d] == c_air or data[index_3d] == c_river_water_source or data[index_3d] == c_water_source) then
+					relight = true
+
 					local under_biome
 					local deep = -7000
 					local stone_type = c_stone
 					local stone_depth = 1
-					local n21_val = n21[index_2d] + n22[index_2d]
-					if n21_val < -0.5 then
-						if y < deep then
-							under_biome = "glow"
-							if math.random(2) == 1 then
-								stone_type = c_gobsidian
-							else
-								stone_type = c_gobsidian2
-							end
-						else
-						end
-					elseif n21_val < -0.2 then
-						if y < deep then
-							under_biome = "coal"
-							stone_type = c_coalblock
-							stone_depth = 2
-						else
-							under_biome = "algae"
-							stone_type = c_algae
-						end
-					elseif n21_val < 0.2 then
-						under_biome = "fungal"
-						stone_type = c_lichen
-					elseif n21_val < 0.5 then
-						if y < deep then
-							under_biome = "salt"
-							stone_type = c_salt
-							stone_depth = 2
-						else
-							under_biome = "moss"
-							stone_type = c_moss
-						end
-					else
+					local n23_val = n23[index_2d] + n22[index_2d]
+					if n23_val < -0.9 then
 						if y < deep then
 							under_biome = "deep"
 							stone_type = c_ice
@@ -389,19 +372,43 @@ function valc.generate(minp, maxp, seed)
 							stone_type = c_thinice
 							stone_depth = 2
 						end
+					elseif n23_val < -0.8 then
+						under_biome = "eeking"
+						stone_type = c_lichen
+					elseif n23_val < -0.3 then
+						under_biome = "moss"
+						stone_type = c_moss
+					elseif n23_val < 0.2 then
+						under_biome = "fungal"
+						stone_type = c_lichen
+					elseif n23_val < 0.5 then
+						under_biome = "algae"
+						stone_type = c_algae
+					elseif n23_val < 0.7 then
+						under_biome = "salt"
+						stone_type = c_salt
+						stone_depth = 2
+					elseif n23_val < 0.9 then
+						under_biome = "coal"
+						stone_type = c_coalblock
+						stone_depth = 2
+					else
+						under_biome = "hot"
+						stone_type = c_stone
 					end
+					--	under_biome = "glow"
 
 					-- Change stone per biome.
 					if data[index_3d_below] == c_stone then
 						data[index_3d_below] = stone_type
 						if stone_depth == 2 then
-							data[index_3d - 2 * ystride] = stone_type
+							data[index_3d_below - ystride] = stone_type
 						end
 						write = true
 					elseif data[index_3d_above] == c_stone then
 						data[index_3d_above] = stone_type
 						if stone_depth == 2 then
-							data[index_3d + 2 * ystride] = stone_type
+							data[index_3d_above + ystride] = stone_type
 						end
 						write = true
 					end
@@ -411,59 +418,71 @@ function valc.generate(minp, maxp, seed)
 						write = true
 					end
 
+					-- pill chopper
 					if data[index_3d] == c_air then
 						local sr = math.random(1000)
 
-						if data[index_3d_above] == c_lichen or data[index_3d_above] == c_moss or data[index_3d_above] == c_algae and sr < 135 then
+						-- fluids
+						if data[index_3d_below] == c_stone and sr < 3 then
+							data[index_3d_below] = c_lava
+						elseif data[index_3d_below] == c_moss and sr < 3 then
+							data[index_3d_below] = c_river_water_source
+							data[index_3d - 2 * ystride] = c_fungal_stone
+						-- hanging down
+						elseif data[index_3d_above] == c_ice and sr < 80 then
+							data[index_3d] = c_icicle_down
+							write = true
+						elseif (data[index_3d_above] == c_lichen or data[index_3d_above] == c_moss or data[index_3d_above] == c_algae or data[index_3d_above] == c_stone) and sr < 80 then
 							if data[index_3d_above] == c_algae then
 								data[index_3d] = c_stalactite_slimy
 							elseif data[index_3d_above] == c_moss then
 								data[index_3d] = c_stalactite_mossy
-							elseif data[index_3d_above] == c_lichen then
+							else
 								data[index_3d] = c_stalactite
 							end
 							write = true
-						elseif data[index_3d_above] == c_ice and sr < 135 then
-							data[index_3d] = c_icicle_down
-							write = true
-						elseif data[index_3d_below] == c_ice and sr < 200 then
+						-- standing up
+						elseif data[index_3d_below] == c_coalblock and sr < 20 then
+							data[index_3d] = c_flame
+						elseif data[index_3d_below] == c_ice and sr < 80 then
 							data[index_3d] = c_icicle_up
 							write = true
-						elseif data[index_3d_below] == c_lichen or data[index_3d_below] == c_algae then
-							if sr < 40 then
+						elseif (data[index_3d_below] == c_lichen or data[index_3d_below] == c_algae or data[index_3d_below] == c_stone or data[index_3d_below] == c_moss) and sr < 80 then
+							if data[index_3d_below] == c_algae then
+								data[index_3d] = c_stalagmite_slimy
+							elseif data[index_3d_below] == c_moss then
+								data[index_3d] = c_stalagmite_mossy
+							elseif data[index_3d_below] == c_lichen or data[index_3d_above] == c_stone then
+								data[index_3d] = c_stalagmite
+							end
+						-- vegetation
+						elseif (data[index_3d_below] == c_lichen or data[index_3d_below] == c_algae) and under_biome ~= "eeking" then
+							if sr < 110 then
 								data[index_3d] = c_mushroom_red
 								data[index_3d_below] = c_dirt
 								write = true
-							elseif sr < 70 then
+							elseif sr < 140 then
 								data[index_3d] = c_mushroom_brown
 								data[index_3d_below] = c_dirt
 								write = true
-							elseif air_count > 1 and sr < 100 then
+							elseif air_count > 1 and sr < 160 then
 								data[index_3d_above] = c_mushroom_cap_huge
 								data[index_3d] = c_mushroom_stem
 								data[index_3d_below] = c_dirt
 								write = true
-							elseif air_count > 2 and sr < 120 then
+							elseif air_count > 2 and sr < 170 then
 								data[index_3d + 2 * ystride] = c_mushroom_cap_giant
 								data[index_3d_above] = c_mushroom_stem
 								data[index_3d] = c_mushroom_stem
 								data[index_3d_below] = c_dirt
 								write = true
-							elseif sr < 180 then
+							elseif air_count > 5 and sr < 180 then
+								valc.make_fungal_tree(data, area, index_3d, math.random(2,math.min(air_count, 8)), c_fungal_tree_leaves[math.random(#c_fungal_tree_leaves)], c_fungal_tree_fruit)
+								data[index_3d_below] = c_dirt
+							elseif sr < 300 then
 								data[index_3d_below] = c_dirt
 								write = true
-							elseif sr < 305 then
-								if data[index_3d_below] == c_algae then
-									data[index_3d] = c_stalagmite_slimy
-								elseif data[index_3d_below] == c_moss then
-									data[index_3d] = c_stalagmite_mossy
-								elseif data[index_3d_below] == c_lichen then
-									data[index_3d] = c_stalagmite
-								end
 							end
-						elseif data[index_3d_below] == c_moss and sr < 3 then
-							data[index_3d_below] = c_river_water_source
-							data[index_3d - 2 * ystride] = c_fungal_stone
 						end
 					end
 
@@ -537,7 +556,9 @@ function valc.generate(minp, maxp, seed)
 
 	if write then
 		-- probably not necessary
-		--vm:set_lighting({day = 0, night = 0})
+		if relight then
+			--vm:set_lighting({day = 10, night = 10})
+		end
 
 		-- This seems to be necessary to avoid lighting problems.
 		vm:calc_lighting()
