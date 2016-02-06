@@ -259,7 +259,7 @@ function valc.generate(minp, maxp, seed)
 	local index_2d = 0
 	local write = false
 	local relight = false
-	local huge_cave = false
+	local huge_cave = true
 
 	if gennotify.alternative_cave then
 		huge_cave = true
