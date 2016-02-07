@@ -20,7 +20,7 @@ minetest.register_node("valleys_c:huge_mushroom_cap", {
 			{-0.33, -0.33, -0.33, 0.33, -0.17, 0.33}, 
 		} },
 	light_source = 4,
-	groups = {oddly_breakable_by_hand=1, dig_immediate=3, flammable=2, plant=1, leafdecay=1},
+	groups = {fleshy=1, dig_immediate=3, flammable=2, plant=1, leafdecay=1},
 })
 
 minetest.register_node("valleys_c:giant_mushroom_cap", {
@@ -38,7 +38,7 @@ minetest.register_node("valleys_c:giant_mushroom_cap", {
 			{-0.4, -0.5, 0.4, 0.4, -0.25, 0.75},
 		} },
 	light_source = 8,
-	groups = {oddly_breakable_by_hand=1, dig_immediate=3, flammable=2, plant=1, leafdecay=1},
+	groups = {fleshy=1, dig_immediate=3, flammable=2, plant=1, leafdecay=1},
 })
 
 minetest.register_node("valleys_c:giant_mushroom_stem", {
@@ -402,3 +402,117 @@ minetest.register_node("valleys_c:hot_cobble", {
 	}),
 })
 
+-- mushroom growth
+minetest.register_abm({
+	nodenames = {"flowers:mushroom_brown", "flowers:mushroom_red"},
+	interval = 98,
+	chance = 300,
+	action = function(pos, node)
+		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
+		local node_up = minetest.get_node_or_nil(pos_up)
+		if not node_up then
+			return
+		end
+		if node_up.name ~= "air" then
+			return
+		end
+		local node_under = minetest.get_node_or_nil({x = pos.x, y = pos.y - 1, z = pos.z})
+		if not node_under then
+			return
+		end
+		if minetest.get_item_group(node_under.name, "soil") ~= 0 and
+				minetest.get_node_light(pos_up, nil) <= 9 then
+			minetest.set_node(pos_up, {name = "valleys_c:huge_mushroom_cap"})
+			minetest.set_node(pos, {name = "valleys_c:giant_mushroom_stem"})
+		end
+	end
+})
+
+-- mushroom growth
+minetest.register_abm({
+	nodenames = {"valleys_c:huge_mushroom_cap"},
+	interval = 99,
+	chance = 2000,
+	action = function(pos, node)
+		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
+		local node_up = minetest.get_node_or_nil(pos_up)
+		if not node_up then
+			return
+		end
+		if node_up.name ~= "air" then
+			return
+		end
+		local node_under = minetest.get_node_or_nil({x = pos.x, y = pos.y - 1, z = pos.z})
+		if not node_under or node_under.name ~= "valleys_c:giant_mushroom_stem" then
+			return
+		end
+		node_under = minetest.get_node_or_nil({x = pos.x, y = pos.y - 2, z = pos.z})
+		if not node_under then
+			return
+		end
+		if minetest.get_item_group(node_under.name, "soil") ~= 0 and
+				minetest.get_node_light(pos_up, nil) <= 9 then
+			minetest.set_node(pos_up, {name = "valleys_c:giant_mushroom_cap"})
+			minetest.set_node(pos, {name = "valleys_c:giant_mushroom_stem"})
+		end
+	end
+})
+
+-- mushroom growth
+minetest.register_abm({
+	nodenames = {"valleys_c:giant_mushroom_stem"},
+	interval = 49,
+	chance = 5,
+	action = function(pos, node)
+		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
+		local node_up = minetest.get_node_or_nil(pos_up)
+		if not node_up then
+			return
+		end
+		if node_up.name ~= "air" then
+			return
+		end
+		if minetest.get_node_light(pos_up, nil) <= 9 then
+			minetest.set_node(pos_up, {name = "valleys_c:huge_mushroom_cap"})
+		end
+	end
+})
+
+-- mushroom spread
+minetest.register_abm({
+	nodenames = {"valleys_c:giant_mushroom_stem"},
+	interval = 11,
+	chance = 50,
+	action = function(pos, node)
+		if minetest.get_node_light(pos, nil) == 15 then
+			minetest.remove_node(pos)
+		end
+		local random = {
+			x = pos.x + math.random(-3,3),
+			y = pos.y + math.random(-1,1),
+			z = pos.z + math.random(-3,3)
+		}
+		local random_node = minetest.get_node_or_nil(random)
+		if not random_node then
+			return
+		end
+		if random_node.name ~= "air" then
+			return
+		end
+		local node_under = minetest.get_node_or_nil({x = random.x,
+			y = random.y - 1, z = random.z})
+		if not node_under then
+			return
+		end
+		local mushroom_type
+		if math.random(2) == 1 then
+			mushroom_type = "flowers:mushroom_red"
+		else
+			mushroom_type = "flowers:mushroom_brown"
+		end
+		if minetest.get_item_group(node_under.name, "soil") ~= 0 and
+				minetest.get_node_light(random, nil) <= 9 then
+			minetest.set_node(random, {name = mushroom_type})
+		end
+	end
+})

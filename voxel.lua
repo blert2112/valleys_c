@@ -566,9 +566,8 @@ function valc.generate(minp, maxp, seed)
 	if write then
 		-- probably not necessary
 		if relight then
-			--vm:set_lighting({day = 12, night = 12})
+			--vm:set_lighting({day = 10, night = 10})
 		end
-						---34,-900,90
 
 		-- This seems to be necessary to avoid lighting problems.
 		vm:calc_lighting()
