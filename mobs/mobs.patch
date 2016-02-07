@@ -1,0 +1,61 @@
+diff --git a/dirtmonster.lua b/dirtmonster.lua
+index e34515c..3f9c644 100644
+--- a/dirtmonster.lua
++++ b/dirtmonster.lua
+@@ -47,6 +47,6 @@ mobs:register_mob("mobs:dirt_monster", {
+ 	},
+ })
+ 
+-mobs:register_spawn("mobs:dirt_monster", {"default:dirt_with_grass", "ethereal:gray_dirt"}, 7, 0, 7000, 2, 31000)
++mobs:register_spawn("mobs:dirt_monster", {"default:dirt_with_grass", "ethereal:gray_dirt", "default:dirt"}, 7, 0, 7000, 2, 31000)
+ 
+ mobs:register_egg("mobs:dirt_monster", "Dirt Monster", "default_dirt.png", 1)
+diff --git a/dungeonmaster.lua b/dungeonmaster.lua
+index 2b2a5ff..60d142c 100644
+--- a/dungeonmaster.lua
++++ b/dungeonmaster.lua
+@@ -56,7 +56,7 @@ mobs:register_mob("mobs:dungeon_master", {
+ 	},
+ })
+ 
+-mobs:register_spawn("mobs:dungeon_master", {"default:stone"}, 7, 0, 7000, 2, -70)
++mobs:register_spawn("mobs:dungeon_master", {"group:stone"}, 7, 0, 7000, 2, -70)
+ 
+ mobs:register_egg("mobs:dungeon_master", "Dungeon Master", "fire_basic_flame.png", 1)
+ 
+diff --git a/oerkki.lua b/oerkki.lua
+index a6ae699..381d9fe 100644
+--- a/oerkki.lua
++++ b/oerkki.lua
+@@ -51,6 +51,6 @@ mobs:register_mob("mobs:oerkki", {
+ 	replace_offset = -1,
+ })
+ 
+-mobs:register_spawn("mobs:oerkki", {"default:stone"}, 7, 0, 7000, 2, -10)
++mobs:register_spawn("mobs:oerkki", {"group:stone"}, 7, 0, 7000, 2, -10)
+ 
+ mobs:register_egg("mobs:oerkki", "Oerkki", "default_obsidian.png", 1)
+diff --git a/spider.lua b/spider.lua
+index a74055d..78251d8 100644
+--- a/spider.lua
++++ b/spider.lua
+@@ -52,6 +52,7 @@ mobs:register_mob("mobs:spider", {
+ })
+ 
+ mobs:register_spawn("mobs:spider", {"default:desert_stone", "ethereal:crystal_dirt"}, 13, 0, 7000, 2, 71)
++mobs:register_spawn("mobs:spider", {"valleys_c:stone_with_lichen", "valleys_c:stone_with_salt"}, 13, 0, 700, 2, 71)
+ 
+ mobs:register_egg("mobs:spider", "Spider", "mobs_cobweb.png", 1)
+ 
+diff --git a/stonemonster.lua b/stonemonster.lua
+index f3c09a4..4338412 100644
+--- a/stonemonster.lua
++++ b/stonemonster.lua
+@@ -50,6 +50,6 @@ mobs:register_mob("mobs:stone_monster", {
+ 	},
+ })
+ 
+-mobs:register_spawn("mobs:stone_monster", {"default:stone"}, 7, 0, 7000, 2, 0)
++mobs:register_spawn("mobs:stone_monster", {"group:stone"}, 7, 0, 7000, 2, 0)
+ 
+ mobs:register_egg("mobs:stone_monster", "Stone Monster", "default_stone.png", 1)
