@@ -2,6 +2,10 @@
 -- Fungal Tree   --
 -------------------
 
+local light_max = 9
+local time_factor = 10
+local pr = PseudoRandom(os.time())
+
 local colors = {"^[colorize:#FF00FF:60", "", "^[colorize:#0000FF:60", "^[colorize:#FF4500:80"}
 valc.fungal_tree_leaves = {}
 
@@ -12,11 +16,11 @@ function valc.make_fungal_tree(data, area, pos, height, leaves, fruit)
 		if y > 1 and y < height - 2 then
 			radius = 2
 		end
-		local force_x = math.random(3) - 2
-		local force_y = math.random(3) - 2
+		local force_x = pr:next(1,3) - 2
+		local force_y = pr:next(1,3) - 2
 		for z = -radius,radius do
 			for x = -radius,radius do
-				local sr = math.random(20)
+				local sr = pr:next(1,27)
 				local i = pos + z*area.zstride + y*area.ystride + x
 				if force_x == x and force_y == y then
 					data[i] = leaves
@@ -66,15 +70,16 @@ for _, color in pairs(colors) do
 end
 
 
-local trees_and_fruit = table.copy(valc.fungal_tree_leaves)
-trees_and_fruit[#trees_and_fruit+1] = "valleys_c:fungal_tree_fruit"
+local leaves_and_air = table.copy(valc.fungal_tree_leaves)
+leaves_and_air[#leaves_and_air+1] = "air"
+local good_stone = {"valleys_c:stone_with_lichen", "valleys_c:stone_with_algae"}
 
 local function find_ground(pos)
 	for y1 = 1, 16 do
 		local node = minetest.get_node_or_nil({x=pos.x, y=pos.y-y1, z=pos.z})
 		if node then
 			if minetest.get_item_group(node.name, "soil") ~= 0 or
-				minetest.get_item_group(node.name, "stone") ~= 0 then
+				table.contains(good_stone, node.name) then
 				return y1
 			end
 		end
@@ -87,26 +92,25 @@ end
 -- fungal spread
 minetest.register_abm({
 	nodenames = valc.fungal_tree_leaves,
-	interval = 60,
+	interval = 2 * time_factor,
 	chance = 10,
 	action = function(pos, node)
 		if minetest.get_node_light(pos, nil) == 15 then
 			minetest.remove_node(pos)
+			return
+		end
+		if find_ground(pos) > 16 then
+			minetest.remove_node(pos)
+			return
 		end
 
-		local grow_pos
-		local grow_node
-		local good = false
-
-		for y1 = 1, 1 do
-			grow_pos = {x=pos.x, y=pos.y-y1, z=pos.z}
-			grow_node = minetest.get_node_or_nil(grow_pos)
-			if grow_node and grow_node.name == "air" then
-				minetest.set_node(grow_pos, {name = node.name})
-				good = true
-			end
+		local grow_pos = {x=pos.x, y=pos.y-1, z=pos.z}
+		local grow_node = minetest.get_node_or_nil(grow_pos)
+		if grow_node and grow_node.name == "air" then
+			minetest.set_node(grow_pos, {name = node.name})
+			return
 		end
-		if good then
+		if pr:next(1,3) ~= 1 then
 			return
 		end
 
@@ -118,12 +122,12 @@ minetest.register_abm({
 		end
 		local pos1, count = minetest.find_nodes_in_area(vector.subtract(pos, 3), vector.add(pos, 3), foreign)
 		if #pos1 > 0 then
-			minetest.set_node(pos1[math.random(#pos1)], {name="air"})
+			minetest.set_node(pos1[pr:next(1,#pos1)], {name="air"})
 			return
 		end
 
-		if math.random(80) == 1 then
-			local new = valc.fungal_tree_leaves[math.random(#valc.fungal_tree_leaves)]
+		if pr:next(1,201) == 1 then
+			local new = valc.fungal_tree_leaves[pr:next(1,#valc.fungal_tree_leaves)]
 			local pos1, count = minetest.find_nodes_in_area({x=pos.x-8, y=pos.y-16, z=pos.z-8}, {x=pos.x+8, y=pos.y+16, z=pos.z+8}, node.name)
 			for _, p in pairs(pos1) do
 				minetest.set_node(p, {name=new})
@@ -131,17 +135,17 @@ minetest.register_abm({
 			return
 		end
 
-		grow_pos = {x = pos.x + math.random(-1,1), y = pos.y + math.random(-1,1), z = pos.z + math.random(-1,1)}
+		grow_pos = {x = pos.x + pr:next(-1,1), y = pos.y + pr:next(-1,1), z = pos.z + pr:next(-1,1)}
 		grow_node = minetest.get_node_or_nil(grow_pos)
-		if math.random(2) == 1 then
+		--if pr:next(1,2) == 1 then
 			minetest.set_node(pos, {name = "air"})
-		end
-		if not grow_node or grow_node.name ~= "air" or find_ground(grow_pos) > 16 then
+		--end
+		if not grow_node or not table.contains(leaves_and_air, grow_node.name) or find_ground(grow_pos) > 16 then
 			return
 		end
-		if minetest.get_node_light(grow_pos, nil) <= 9 then
+		if minetest.get_node_light(grow_pos, nil) <= light_max then
 			minetest.set_node(pos, {name = "air"})
-			if math.random(20) == 1 then
+			if pr:next(1,27) == 1 then
 				minetest.set_node(grow_pos, {name = "valleys_c:fungal_tree_fruit"})
 			else
 				minetest.set_node(grow_pos, {name = node.name})
@@ -193,11 +197,11 @@ local function destroy(pos, cid)
 		def.on_blast(vector.new(pos), 1)
 		return
 	end
-	if def.snappy == nil and def.choppy == nil and def.fleshy == nil then
+	if def.snappy == nil and def.choppy == nil and def.fleshy == nil and def.name ~= "fire:basic_flame" then
 		return
 	end
 	local new = "air"
-	--if math.random(2) == 1 then
+	--if pr:next(1,2) == 1 then
 	if true then
 		local node_under = minetest.get_node_or_nil({x = pos.x,
 			y = pos.y - 1, z = pos.z})
@@ -211,7 +215,6 @@ end
 local function explode(pos, radius)
 	local pos = vector.round(pos)
 	local vm = VoxelManip()
-	local pr = PseudoRandom(os.time())
 	local p1 = vector.subtract(pos, radius)
 	local p2 = vector.add(pos, radius)
 	local minp, maxp = vm:read_from_map(p1, p2)
@@ -224,10 +227,10 @@ local function explode(pos, radius)
 	local c_air = minetest.get_content_id("air")
 
 	for z = -radius, radius do
-	for y = -radius, radius + 16 do
+	for y = -radius, 4*radius do
 	local vi = a:index(pos.x + (-radius), pos.y + y, pos.z + z)
 	for x = -radius, radius do
-		if (x * x) + (y * y) + (z * z) <=
+		if (x * x) + (y * y / 4) + (z * z) <=
 				(radius * radius) + pr:next(-radius, radius) then
 			local cid = data[vi]
 			p.x = pos.x + x
@@ -303,15 +306,27 @@ end
 -- Exploding fruit
 minetest.register_abm({
 	nodenames = {"valleys_c:fungal_tree_fruit"},
-	interval = 20,
+	interval = 3 * time_factor,
 	chance = 20,
 	action = function(pos, node)
+		local pos1, count = minetest.find_nodes_in_area(vector.subtract(pos, 1), vector.add(pos, 1), {"fire:basic_flame"})
+		if #pos1 > 0 then
+			boom(pos)
+			return
+		end
+
+		local pos1, count = minetest.find_nodes_in_area(vector.subtract(pos, 1), vector.add(pos, 1), valc.fungal_tree_leaves)
+		if #pos1 < 3 then
+			minetest.set_node(pos, {name="air"})
+			return
+		end
+
 		local g = find_ground(pos)
-		if g > 4 then
-			if math.random(17 - g) == 1 then
+		if g > 4 and g < 17 then
+			if pr:next(1,17 - g) == 1 then
 				boom(pos)
 			end
-		elseif math.random(2) == 1 then
+		elseif pr:next(1,2) == 1 then
 			minetest.set_node(pos, {name="air"})
 		end
 	end

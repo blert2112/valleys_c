@@ -6,6 +6,10 @@
 --  These are instantiated by voxel.lua since the decoration manager
 --   only works at the surface of the world.
 
+local light_max = 9
+local time_factor = 10
+local pr = PseudoRandom(os.time())
+
 minetest.register_node("valleys_c:huge_mushroom_cap", {
 	description = "Huge Mushroom Cap",
 	tiles = {"vmg_mushroom_giant_cap.png", "vmg_mushroom_giant_under.png", "vmg_mushroom_giant_cap.png"},
@@ -405,8 +409,8 @@ minetest.register_node("valleys_c:hot_cobble", {
 -- mushroom growth
 minetest.register_abm({
 	nodenames = {"flowers:mushroom_brown", "flowers:mushroom_red"},
-	interval = 98,
-	chance = 300,
+	interval = 50 * time_factor,
+	chance = 100,
 	action = function(pos, node)
 		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
 		local node_up = minetest.get_node_or_nil(pos_up)
@@ -421,7 +425,7 @@ minetest.register_abm({
 			return
 		end
 		if minetest.get_item_group(node_under.name, "soil") ~= 0 and
-				minetest.get_node_light(pos_up, nil) <= 9 then
+				minetest.get_node_light(pos_up, nil) <= light_max then
 			minetest.set_node(pos_up, {name = "valleys_c:huge_mushroom_cap"})
 			minetest.set_node(pos, {name = "valleys_c:giant_mushroom_stem"})
 		end
@@ -431,8 +435,8 @@ minetest.register_abm({
 -- mushroom growth
 minetest.register_abm({
 	nodenames = {"valleys_c:huge_mushroom_cap"},
-	interval = 99,
-	chance = 2000,
+	interval = 100 * time_factor,
+	chance = 150,
 	action = function(pos, node)
 		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
 		local node_up = minetest.get_node_or_nil(pos_up)
@@ -451,7 +455,7 @@ minetest.register_abm({
 			return
 		end
 		if minetest.get_item_group(node_under.name, "soil") ~= 0 and
-				minetest.get_node_light(pos_up, nil) <= 9 then
+				minetest.get_node_light(pos_up, nil) <= light_max then
 			minetest.set_node(pos_up, {name = "valleys_c:giant_mushroom_cap"})
 			minetest.set_node(pos, {name = "valleys_c:giant_mushroom_stem"})
 		end
@@ -461,7 +465,7 @@ minetest.register_abm({
 -- mushroom growth
 minetest.register_abm({
 	nodenames = {"valleys_c:giant_mushroom_stem"},
-	interval = 49,
+	interval = 5 * time_factor,
 	chance = 5,
 	action = function(pos, node)
 		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
@@ -472,7 +476,7 @@ minetest.register_abm({
 		if node_up.name ~= "air" then
 			return
 		end
-		if minetest.get_node_light(pos_up, nil) <= 9 then
+		if minetest.get_node_light(pos_up, nil) <= light_max then
 			minetest.set_node(pos_up, {name = "valleys_c:huge_mushroom_cap"})
 		end
 	end
@@ -481,37 +485,22 @@ minetest.register_abm({
 -- mushroom spread
 minetest.register_abm({
 	nodenames = {"valleys_c:giant_mushroom_stem"},
-	interval = 11,
-	chance = 50,
+	interval = 3 * time_factor,
+	chance = 40,
 	action = function(pos, node)
-		if minetest.get_node_light(pos, nil) == 15 then
-			minetest.remove_node(pos)
-		end
-		local random = {
-			x = pos.x + math.random(-3,3),
-			y = pos.y + math.random(-1,1),
-			z = pos.z + math.random(-3,3)
-		}
-		local random_node = minetest.get_node_or_nil(random)
-		if not random_node then
+		local pos1, count = minetest.find_nodes_in_area_under_air(vector.subtract(pos, 4), vector.add(pos, 4), {"group:soil"})
+		if #pos1 < 1 then
 			return
 		end
-		if random_node.name ~= "air" then
-			return
-		end
-		local node_under = minetest.get_node_or_nil({x = random.x,
-			y = random.y - 1, z = random.z})
-		if not node_under then
-			return
-		end
+		local random = pos1[pr:next(1, #pos1)]
+		random.y = random.y + 1
 		local mushroom_type
-		if math.random(2) == 1 then
+		if pr:next(1,2) == 1 then
 			mushroom_type = "flowers:mushroom_red"
 		else
 			mushroom_type = "flowers:mushroom_brown"
 		end
-		if minetest.get_item_group(node_under.name, "soil") ~= 0 and
-				minetest.get_node_light(random, nil) <= 9 then
+		if minetest.get_node_light(random, nil) <= light_max then
 			minetest.set_node(random, {name = mushroom_type})
 		end
 	end
