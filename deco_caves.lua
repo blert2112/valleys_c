@@ -7,8 +7,6 @@
 --   only works at the surface of the world.
 
 local light_max = 9
-local time_factor = 10
-local pr = PseudoRandom(os.time())
 
 minetest.register_node("valleys_c:huge_mushroom_cap", {
 	description = "Huge Mushroom Cap",
@@ -409,9 +407,12 @@ minetest.register_node("valleys_c:hot_cobble", {
 -- mushroom growth
 minetest.register_abm({
 	nodenames = {"flowers:mushroom_brown", "flowers:mushroom_red"},
-	interval = 50 * time_factor,
+	interval = 50 * valc.time_factor,
 	chance = 100,
 	action = function(pos, node)
+		if pos.y > -50 then
+			return
+		end
 		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
 		local node_up = minetest.get_node_or_nil(pos_up)
 		if not node_up then
@@ -435,9 +436,13 @@ minetest.register_abm({
 -- mushroom growth
 minetest.register_abm({
 	nodenames = {"valleys_c:huge_mushroom_cap"},
-	interval = 100 * time_factor,
+	interval = 100 * valc.time_factor,
 	chance = 150,
 	action = function(pos, node)
+		if minetest.get_node_light(pos, nil) >= 14 then
+			minetest.set_node(pos, {name = "air"})
+			return
+		end
 		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
 		local node_up = minetest.get_node_or_nil(pos_up)
 		if not node_up then
@@ -465,7 +470,7 @@ minetest.register_abm({
 -- mushroom growth
 minetest.register_abm({
 	nodenames = {"valleys_c:giant_mushroom_stem"},
-	interval = 5 * time_factor,
+	interval = 5 * valc.time_factor,
 	chance = 5,
 	action = function(pos, node)
 		local pos_up = {x=pos.x,y=pos.y+1,z=pos.z}
@@ -484,18 +489,24 @@ minetest.register_abm({
 
 -- mushroom spread
 minetest.register_abm({
-	nodenames = {"valleys_c:giant_mushroom_stem"},
-	interval = 3 * time_factor,
+	nodenames = {"valleys_c:giant_mushroom_cap", "valleys_c:huge_mushroom_cap"},
+	interval = 3 * valc.time_factor,
 	chance = 40,
 	action = function(pos, node)
-		local pos1, count = minetest.find_nodes_in_area_under_air(vector.subtract(pos, 4), vector.add(pos, 4), {"group:soil"})
+		if minetest.get_node_light(pos, nil) >= 14 then
+			minetest.set_node(pos, {name = "air"})
+			return
+		end
+		local pos_down = pos
+		pos_down.y = pos_down.y - 1
+		local pos1, count = minetest.find_nodes_in_area_under_air(vector.subtract(pos_down, 4), vector.add(pos_down, 4), {"group:soil"})
 		if #pos1 < 1 then
 			return
 		end
-		local random = pos1[pr:next(1, #pos1)]
+		local random = pos1[valc.pr:next(1, #pos1)]
 		random.y = random.y + 1
 		local mushroom_type
-		if pr:next(1,2) == 1 then
+		if valc.pr:next(1,2) == 1 then
 			mushroom_type = "flowers:mushroom_red"
 		else
 			mushroom_type = "flowers:mushroom_brown"

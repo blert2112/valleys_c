@@ -3,8 +3,6 @@
 -------------------
 
 local light_max = 9
-local time_factor = 10
-local pr = PseudoRandom(os.time())
 
 local colors = {"^[colorize:#FF00FF:60", "", "^[colorize:#0000FF:60", "^[colorize:#FF4500:80"}
 valc.fungal_tree_leaves = {}
@@ -16,11 +14,11 @@ function valc.make_fungal_tree(data, area, pos, height, leaves, fruit)
 		if y > 1 and y < height - 2 then
 			radius = 2
 		end
-		local force_x = pr:next(1,3) - 2
-		local force_y = pr:next(1,3) - 2
+		local force_x = valc.pr:next(1,3) - 2
+		local force_y = valc.pr:next(1,3) - 2
 		for z = -radius,radius do
 			for x = -radius,radius do
-				local sr = pr:next(1,27)
+				local sr = valc.pr:next(1,27)
 				local i = pos + z*area.zstride + y*area.ystride + x
 				if force_x == x and force_y == y then
 					data[i] = leaves
@@ -92,7 +90,7 @@ end
 -- fungal spread
 minetest.register_abm({
 	nodenames = valc.fungal_tree_leaves,
-	interval = 2 * time_factor,
+	interval = 2 * valc.time_factor,
 	chance = 10,
 	action = function(pos, node)
 		if minetest.get_node_light(pos, nil) == 15 then
@@ -110,7 +108,7 @@ minetest.register_abm({
 			minetest.set_node(grow_pos, {name = node.name})
 			return
 		end
-		if pr:next(1,3) ~= 1 then
+		if valc.pr:next(1,3) ~= 1 then
 			return
 		end
 
@@ -122,12 +120,12 @@ minetest.register_abm({
 		end
 		local pos1, count = minetest.find_nodes_in_area(vector.subtract(pos, 3), vector.add(pos, 3), foreign)
 		if #pos1 > 0 then
-			minetest.set_node(pos1[pr:next(1,#pos1)], {name="air"})
+			minetest.set_node(pos1[valc.pr:next(1,#pos1)], {name="air"})
 			return
 		end
 
-		if pr:next(1,201) == 1 then
-			local new = valc.fungal_tree_leaves[pr:next(1,#valc.fungal_tree_leaves)]
+		if valc.pr:next(1,201) == 1 then
+			local new = valc.fungal_tree_leaves[valc.pr:next(1,#valc.fungal_tree_leaves)]
 			local pos1, count = minetest.find_nodes_in_area({x=pos.x-8, y=pos.y-16, z=pos.z-8}, {x=pos.x+8, y=pos.y+16, z=pos.z+8}, node.name)
 			for _, p in pairs(pos1) do
 				minetest.set_node(p, {name=new})
@@ -135,9 +133,9 @@ minetest.register_abm({
 			return
 		end
 
-		grow_pos = {x = pos.x + pr:next(-1,1), y = pos.y + pr:next(-1,1), z = pos.z + pr:next(-1,1)}
+		grow_pos = {x = pos.x + valc.pr:next(-1,1), y = pos.y + valc.pr:next(-1,1), z = pos.z + valc.pr:next(-1,1)}
 		grow_node = minetest.get_node_or_nil(grow_pos)
-		--if pr:next(1,2) == 1 then
+		--if valc.pr:next(1,2) == 1 then
 			minetest.set_node(pos, {name = "air"})
 		--end
 		if not grow_node or not table.contains(leaves_and_air, grow_node.name) or find_ground(grow_pos) > 16 then
@@ -145,7 +143,7 @@ minetest.register_abm({
 		end
 		if minetest.get_node_light(grow_pos, nil) <= light_max then
 			minetest.set_node(pos, {name = "air"})
-			if pr:next(1,27) == 1 then
+			if valc.pr:next(1,27) == 1 then
 				minetest.set_node(grow_pos, {name = "valleys_c:fungal_tree_fruit"})
 			else
 				minetest.set_node(grow_pos, {name = node.name})
@@ -201,7 +199,7 @@ local function destroy(pos, cid)
 		return
 	end
 	local new = "air"
-	--if pr:next(1,2) == 1 then
+	--if valc.pr:next(1,2) == 1 then
 	if true then
 		local node_under = minetest.get_node_or_nil({x = pos.x,
 			y = pos.y - 1, z = pos.z})
@@ -231,7 +229,7 @@ local function explode(pos, radius)
 	local vi = a:index(pos.x + (-radius), pos.y + y, pos.z + z)
 	for x = -radius, radius do
 		if (x * x) + (y * y / 4) + (z * z) <=
-				(radius * radius) + pr:next(-radius, radius) then
+				(radius * radius) + valc.pr:next(-radius, radius) then
 			local cid = data[vi]
 			p.x = pos.x + x
 			p.y = pos.y + y
@@ -306,7 +304,7 @@ end
 -- Exploding fruit
 minetest.register_abm({
 	nodenames = {"valleys_c:fungal_tree_fruit"},
-	interval = 3 * time_factor,
+	interval = 3 * valc.time_factor,
 	chance = 20,
 	action = function(pos, node)
 		local pos1, count = minetest.find_nodes_in_area(vector.subtract(pos, 1), vector.add(pos, 1), {"fire:basic_flame"})
@@ -323,10 +321,10 @@ minetest.register_abm({
 
 		local g = find_ground(pos)
 		if g > 4 and g < 17 then
-			if pr:next(1,17 - g) == 1 then
+			if valc.pr:next(1,17 - g) == 1 then
 				boom(pos)
 			end
-		elseif pr:next(1,2) == 1 then
+		elseif valc.pr:next(1,2) == 1 then
 			minetest.set_node(pos, {name="air"})
 		end
 	end

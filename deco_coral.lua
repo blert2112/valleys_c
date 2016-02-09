@@ -13,7 +13,7 @@
 --		g[#g + 1] = -0.5 
 --		g[#g + 1] = (z - 1) * d1 - 0.5
 --		g[#g + 1] = x * d1 - d2 - 0.5
---		g[#g + 1] = 0.5 - (math.random(4) + math.random(4)) * 0.1 
+--		g[#g + 1] = 0.5 - (valc.pr:next(1,4) + valc.pr:next(4)) * 0.1 
 --		g[#g + 1] = z * d1 - d2 - 0.5
 --		grid[#grid + 1] = g
 --	end

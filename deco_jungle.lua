@@ -43,11 +43,11 @@ function valc.generate_jungle_tree_schematic(trunk_height, trunk, leaf)
 
 	-- canopies
 	for y = 1,trunk_top+2 do
-		if y > trunk_height and (y == trunk_top or math.random(height - y) == 1) then
+		if y > trunk_height and (y == trunk_top or valc.pr:next(1,height - y) == 1) then
 			local x, z = 0, 0
 			while x == 0 and z == 0 do
-				x = math.random(-1,1) * 2
-				z = math.random(-1,1) * 2
+				x = valc.pr:next(-1,1) * 2
+				z = valc.pr:next(-1,1) * 2
 			end
 			for j = -1,1,2 do
 				local i = (j*z + radius)*width*height + y*width + (j*x + radius) + 1
@@ -119,7 +119,7 @@ end
 
 -- Place the schematic when a sapling grows.
 function default.grow_new_jungle_tree(pos, bad)
-	local schem = valc.schematics.jungle_trees[math.random(1,#valc.schematics.jungle_trees)]
+	local schem = valc.schematics.jungle_trees[valc.pr:next(1,#valc.schematics.jungle_trees)]
 	local adj = {x = pos.x - math.floor(schem.size.x / 2),
 	             y = pos.y - 1,
 	             z = pos.z - math.floor(schem.size.z / 2)}

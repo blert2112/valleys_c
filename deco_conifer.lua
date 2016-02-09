@@ -53,7 +53,7 @@ function valc.generate_conifer_schematic(trunk_height, radius, trunk, leaf)
 				local i = (z+radius)*width*height + y*width + (x+radius) + 1
 				local dist = math.round(math.sqrt(x^2 + z^2))
 				if x == 0 and z == 0 then
-					if trunk == "default:pine_tree" and valc.glow and math.random(10) == 1 then
+					if trunk == "default:pine_tree" and valc.glow and valc.pr:next(1,10) == 1 then
 						s.data[i].name = "valleys_c:pine_tree_glowing_moss"
 					else
 						s.data[i].name = trunk
@@ -114,7 +114,7 @@ function valc.generate_default_conifer_schematic(trunk, leaf)
 		s.yslice_prob = {}
 		for y = 1,height-3 do
 			local i = 2*width*height + y*width + 2 + 1
-			if trunk == "default:pine_tree" and valc.glow and math.random(10) == 1 then
+			if trunk == "default:pine_tree" and valc.glow and valc.pr:next(1,10) == 1 then
 				s.data[i].name = "valleys_c:pine_tree_glowing_moss"
 			else
 				s.data[i].name = trunk
@@ -184,7 +184,7 @@ end
 
 -- Place the schematic when a sapling grows.
 function default.grow_new_pine_tree(pos, bad)
-	local schem = valc.schematics.conifer_trees[math.random(1,#valc.schematics.conifer_trees)]
+	local schem = valc.schematics.conifer_trees[valc.pr:next(1,#valc.schematics.conifer_trees)]
 	local adj = {x = pos.x - math.floor(schem.size.x / 2),
 	             y = pos.y - 1,
 	             z = pos.z - math.floor(schem.size.z / 2)}
