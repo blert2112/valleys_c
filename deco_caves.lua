@@ -503,10 +503,10 @@ minetest.register_abm({
 		if #pos1 < 1 then
 			return
 		end
-		local random = pos1[valc.pr:next(1, #pos1)]
+		local random = pos1[math.random(1, #pos1)]
 		random.y = random.y + 1
 		local mushroom_type
-		if valc.pr:next(1,2) == 1 then
+		if math.random(1,2) == 1 then
 			mushroom_type = "flowers:mushroom_red"
 		else
 			mushroom_type = "flowers:mushroom_brown"

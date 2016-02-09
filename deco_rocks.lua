@@ -84,15 +84,15 @@ local tiles = {"default_stone.png", "default_desert_stone.png", "default_sandsto
 
 for grid_count = 1,6 do
 	local grid = {}
-	for rock_count = 2, valc.pr:next(1,4) + 1 do
-		local diameter = valc.pr:next(5,15)/100
-		local x = valc.pr:next(1,80)/100 - 0.5
-		local z = valc.pr:next(1,80)/100 - 0.5
+	for rock_count = 2, math.random(1,4) + 1 do
+		local diameter = math.random(5,15)/100
+		local x = math.random(1,80)/100 - 0.5
+		local z = math.random(1,80)/100 - 0.5
 		--step_sphere(grid, {x=x,y=-0.5,z=z}, {x=diameter, y=diameter, z=diameter})
 		small_cube(grid, {x=x,y=-0.5,z=z}, {x=diameter, y=diameter, z=diameter})
 	end
 
-	--local stone = tiles[valc.pr:next(1,#tiles)]
+	--local stone = tiles[math.random(1,#tiles)]
 	local stone = tiles[(grid_count % #tiles) + 1]
 
 	minetest.register_node("valleys_c:small_rocks"..grid_count, {

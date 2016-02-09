@@ -43,7 +43,7 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 	-- the main trunk
 	for y = 1,trunk_top do
 		local i = radii.z*width*height + y*width + radii.x + 1
-		if trunk == "default:tree" and valc.glow and valc.pr:next(1,10) == 1 then
+		if trunk == "default:tree" and valc.glow and math.random(1,10) == 1 then
 			s.data[i].name = "valleys_c:tree_glowing_moss"
 		else
 			s.data[i].name = trunk
@@ -71,7 +71,7 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 				for x = -radii.x,radii.x do
 					-- a smaller spheroid inside the radii
 					if x^2/(radii.x-3)^2 + y^2/(radii.y-3)^2 + z^2/(radii.z-3)^2 <= 1 then
-						if valc.pr:next(1,6) == 1 then
+						if math.random(1,6) == 1 then
 							local i = (z+radii.z)*width*height + (y+trunk_top)*width + (x+radii.x) + 1
 
 							s.data[i].name = trunk
@@ -107,7 +107,7 @@ function valc.generate_leaves(s, leaf, pos, radius, fruit, adjust)
 					if dist1 <= r1 then
 						local newprob = probs[math.max(1, math.ceil(dist1))]
 						if s.data[i].name == "air" then
-							if fruit and (rx < 3 or dist2 / rx > 0.5) and valc.pr:next(1,10) == 1 then
+							if fruit and (rx < 3 or dist2 / rx > 0.5) and math.random(1,10) == 1 then
 								s.data[i].name = fruit
 								s.data[i].param1 = 127
 							else
@@ -156,7 +156,7 @@ end
 
 -- Place the schematic when a sapling grows.
 function default.grow_new_apple_tree(pos, bad)
-	local schem = valc.schematics.deciduous_trees[valc.pr:next(1,#valc.schematics.deciduous_trees)]
+	local schem = valc.schematics.deciduous_trees[math.random(1,#valc.schematics.deciduous_trees)]
 	local adj = {x = pos.x - math.floor(schem.size.x / 2),
 	             y = pos.y - 1,
 	             z = pos.z - math.floor(schem.size.z / 2)}

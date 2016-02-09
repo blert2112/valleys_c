@@ -223,7 +223,7 @@ minetest.register_abm({
 				minetest.log("action", "A sapling grows into a tree at "..
 					minetest.pos_to_string(pos))
 
-				local schem = sap.schematics[valc.pr:next(1,#sap.schematics)]
+				local schem = sap.schematics[math.random(1,#sap.schematics)]
 				local adj = {x = pos.x - math.floor(schem.size.x / 2),
 										 y = pos.y - 1,
 										 z = pos.z - math.floor(schem.size.z / 2)}

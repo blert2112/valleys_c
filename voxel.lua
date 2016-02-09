@@ -304,8 +304,8 @@ function valc.generate(minp, maxp, seed)
 					if y >= light_depth and (data[index_3d] == node["sand"] or data[index_3d] == node["dirt"]) and (data[index_3d_above] == node["water_source"] or data[index_3d_above] == node["river_water_source"]) then
 						-- Check the biomes and plant water plants, if called for.
 						local biome = valc.biome_ids[biomemap[index_2d]]
-						if y < water_level and data[index_3d_above + ystride] == node["water_source"] and table.contains(coral_biomes, biome) and n21[index_2d] < -0.1 and valc.pr:next(1,3) ~= 1 then
-							local sr = valc.pr:next(1,100)
+						if y < water_level and data[index_3d_above + ystride] == node["water_source"] and table.contains(coral_biomes, biome) and n21[index_2d] < -0.1 and math.random(1,3) ~= 1 then
+							local sr = math.random(1,100)
 							if sr < 4 then
 								data[index_3d_above] = node["brain_coral"]
 							elseif sr < 6 then
@@ -341,7 +341,7 @@ function valc.generate(minp, maxp, seed)
 									local biome = valc.biome_ids[biomemap[index_2d]]
 
 									if not desc.biomes or (biome and desc.biomes and table.contains(desc.biomes, biome)) then
-										if valc.pr:next() / 32767 <= desc.fill_ratio then
+										if math.random() / 32767 <= desc.fill_ratio then
 											data[index_3d] = desc.content_id
 											write = true
 										end
@@ -357,7 +357,7 @@ function valc.generate(minp, maxp, seed)
 					local biome = valc.biome_ids[biomemap[index_2d]]
 					-- I haven't figured out what the decoration manager is
 					--  doing with the noise functions, but this works ok.
-					if table.contains(water_lily_biomes, biome) and n21[index_2d] > 0.5 and valc.pr:next(1,15) == 1 then
+					if table.contains(water_lily_biomes, biome) and n21[index_2d] > 0.5 and math.random(1,15) == 1 then
 						data[index_3d] = node["waterlily"]
 						write = true
 					end
@@ -423,13 +423,13 @@ function valc.generate(minp, maxp, seed)
 						write = true
 					end
 
-					if (data[index_3d_above] == node["lichen"] or data[index_3d_above] == node["moss"]) and valc.pr:next(1,20) == 1 then
+					if (data[index_3d_above] == node["lichen"] or data[index_3d_above] == node["moss"]) and math.random(1,20) == 1 then
 						data[index_3d_above] = node["fungal_stone"]
 						write = true
 					end
 
 					if data[index_3d] == node["air"] then
-						local sr = valc.pr:next(1,1000)
+						local sr = math.random(1,1000)
 
 						-- fluids
 						if (not huge_cave) and data[index_3d_below] == node["stone"] and sr < 10 then
@@ -485,7 +485,7 @@ function valc.generate(minp, maxp, seed)
 								data[index_3d_below] = node["dirt"]
 								write = true
 							elseif huge_cave and air_count > 5 and sr < 180 then
-								valc.make_fungal_tree(data, area, index_3d, valc.pr:next(2,math.min(air_count, 12)), node["fungal_tree_leaves"][valc.pr:next(1,#node["fungal_tree_leaves"])], node["fungal_tree_fruit"])
+								valc.make_fungal_tree(data, area, index_3d, math.random(2,math.min(air_count, 12)), node["fungal_tree_leaves"][math.random(1,#node["fungal_tree_leaves"])], node["fungal_tree_fruit"])
 								data[index_3d_below] = node["dirt"]
 							elseif sr < 300 then
 								data[index_3d_below] = node["dirt"]
@@ -534,7 +534,7 @@ function valc.generate(minp, maxp, seed)
 						data[index_3d] = soil_translate[soil].dry
 						write = true
 					elseif data[index_3d] == node["sand"] then
-						local sr = valc.pr:next(1,50)
+						local sr = math.random(1,50)
 						if valc.glow and sr == 1 then
 							data[index_3d] = node["glowing_sand"]
 							write = true

@@ -6,7 +6,7 @@ minetest.register_node("valleys_c:lava_stone", newnode)
 
 
 default.cool_lava_flowing = function(pos)
-	local sr = valc.pr:next(1,200)
+	local sr = math.random(1,200)
 	if sr == 1 then
 		minetest.place_node(pos, {name='default:stone_with_mese'})
 	elseif sr == 2 then
@@ -33,11 +33,11 @@ minetest.register_abm({
 	chance = 5,
 	action = function(pos, node)
 		if pos.y > 0 then
-			if valc.pr:next(1,8) < 8 then
+			if math.random(1,8) < 8 then
 				local pos2 = {}
-				pos2.x = pos.x + valc.pr:next(-1,1)
+				pos2.x = pos.x + math.random(-1,1)
 				pos2.y = pos.y + 1
-				pos2.z = pos.z + valc.pr:next(-1,1)
+				pos2.z = pos.z + math.random(-1,1)
 				minetest.place_node(pos2, {name='default:lava_source'})
 			else
 				minetest.place_node(pos, {name='default:obsidian'})
@@ -51,7 +51,7 @@ minetest.register_abm({
 	interval = 30,
 	chance = 3,
 	action = function(pos, node)
-		sr = valc.pr:next(1,500)
+		sr = math.random(1,500)
 		if pos.y > 0 then
 			if sr == 1 then
 				minetest.place_node(pos, {name='default:stone_with_mese'})
