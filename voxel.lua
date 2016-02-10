@@ -341,7 +341,7 @@ function valc.generate(minp, maxp, seed)
 									local biome = valc.biome_ids[biomemap[index_2d]]
 
 									if not desc.biomes or (biome and desc.biomes and table.contains(desc.biomes, biome)) then
-										if math.random() / 32767 <= desc.fill_ratio then
+										if math.random() <= desc.fill_ratio then
 											data[index_3d] = desc.content_id
 											write = true
 										end
