@@ -68,111 +68,148 @@ local mapgen_times = {
 
 local node = {}
 
--- Ground nodes
-node["stone"] = minetest.get_content_id("default:stone")
-node["dirt"] = minetest.get_content_id("default:dirt")
-node["dirt_with_grass"] = minetest.get_content_id("default:dirt_with_grass")
-node["dirt_with_dry_grass"] = minetest.get_content_id("default:dirt_with_dry_grass")
-node["snow"] = minetest.get_content_id("default:dirt_with_snow")
-node["sand"] = minetest.get_content_id("default:sand")
-node["sandstone"] = minetest.get_content_id("default:sandstone")
-node["desert_sand"] = minetest.get_content_id("default:desert_sand")
-node["gravel"] = minetest.get_content_id("default:gravel")
-node["desertstone"] = minetest.get_content_id("default:desert_stone")
-node["river_water_source"] = minetest.get_content_id("default:river_water_source")
-node["water_source"] = minetest.get_content_id("default:water_source")
-node["lava"] = minetest.get_content_id("default:lava_source")
+local nodes = {
+	-- Ground nodes
+	{"stone", "default:stone"},
+	{"dirt", "default:dirt"},
+	{"dirt_with_grass", "default:dirt_with_grass"},
+	{"dirt_with_dry_grass", "default:dirt_with_dry_grass"},
+	{"dirt_with_snow", "default:dirt_with_snow"},
+	{"sand", "default:sand"},
+	{"sandstone", "default:sandstone"},
+	{"desert_sand", "default:desert_sand"},
+	{"gravel", "default:gravel"},
+	{"desertstone", "default:desert_stone"},
+	{"river_water_source", "default:river_water_source"},
+	{"water_source", "default:water_source"},
+	{"lava", "default:lava_source"},
 
-node["sand_with_rocks"] = minetest.get_content_id("valleys_c:sand_with_rocks")
-node["glowing_sand"] = minetest.get_content_id("valleys_c:glowing_sand")
-node["fungal_stone"] = minetest.get_content_id("valleys_c:glowing_fungal_stone")
-node["stalactite"] = minetest.get_content_id("valleys_c:stalactite")
-node["stalactite_slimy"] = minetest.get_content_id("valleys_c:stalactite_slimy")
-node["stalactite_mossy"] = minetest.get_content_id("valleys_c:stalactite_mossy")
-node["stalagmite"] = minetest.get_content_id("valleys_c:stalagmite")
-node["stalagmite_slimy"] = minetest.get_content_id("valleys_c:stalagmite_slimy")
-node["stalagmite_mossy"] = minetest.get_content_id("valleys_c:stalagmite_mossy")
-node["mushroom_cap_giant"] = minetest.get_content_id("valleys_c:giant_mushroom_cap")
-node["mushroom_cap_huge"] = minetest.get_content_id("valleys_c:huge_mushroom_cap")
-node["mushroom_stem"] = minetest.get_content_id("valleys_c:giant_mushroom_stem")
-node["mushroom_red"] = minetest.get_content_id("flowers:mushroom_red")
-node["mushroom_brown"] = minetest.get_content_id("flowers:mushroom_brown")
-node["waterlily"] = minetest.get_content_id("flowers:waterlily")
-node["brain_coral"] = minetest.get_content_id("valleys_c:brain_coral")
-node["dragon_eye"] = minetest.get_content_id("valleys_c:dragon_eye")
-node["pillar_coral"] = minetest.get_content_id("valleys_c:pillar_coral")
-node["staghorn_coral"] = minetest.get_content_id("valleys_c:staghorn_coral")
+	{"sand_with_rocks", "valleys_c:sand_with_rocks"},
+	{"glowing_sand", "valleys_c:glowing_sand"},
+	{"fungal_stone", "valleys_c:glowing_fungal_stone"},
+	{"stalactite", "valleys_c:stalactite"},
+	{"stalactite_slimy", "valleys_c:stalactite_slimy"},
+	{"stalactite_mossy", "valleys_c:stalactite_mossy"},
+	{"stalagmite", "valleys_c:stalagmite"},
+	{"stalagmite_slimy", "valleys_c:stalagmite_slimy"},
+	{"stalagmite_mossy", "valleys_c:stalagmite_mossy"},
+	{"mushroom_cap_giant", "valleys_c:giant_mushroom_cap"},
+	{"mushroom_cap_huge", "valleys_c:huge_mushroom_cap"},
+	{"mushroom_stem", "valleys_c:giant_mushroom_stem"},
+	{"mushroom_red", "flowers:mushroom_red"},
+	{"mushroom_brown", "flowers:mushroom_brown"},
+	{"waterlily", "flowers:waterlily"},
+	{"brain_coral", "valleys_c:brain_coral"},
+	{"dragon_eye", "valleys_c:dragon_eye"},
+	{"pillar_coral", "valleys_c:pillar_coral"},
+	{"staghorn_coral", "valleys_c:staghorn_coral"},
 
-node["dirt_clay"] = minetest.get_content_id("valleys_c:dirt_clayey")
-node["lawn_clay"] = minetest.get_content_id("valleys_c:dirt_clayey_with_grass")
-node["dry_clay"] = minetest.get_content_id("valleys_c:dirt_clayey_with_dry_grass")
-node["snow_clay"] = minetest.get_content_id("valleys_c:dirt_clayey_with_snow")
-node["dirt_silt"] = minetest.get_content_id("valleys_c:dirt_silty")
-node["lawn_silt"] = minetest.get_content_id("valleys_c:dirt_silty_with_grass")
-node["dry_silt"] = minetest.get_content_id("valleys_c:dirt_silty_with_dry_grass")
-node["snow_silt"] = minetest.get_content_id("valleys_c:dirt_silty_with_snow")
-node["dirt_sand"] = minetest.get_content_id("valleys_c:dirt_sandy")
-node["lawn_sand"] = minetest.get_content_id("valleys_c:dirt_sandy_with_grass")
-node["dry_sand"] = minetest.get_content_id("valleys_c:dirt_sandy_with_dry_grass")
-node["snow_sand"] = minetest.get_content_id("valleys_c:dirt_sandy_with_snow")
-node["silt"] = minetest.get_content_id("valleys_c:silt")
-node["clay"] = minetest.get_content_id("valleys_c:red_clay")
+	{"dirt_clay", "valleys_c:dirt_clayey"},
+	{"lawn_clay", "valleys_c:dirt_clayey_with_grass"},
+	{"dry_clay", "valleys_c:dirt_clayey_with_dry_grass"},
+	{"snow_clay", "valleys_c:dirt_clayey_with_snow"},
+	{"dirt_silt", "valleys_c:dirt_silty"},
+	{"lawn_silt", "valleys_c:dirt_silty_with_grass"},
+	{"dry_silt", "valleys_c:dirt_silty_with_dry_grass"},
+	{"snow_silt", "valleys_c:dirt_silty_with_snow"},
+	{"dirt_sand", "valleys_c:dirt_sandy"},
+	{"lawn_sand", "valleys_c:dirt_sandy_with_grass"},
+	{"dry_sand", "valleys_c:dirt_sandy_with_dry_grass"},
+	{"snow_sand", "valleys_c:dirt_sandy_with_snow"},
+	{"silt", "valleys_c:silt"},
+	{"clay", "valleys_c:red_clay"},
 
--- Air and Ignore
-node["air"] = minetest.get_content_id("air")
-node["ignore"] = minetest.get_content_id("ignore")
+	-- Air and Ignore
+	{"air", "air"},
+	{"ignore", "ignore"},
 
-node["ice"] = minetest.get_content_id("default:ice")
-node["thinice"] = minetest.get_content_id("valleys_c:thin_ice")
---node["crystal"] = minetest.get_content_id("valleys_c:glow_crystal")
---node["gem"]1 = minetest.get_content_id("valleys_c:glow_gem")
---node["gem"]2 = minetest.get_content_id("valleys_c:glow_gem_2")
---node["gem"]3 = minetest.get_content_id("valleys_c:glow_gem_3")
---node["gem"]4 = minetest.get_content_id("valleys_c:glow_gem_4")
---node["gem"]5 = minetest.get_content_id("valleys_c:glow_gem_5")
---node["saltgem"]1 = minetest.get_content_id("valleys_c:salt_gem")
---node["saltgem"]2 = minetest.get_content_id("valleys_c:salt_gem_2")
---node["saltgem"]3 = minetest.get_content_id("valleys_c:salt_gem_3")
---node["saltgem"]4 = minetest.get_content_id("valleys_c:salt_gem_4")
---node["saltgem"]5 = minetest.get_content_id("valleys_c:salt_gem_5")
---node["spike"]1 = minetest.get_content_id("valleys_c:spike")
---node["spike"]2 = minetest.get_content_id("valleys_c:spike_2")
---node["spike"]3 = minetest.get_content_id("valleys_c:spike_3")
---node["spike"]4 = minetest.get_content_id("valleys_c:spike_4")
---node["spike"]5 = minetest.get_content_id("valleys_c:spike_5")
-node["moss"] = minetest.get_content_id("valleys_c:stone_with_moss")
-node["lichen"] = minetest.get_content_id("valleys_c:stone_with_lichen")
-node["algae"] = minetest.get_content_id("valleys_c:stone_with_algae")
-node["salt"] = minetest.get_content_id("valleys_c:stone_with_salt")
-node["hcobble"] = minetest.get_content_id("valleys_c:hot_cobble")
-node["gobsidian"] = minetest.get_content_id("valleys_c:glow_obsidian")
-node["gobsidian2"] = minetest.get_content_id("valleys_c:glow_obsidian_2")
-node["coalblock"] = minetest.get_content_id("default:coalblock")
-node["obsidian"] = minetest.get_content_id("default:obsidian")
---node["desand"] = minetest.get_content_id("default:desert_sand")
---node["coaldust"] = minetest.get_content_id("valleys_c:coal_dust")
---node["fungus"] = minetest.get_content_id("valleys_c:fungus")
---node["mycena"] = minetest.get_content_id("valleys_c:mycena")
---node["worm"] = minetest.get_content_id("valleys_c:glow_worm")
-node["icicle_up"] = minetest.get_content_id("valleys_c:icicle_up")
-node["icicle_down"] = minetest.get_content_id("valleys_c:icicle_down")
-node["flame"] = minetest.get_content_id("valleys_c:constant_flame")
---node["fountain"] = minetest.get_content_id("valleys_c:s_fountain")
---node["fortress"] = minetest.get_content_id("valleys_c:s_fortress")
+	{"ice", "default:ice"},
+	{"thinice", "valleys_c:thin_ice"},
+	--{"crystal", "valleys_c:glow_crystal"},
+	--node["gem"]1 = minetest.get_content_id("valleys_c:glow_gem")
+	--node["gem"]2 = minetest.get_content_id("valleys_c:glow_gem_2")
+	--node["gem"]3 = minetest.get_content_id("valleys_c:glow_gem_3")
+	--node["gem"]4 = minetest.get_content_id("valleys_c:glow_gem_4")
+	--node["gem"]5 = minetest.get_content_id("valleys_c:glow_gem_5")
+	--node["saltgem"]1 = minetest.get_content_id("valleys_c:salt_gem")
+	--node["saltgem"]2 = minetest.get_content_id("valleys_c:salt_gem_2")
+	--node["saltgem"]3 = minetest.get_content_id("valleys_c:salt_gem_3")
+	--node["saltgem"]4 = minetest.get_content_id("valleys_c:salt_gem_4")
+	--node["saltgem"]5 = minetest.get_content_id("valleys_c:salt_gem_5")
+	--node["spike"]1 = minetest.get_content_id("valleys_c:spike")
+	--node["spike"]2 = minetest.get_content_id("valleys_c:spike_2")
+	--node["spike"]3 = minetest.get_content_id("valleys_c:spike_3")
+	--node["spike"]4 = minetest.get_content_id("valleys_c:spike_4")
+	--node["spike"]5 = minetest.get_content_id("valleys_c:spike_5")
+	{"moss", "valleys_c:stone_with_moss"},
+	{"lichen", "valleys_c:stone_with_lichen"},
+	{"algae", "valleys_c:stone_with_algae"},
+	{"salt", "valleys_c:stone_with_salt"},
+	{"hcobble", "valleys_c:hot_cobble"},
+	{"gobsidian", "valleys_c:glow_obsidian"},
+	{"gobsidian2", "valleys_c:glow_obsidian_2"},
+	{"coalblock", "default:coalblock"},
+	{"obsidian", "default:obsidian"},
+	--{"desand", "default:desert_sand"},
+	--{"coaldust", "valleys_c:coal_dust"},
+	--{"fungus", "valleys_c:fungus"},
+	--{"mycena", "valleys_c:mycena"},
+	--{"worm", "valleys_c:glow_worm"},
+	{"icicle_up", "valleys_c:icicle_up"},
+	{"icicle_down", "valleys_c:icicle_down"},
+	{"flame", "valleys_c:constant_flame"},
+	--{"fountain", "valleys_c:s_fountain"},
+	--{"fortress", "valleys_c:s_fortress"},
+
+	{"fungal_tree_fruit", "valleys_c:fungal_tree_fruit"},
+}
+
+for _, i in pairs(nodes) do
+	node[i[1]] = minetest.get_content_id(i[2])
+end
 
 node["fungal_tree_leaves"] = {}
 for _, name in pairs(valc.fungal_tree_leaves) do
 	node["fungal_tree_leaves"][#node["fungal_tree_leaves"]+1] = minetest.get_content_id(name)
 end
-node["fungal_tree_fruit"] = minetest.get_content_id("valleys_c:fungal_tree_fruit")
 
 local soil_translate = {}
-soil_translate["clay_over"] = { dirt = node["clay"], lawn = node["clay"], dry = node["clay"], snow = node["clay"], }
-soil_translate["clay_under"] = { dirt = node["dirt_clay"], lawn = node["lawn_clay"], dry = node["dry_clay"], snow = node["snow_clay"], }
-soil_translate["silt_over"] = { dirt = node["silt"], lawn = node["silt"], dry = node["silt"], snow = node["silt"], }
-soil_translate["silt_under"] = { dirt = node["dirt_silt"], lawn = node["lawn_silt"], dry = node["dry_silt"], snow = node["snow_silt"], }
-soil_translate["sand"] = { dirt = node["dirt_sand"], lawn = node["lawn_sand"], dry = node["dry_sand"], snow = node["snow_sand"], }
-soil_translate["dirt"] = { dirt = node["dirt"], lawn = node["dirt_with_grass"], dry = node["dirt_with_dry_grass"], snow = node["snow"], }
+soil_translate["clay_over"] = {
+	dirt = node["clay"],
+	lawn = node["clay"],
+	dry = node["clay"],
+	snow = node["clay"],
+}
+soil_translate["clay_under"] = {
+	dirt = node["dirt_clay"],
+	lawn = node["lawn_clay"],
+	dry = node["dry_clay"],
+	snow = node["snow_clay"],
+}
+soil_translate["silt_over"] = {
+	dirt = node["silt"],
+	lawn = node["silt"],
+	dry = node["silt"],
+	snow = node["silt"],
+}
+soil_translate["silt_under"] = {
+	dirt = node["dirt_silt"],
+	lawn = node["lawn_silt"],
+	dry = node["dry_silt"],
+	snow = node["snow_silt"],
+}
+soil_translate["sand"] = {
+	dirt = node["dirt_sand"],
+	lawn = node["lawn_sand"],
+	dry = node["dry_sand"],
+	snow = node["snow_sand"],
+}
+soil_translate["dirt"] = {
+	dirt = node["dirt"],
+	lawn = node["dirt_with_grass"],
+	dry = node["dirt_with_dry_grass"],
+	snow = node["dirt_with_snow"],
+}
 
 local water_lily_biomes = {"rainforest_swamp", "rainforest", "savanna_swamp", "savanna",  "deciduous_forest_swamp", "deciduous_forest"}
 local coral_biomes = {"stone_grassland_ocean", "coniferous_forest_ocean", "sandstone_grassland_ocean", "deciduous_forest_ocean", "desert_ocean", "savanna_ocean", "rainforest_ocean", }
@@ -188,6 +225,7 @@ local dirt_threshold = 0.75
 --local dirt_threshold = vmg.define("dirt_threshold", 0.5)
 
 local light_depth = -13
+local deep = -7000
 
 -- Create a table of biome ids, so I can use the biomemap.
 if not valc.biome_ids then
@@ -367,46 +405,35 @@ function valc.generate(minp, maxp, seed)
 				if y < ground and (data[index_3d] == node["air"] or data[index_3d] == node["river_water_source"] or data[index_3d] == node["water_source"]) then
 					relight = true
 
-					local under_biome
-					local deep = -7000
 					local stone_type = node["stone"]
 					local stone_depth = 1
 					local n23_val = n23[index_2d] + n22[index_2d]
 					if n23_val < -0.8 then
 						if y < deep then
-							under_biome = "deep"
 							stone_type = node["ice"]
 							stone_depth = 2
 						else
-							under_biome = "ice"
 							stone_type = node["thinice"]
 							stone_depth = 2
 						end
 					elseif n23_val < -0.7 then
-						under_biome = "eeking"
 						stone_type = node["lichen"]
 					elseif n23_val < -0.3 then
-						under_biome = "moss"
 						stone_type = node["moss"]
 					elseif n23_val < 0.2 then
-						under_biome = "fungal"
 						stone_type = node["lichen"]
 					elseif n23_val < 0.5 then
-						under_biome = "algae"
 						stone_type = node["algae"]
 					elseif n23_val < 0.6 then
-						under_biome = "salt"
 						stone_type = node["salt"]
 						stone_depth = 2
 					elseif n23_val < 0.8 then
-						under_biome = "coal"
 						stone_type = node["coalblock"]
 						stone_depth = 2
 					else
-						under_biome = "hot"
 						stone_type = node["hcobble"]
 					end
-					--	under_biome = "glow"
+					--	"glow"
 
 					-- Change stone per biome.
 					if data[index_3d_below] == node["stone"] then
@@ -415,7 +442,8 @@ function valc.generate(minp, maxp, seed)
 							data[index_3d_below - ystride] = stone_type
 						end
 						write = true
-					elseif data[index_3d_above] == node["stone"] then
+					end
+					if data[index_3d_above] == node["stone"] then
 						data[index_3d_above] = stone_type
 						if stone_depth == 2 then
 							data[index_3d_above + ystride] = stone_type
@@ -464,30 +492,27 @@ function valc.generate(minp, maxp, seed)
 								data[index_3d] = node["stalagmite"]
 							end
 						-- vegetation
-						elseif (data[index_3d_below] == node["lichen"] or data[index_3d_below] == node["algae"]) and under_biome ~= "eeking" then
+						elseif (data[index_3d_below] == node["lichen"] or data[index_3d_below] == node["algae"]) and n23_val >= -0.7 then
 							if sr < 110 then
 								data[index_3d] = node["mushroom_red"]
-								data[index_3d_below] = node["dirt"]
-								write = true
 							elseif sr < 140 then
 								data[index_3d] = node["mushroom_brown"]
-								data[index_3d_below] = node["dirt"]
-								write = true
 							elseif air_count > 1 and sr < 160 then
 								data[index_3d_above] = node["mushroom_cap_huge"]
 								data[index_3d] = node["mushroom_stem"]
-								data[index_3d_below] = node["dirt"]
-								write = true
 							elseif air_count > 2 and sr < 170 then
 								data[index_3d + 2 * ystride] = node["mushroom_cap_giant"]
 								data[index_3d_above] = node["mushroom_stem"]
 								data[index_3d] = node["mushroom_stem"]
-								data[index_3d_below] = node["dirt"]
-								write = true
 							elseif huge_cave and air_count > 5 and sr < 180 then
 								valc.make_fungal_tree(data, area, index_3d, math.random(2,math.min(air_count, 12)), node["fungal_tree_leaves"][math.random(1,#node["fungal_tree_leaves"])], node["fungal_tree_fruit"])
 								data[index_3d_below] = node["dirt"]
+								write = true
 							elseif sr < 300 then
+								data[index_3d_below] = node["dirt"]
+								write = true
+							end
+							if data[index_3d] ~= node["air"] then
 								data[index_3d_below] = node["dirt"]
 								write = true
 							end
@@ -499,7 +524,7 @@ function valc.generate(minp, maxp, seed)
 					end
 				end
 
-				if data[index_3d] == node["dirt"] or data[index_3d] == node["snow"] or data[index_3d] == node["dirt_with_grass"] or data[index_3d] == node["dirt_with_dry_grass"] or data[index_3d] == node["sand"] then
+				if data[index_3d] == node["dirt"] or data[index_3d] == node["dirt_with_snow"] or data[index_3d] == node["dirt_with_grass"] or data[index_3d] == node["dirt_with_dry_grass"] or data[index_3d] == node["sand"] then
 					-- Choose biome, by default normal dirt
 					local soil = "dirt"
 					local max = math.max(v13, v14, v15) -- the biome is the maximal of these 3 values.
@@ -524,7 +549,7 @@ function valc.generate(minp, maxp, seed)
 					if data[index_3d] == node["dirt"] then
 						data[index_3d] = soil_translate[soil].dirt
 						write = true
-					elseif data[index_3d] == node["snow"] then
+					elseif data[index_3d] == node["dirt_with_snow"] then
 						data[index_3d] = soil_translate[soil].snow
 						write = true
 					elseif data[index_3d] == node["dirt_with_grass"] then
