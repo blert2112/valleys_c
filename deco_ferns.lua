@@ -43,7 +43,7 @@ if not abstract_ferns then
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass", "default:mossycobble", "default:sand", "default:jungletree",},
 			fill_ratio = (max_s-s+1)/400,
-			biomes = {"taiga", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",},
+			biomes = {"taiga", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp", "desertstone_grassland", },
 		})
 
 		-- Supposedly ferns sometimes signal the presence of ores.
@@ -61,7 +61,7 @@ if not abstract_ferns then
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass", "default:mossycobble", "default:sand", "default:jungletree",},
 			fill_ratio = (max_s-s+1)/4000,
-			biomes = {"taiga", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",},
+			biomes = {"taiga", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp", "desertstone_grassland", },
 		})
 	end
 
@@ -114,7 +114,7 @@ if not abstract_ferns then
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass", "default:mossycobble", "default:sand", "default:jungletree", "default:gravel",},
 			fill_ratio = 0.003,
-			biomes = {"taiga", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp",},
+			biomes = {"taiga", "coniferous_forest", "deciduous_forest", "savanna", "rainforest", "rainforest_swamp", "desertstone_grassland", },
 		})
 	end
 

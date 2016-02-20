@@ -91,7 +91,7 @@ end
 
 -- Copy all the decorations except the ones I don't like.
 --  This is currently used to remove the default trees.
-local bad_deco = {"apple_tree", "pine_tree", "jungle_tree", }
+local bad_deco = {"apple_tree", "pine_tree", "jungle_tree", "junglegrass", }
 local decos = {}
 for id, deco_table in pairs(minetest.registered_decorations) do
 	if type(deco_table.schematic) ~= "string" or not table.contains_substring(bad_deco, deco_table.schematic) then
@@ -147,7 +147,7 @@ dofile(valc.path.."/deco_ferns_tree.lua")
 dofile(valc.path.."/deco_water.lua")
 
 
-	-- biomes = {"sandstone_grassland", "glacier", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp",},
+	-- biomes = {"sandstone_grassland", "glacier", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest", "rainforest_swamp", "desertstone_grassland", },
 
 
 -- Re-register the good decorations.
@@ -156,4 +156,15 @@ dofile(valc.path.."/deco_water.lua")
 for _, i in pairs(decos) do
 	minetest.register_decoration(i)
 end
+
+minetest.register_decoration({
+	deco_type = "simple",
+	place_on = {"default:dirt_with_grass"},
+	sidelen = 80,
+	fill_ratio = 0.1,
+	biomes = {"rainforest", "desertstone_grassland"},
+	y_min = 1,
+	y_max = 31000,
+	decoration = "default:junglegrass",
+})
 

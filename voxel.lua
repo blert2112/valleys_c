@@ -211,8 +211,8 @@ soil_translate["dirt"] = {
 	snow = node["dirt_with_snow"],
 }
 
-local water_lily_biomes = {"rainforest_swamp", "rainforest", "savanna_swamp", "savanna",  "deciduous_forest_swamp", "deciduous_forest"}
-local coral_biomes = {"stone_grassland_ocean", "coniferous_forest_ocean", "sandstone_grassland_ocean", "deciduous_forest_ocean", "desert_ocean", "savanna_ocean", "rainforest_ocean", }
+local water_lily_biomes = {"rainforest_swamp", "rainforest", "savanna_swamp", "savanna",  "deciduous_forest_swamp", "deciduous_forest", "desertstone_grassland", }
+local coral_biomes = {"desert_ocean", "savanna_ocean", "rainforest_ocean", }
 
 local clay_threshold = 1
 local silt_threshold = 1

@@ -98,7 +98,7 @@ minetest.override_item("default:river_water_source", {is_ground_content = true})
 
 
 -- Execute each section of the code.
---dofile(valc.path.."/biomes.lua")
+dofile(valc.path.."/biomes.lua")
 dofile(valc.path.."/deco.lua")
 dofile(valc.path.."/vulcanism.lua")
 dofile(valc.path.."/voxel.lua")

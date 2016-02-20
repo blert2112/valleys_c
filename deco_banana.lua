@@ -58,7 +58,7 @@ do
 			sidelen = 80,
 			place_on = {"default:dirt_with_grass",},
 			fill_ratio = (max_h-h+1)/5000,
-			biomes = {"rainforest",},
+			biomes = {"rainforest", "desertstone_grassland", },
 			schematic = schem,
 			flags = "place_center_x, place_center_z",
 			rotation = "random",

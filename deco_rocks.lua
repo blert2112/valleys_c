@@ -119,7 +119,7 @@ for grid_count = 1,6 do
 		sidelen = 80,
 		place_on = {"group:soil", "group:sand"},
 		fill_ratio = 0.002,
-		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest",},
+		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "cold_desert", "savanna", "rainforest", "desertstone_grassland", },
 		flags = "place_center_x, place_center_z",
 		rotation = "random",
 	})
@@ -182,7 +182,7 @@ minetest.register_node("valleys_c:small_rocks", {
 --		sidelen = 80,
 --		place_on = {"group:soil", "group:sand"},
 --		fill_ratio = 0.001,
---		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "savanna", "rainforest",},
+--		biomes = {"sandstone_grassland", "tundra", "taiga", "stone_grassland", "coniferous_forest", "deciduous_forest", "desert", "cold_desert", "savanna", "rainforest", "desertstone_grassland", },
 --		flags = "place_center_x, place_center_z",
 --		rotation = "random",
 --	})
