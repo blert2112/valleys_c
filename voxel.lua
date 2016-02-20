@@ -309,7 +309,18 @@ function valc.generate(minp, maxp, seed)
 
 			local index_3d = area:index(x, maxp.y, z) -- index of the data array, matching the position {x, y, z}
 			local air_count = 0
-			local ground = math.max(heightmap[index_2d], 0) - 5
+			-- Because of the way valleys generates terrain, the heightmap
+			-- is NOT accurate unless the surface is part of the current chunk.
+			-- In this case, we don't need it to be accurate if it's well
+			-- outside of this chunk. If the mapgen is over-generating,
+			-- it may still be inaccurate, so check it where possible.
+			local ground = heightmap[index_2d]
+			if ground >= minp.y - 5 and ground <= maxp.y + 5 then
+				local index_ground = index_3d - ystride * (maxp.y - ground)
+				if data[index_ground] == node["air"] or data[index_ground] == node["ignore"] then
+					ground = -31000
+				end
+			end
 
 			local v13, v14, v15, v16 = n13[index_2d], n14[index_2d], n15[index_2d], n16[index_2d] -- take the noise values for 2D noises
 
@@ -402,7 +413,7 @@ function valc.generate(minp, maxp, seed)
 				end
 
 				-- Handle caves.
-				if y < ground and (data[index_3d] == node["air"] or data[index_3d] == node["river_water_source"] or data[index_3d] == node["water_source"]) then
+				if y < ground - 5 and (data[index_3d] == node["air"] or data[index_3d] == node["river_water_source"] or data[index_3d] == node["water_source"]) then
 					relight = true
 
 					local stone_type = node["stone"]

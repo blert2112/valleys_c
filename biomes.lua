@@ -151,7 +151,7 @@ if true then
 		y_min = 5,
 		y_max = 31000,
 		heat_point = 25,
-		humidity_point = 10,
+		humidity_point = 5,
 	})
 
 	minetest.register_biome({
