@@ -303,8 +303,8 @@ function valc.generate(minp, maxp, seed)
 		huge_cave = true
 	end
 
-	for x = minp.x, maxp.x do -- for each YZ plane
-		for z = minp.z, maxp.z do -- for each vertical line in this plane
+	for z = minp.z, maxp.z do -- for each vertical line in this plane
+		for x = minp.x, maxp.x do -- for each YZ plane
 			index_2d = index_2d + 1
 
 			local index_3d = area:index(x, maxp.y, z) -- index of the data array, matching the position {x, y, z}
