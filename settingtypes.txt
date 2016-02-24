@@ -11,3 +11,6 @@ valc_houses (Houses) bool false
 # when a tree is cut down.
 valc_leaf_decay (Leaf Decay) bool true
 
+# Set this to true only if you have compiled the gennotify
+# patch for huge caves into your mintest program.
+valc_use_gennotify (Use gennotify) bool false

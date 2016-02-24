@@ -37,6 +37,7 @@ valc.time_factor = 10
 valc.noleafdecay = not minetest.setting_getbool('valc_leaf_decay')
 valc.glow = minetest.setting_getbool('valc_glow')
 valc.houses = minetest.setting_getbool('valc_houses')
+valc.use_gennotify = minetest.setting_getbool('valc_use_gennotify')
 
 
 -- path to all Valleys Mapgen code
@@ -111,6 +112,21 @@ minetest.register_abm({
 		minetest.log("*** Bones say: I'm at ("..pos.x..","..pos.y..","..pos.z..").")
 	end,
 })
+
+minetest.register_on_dieplayer(function(player)
+	if minetest.setting_getbool("creative_mode") then
+		return
+	end
+	
+	local pos = player:getpos()
+	pos.x = math.floor(pos.x+0.5)
+	pos.y = math.floor(pos.y+0.5)
+	pos.z = math.floor(pos.z+0.5)
+	local player_name = player:get_player_name()
+
+	minetest.log("* "..player_name.." died at ("..pos.x..","..pos.y..","..pos.z..").")
+	minetest.chat_send_player(player_name, "You died at ("..pos.x..","..pos.y..","..pos.z..").")
+end)
 
 
 minetest.log("Valleys Mapgen C++ Helper loaded")

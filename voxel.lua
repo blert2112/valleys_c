@@ -51,6 +51,34 @@ function pos2d(pos)
 	end
 end
 
+-- Check if a chunk contains a huge cave.
+-- This sucks. Use gennotify when possible.
+local function survey(data, area, maxp, minp, lava, water, air)
+	local space = 0
+	for z = minp.z, maxp.z do
+		for x = minp.x, maxp.x do
+			local index_3d = area:index(x, maxp.y, z)
+			for y = maxp.y, minp.y, -1 do
+				index_3d = index_3d - area.ystride
+				-- The mapgen won't place lava or water near a huge cave.
+				if data[index_3d] == lava or data[index_3d] == water then
+					return false
+				elseif data[index_3d] == air then
+					space = space + 1
+				end
+			end
+		end
+	end
+
+	-- This is an extremely poor way to check, but there aren't
+	-- any good ways, and all the others take more cpu time.
+	if space < 20000 then
+		return false
+	else
+		return true
+	end
+end
+
 local mapgen_times = {
 	liquid_lighting = {},
 	loops = {},
@@ -297,11 +325,16 @@ function valc.generate(minp, maxp, seed)
 	local index_2d = 0
 	local write = false
 	local relight = false
-	local huge_cave = true
+	local huge_cave = false
 
-	if gennotify.alternative_cave then
-		huge_cave = true
+	if valc.use_gennotify then
+		if gennotify.alternative_cave then
+			huge_cave = true
+		end
+	elseif maxp.y < -300 then
+		huge_cave = survey(data, area, maxp, minp, node['lava'], node['water'], node['air'])
 	end
+
 
 	for z = minp.z, maxp.z do -- for each vertical line in this plane
 		for x = minp.x, maxp.x do -- for each YZ plane

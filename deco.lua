@@ -168,3 +168,11 @@ minetest.register_decoration({
 	decoration = "default:junglegrass",
 })
 
+minetest.register_craft({
+	output = "default:stick 2",
+	recipe = {
+		{"default:cactus"}
+	}
+})
+
+minetest.add_group("default:cactus", {oddly_breakable_by_hand=1})
