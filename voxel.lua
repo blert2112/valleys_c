@@ -66,17 +66,19 @@ local function survey(data, area, maxp, minp, lava, water, air)
 				elseif data[index_3d] == air then
 					space = space + 1
 				end
+
+				-- This shortcut may skip lava or water, causing a false
+				-- positive, but it can save a lot of time.
+				-- This is an extremely poor way to check, but there aren't
+				-- any good ways, and all the others take more cpu time.
+				if space > 20000 then
+					return true
+				end
 			end
 		end
 	end
 
-	-- This is an extremely poor way to check, but there aren't
-	-- any good ways, and all the others take more cpu time.
-	if space < 20000 then
-		return false
-	else
-		return true
-	end
+	return false
 end
 
 local mapgen_times = {
@@ -332,7 +334,15 @@ function valc.generate(minp, maxp, seed)
 			huge_cave = true
 		end
 	elseif maxp.y < -300 then
-		huge_cave = survey(data, area, maxp, minp, node['lava'], node['water'], node['air'])
+		if gennotify.alternative_cave then
+			huge_cave = true
+		end
+
+		local hug = survey(data, area, maxp, minp, node['lava'], node['water'], node['air'])
+
+		if huge_cave ~= hug then
+			print("fake gennotify screwed up")
+		end
 	end
 
 
