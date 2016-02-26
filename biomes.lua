@@ -137,7 +137,7 @@ if true then
 	})
 
 	minetest.register_biome({
-		name = "cold desert",
+		name = "cold_desert",
 		--node_dust = "",
 		node_top = "default:desert_sand",
 		depth_top = 1,

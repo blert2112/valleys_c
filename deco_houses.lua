@@ -50,15 +50,15 @@ function valc.generate_test_house_schematic(size, floor, walls, ceiling)
 					s.data[i].force_place = true
 				elseif (x == offset.x or x == width - offset.x - 1 or z == offset.z + 1 or z == depth - offset.z - 1) and y >= offset.y and y < p and z >= offset.z + 1 and x >= offset.x and x <= width - offset.x - 1 and z <= depth - offset.z - 1 then
 					if x == c and y == offset.y + 1 and z == offset.z + 1 then
-						s.data[i].name = "doors:door_wood_b_1"
+						s.data[i].name = "doors:door_wood_b"
 						s.data[i].param1 = 255
 						s.data[i].param2 = 0
 						s.data[i].force_place = true
-					elseif x == c and y == offset.y + 2 and z == offset.z + 1 then
-						s.data[i].name = "doors:door_wood_t_1"
-						s.data[i].param1 = 255
-						s.data[i].param2 = 0
-						s.data[i].force_place = true
+					--elseif x == c and y == offset.y + 2 and z == offset.z + 1 then
+					--	s.data[i].name = "doors:door_wood_a"
+					--	s.data[i].param1 = 255
+					--	s.data[i].param2 = 0
+					--	s.data[i].force_place = true
 					elseif y == offset.y + 2 and ((x > offset.x and x < width - offset.x - 1) or (z > offset.z + 1 and z < depth - offset.z - 1)) then
 						s.data[i].name = walls
 						s.data[i].param1 = 150
