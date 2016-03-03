@@ -147,7 +147,7 @@ for _, tree in ipairs(valc.treelist) do
 		tiles = { "vmg_"..tree.leaf_tile..".png"},
 		paramtype = "light",
 		is_ground_content = false,
-		groups = {snappy=3, leafdecay=4, flammable=2, leaves=1},
+		groups = {snappy=3, leafdecay=4, flammable=2, leaves=1, leafdecay=1},
 		drop = {
 			max_items = 1,
 			items = {

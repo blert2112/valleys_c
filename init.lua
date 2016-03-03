@@ -34,7 +34,7 @@ valc = {}
 valc.version = "1.0"
 valc.time_factor = 10
 
-valc.noleafdecay = not minetest.setting_getbool('valc_leaf_decay')
+valc.noleafdecay = minetest.setting_getbool('valc_no_leaf_decay')
 valc.glow = minetest.setting_getbool('valc_glow')
 valc.houses = minetest.setting_getbool('valc_houses')
 valc.use_gennotify = minetest.setting_getbool('valc_use_gennotify')

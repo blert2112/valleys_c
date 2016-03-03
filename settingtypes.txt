@@ -9,7 +9,7 @@ valc_houses (Houses) bool false
 
 # If leaf decay is disabled, leaves will not disappear, even
 # when a tree is cut down.
-valc_leaf_decay (Leaf Decay) bool true
+valc_no_leaf_decay (No Leaf Decay) bool false
 
 # Set this to true only if you have compiled the gennotify
 # patch for huge caves into your mintest program.
