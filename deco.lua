@@ -16,6 +16,8 @@ minetest.override_item("default:river_water_source", {liquid_range = waterflow})
 minetest.override_item("default:river_water_flowing", {liquid_range = waterflow})
 minetest.override_item("default:river_water_source", {is_ground_content = true})
 minetest.override_item("default:river_water_flowing", {is_ground_content = true})
+minetest.override_item("default:water_source", {is_ground_content = true})
+minetest.override_item("default:water_flowing", {is_ground_content = true})
 
 if false then
 	minetest.override_item("default:river_water_source", {light_source = 14})

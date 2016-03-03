@@ -54,10 +54,11 @@ end
 -- Check if a chunk contains a huge cave.
 -- This sucks. Use gennotify when possible.
 local function survey(data, area, maxp, minp, lava, water, air)
+	local index_3d
 	local space = 0
 	for z = minp.z, maxp.z do
 		for x = minp.x, maxp.x do
-			local index_3d = area:index(x, maxp.y, z)
+			index_3d = area:index(x, maxp.y, z)
 			for y = maxp.y, minp.y, -1 do
 				index_3d = index_3d - area.ystride
 				-- The mapgen won't place lava or water near a huge cave.
@@ -259,9 +260,10 @@ local deep = -7000
 
 -- Create a table of biome ids, so I can use the biomemap.
 if not valc.biome_ids then
+	local i
 	valc.biome_ids = {}
 	for name, desc in pairs(minetest.registered_biomes) do
-		local i = minetest.get_biome_id(desc.name)
+		i = minetest.get_biome_id(desc.name)
 		valc.biome_ids[i] = desc.name
 	end
 end
@@ -274,6 +276,9 @@ for _, desc in pairs(valc.water_plants) do
 		desc.content_id = minetest.get_content_id(desc.decoration[1])
 	end
 end
+
+
+local data = {}
 
 
 -- the mapgen function
@@ -291,7 +296,7 @@ function valc.generate(minp, maxp, seed)
 	--print(dump(gennotify))
 	local water_level = 1
 
-	local data = vm:get_data() -- data is the original array of content IDs (solely or mostly air)
+	data = vm:get_data(data) -- data is the original array of content IDs (solely or mostly air)
 	-- Be careful: emin ≠ minp and emax ≠ maxp !
 	-- The data array is not limited by minp and maxp. It exceeds it by 16 nodes in the 6 directions.
 	-- The real limits of data array are emin and emax.
@@ -328,6 +333,7 @@ function valc.generate(minp, maxp, seed)
 	local write = false
 	local relight = false
 	local huge_cave = false
+	local hug
 
 	if valc.use_gennotify then
 		if gennotify.alternative_cave then
@@ -338,7 +344,7 @@ function valc.generate(minp, maxp, seed)
 			huge_cave = true
 		end
 
-		local hug = survey(data, area, maxp, minp, node['lava'], node['water'], node['air'])
+		hug = survey(data, area, maxp, minp, node['lava'], node['water'], node['air'])
 
 		if huge_cave ~= hug then
 			print("fake gennotify screwed up")
@@ -346,29 +352,34 @@ function valc.generate(minp, maxp, seed)
 	end
 
 
+	local index_3d, air_count, ground
+	local index_3d_below, index_3d_above, surround
+	local v13, v14, v15, v16
+	local n, biome, sr, placeable, pos, count
+	local stone_type, stone_depth, n23_val
+	local soil, max
+
 	for z = minp.z, maxp.z do
 		for x = minp.x, maxp.x do
 			index_2d = index_2d + 1
 
-			local index_3d = area:index(x, maxp.y, z) -- index of the data array, matching the position {x, y, z}
-			local air_count = 0
-			-- Because of the way valleys generates terrain, the heightmap
-			-- is NOT accurate. In this case, we don't need it to be precise.
-			local ground = heightmap[index_2d]
-			--if ground >= minp.y - 5 and ground <= maxp.y + 5 then
+			index_3d = area:index(x, maxp.y, z) -- index of the data array, matching the position {x, y, z}
+			air_count = 0
+			ground = heightmap[index_2d]
+			--if ground >= minp.y and ground <= maxp.y then
 			--	local index_ground = index_3d - ystride * (maxp.y - ground)
 			--	if data[index_ground] == node["air"] then
-			--		--print("*** forcing ground at ("..x..","..ground..","..z..")")
-			--		ground = -31000
+			--		print("*** bad heightmap at ("..x..","..ground..","..z..")")
+			--		--ground = -31000
 			--	end
 			--end
 
-			local v13, v14, v15, v16 = n13[index_2d], n14[index_2d], n15[index_2d], n16[index_2d] -- take the noise values for 2D noises
+			v13, v14, v15, v16 = n13[index_2d], n14[index_2d], n15[index_2d], n16[index_2d] -- take the noise values for 2D noises
 
 			for y = maxp.y, minp.y, -1 do -- for each node in vertical line
-				local index_3d_below = index_3d - ystride
-				local index_3d_above = index_3d + ystride
-				local surround = true
+				index_3d_below = index_3d - ystride
+				index_3d_above = index_3d + ystride
+				surround = true
 
 				-- Determine if a plant/dirt block can be placed without showing.
 				-- Avoid the edges of the chunk, just to make things easier.
@@ -378,13 +389,13 @@ function valc.generate(minp, maxp, seed)
 						-- This is due to the kludgy way you have to make water plants
 						--  in minetest, to avoid bubbles.
 						for x1 = -1,1,2 do
-							local n = data[index_3d+x1] 
+							n = data[index_3d+x1] 
 							if n == node["river_water_source"] or n == node["water_source"] or n == node["air"] then
 								surround = false
 							end
 						end
 						for z1 = -zstride,zstride,2*zstride do
-							local n = data[index_3d+z1] 
+							n = data[index_3d+z1] 
 							if n == node["river_water_source"] or n == node["water_source"] or n == node["air"] then
 								surround = false
 							end
@@ -393,9 +404,9 @@ function valc.generate(minp, maxp, seed)
 
 					if y >= light_depth and (data[index_3d] == node["sand"] or data[index_3d] == node["dirt"]) and (data[index_3d_above] == node["water_source"] or data[index_3d_above] == node["river_water_source"]) then
 						-- Check the biomes and plant water plants, if called for.
-						local biome = valc.biome_ids[biomemap[index_2d]]
+						biome = valc.biome_ids[biomemap[index_2d]]
 						if y < water_level and data[index_3d_above + ystride] == node["water_source"] and table.contains(coral_biomes, biome) and n21[index_2d] < -0.1 and math.random(1,3) ~= 1 then
-							local sr = math.random(1,100)
+							sr = math.random(1,100)
 							if sr < 4 then
 								data[index_3d_above] = node["brain_coral"]
 							elseif sr < 6 then
@@ -407,7 +418,7 @@ function valc.generate(minp, maxp, seed)
 							end
 						elseif surround then
 							for _, desc in pairs(valc.water_plants) do
-								local placeable = false
+								placeable = false
 
 								if not node_match_cache[desc] then
 									node_match_cache[desc] = {}
@@ -420,7 +431,7 @@ function valc.generate(minp, maxp, seed)
 									-- against a given node (or nodes). However, it's slow.
 									-- To speed it up, we cache the results for each plant
 									-- on each node, and avoid calling find_nodes every time.
-									local pos, count = minetest.find_nodes_in_area({x=x,y=y,z=z}, {x=x,y=y,z=z}, desc.place_on)
+									pos, count = minetest.find_nodes_in_area({x=x,y=y,z=z}, {x=x,y=y,z=z}, desc.place_on)
 									if #pos > 0 then
 										placeable = true
 									end
@@ -428,7 +439,7 @@ function valc.generate(minp, maxp, seed)
 								end
 
 								if placeable and desc.fill_ratio and desc.content_id then
-									local biome = valc.biome_ids[biomemap[index_2d]]
+									biome = valc.biome_ids[biomemap[index_2d]]
 
 									if not desc.biomes or (biome and desc.biomes and table.contains(desc.biomes, biome)) then
 										if math.random() <= desc.fill_ratio then
@@ -444,7 +455,7 @@ function valc.generate(minp, maxp, seed)
 
 				-- on top of the water
 				if y > minp.y and data[index_3d] == node["air"] and data[index_3d_below] == node["river_water_source"] then
-					local biome = valc.biome_ids[biomemap[index_2d]]
+					biome = valc.biome_ids[biomemap[index_2d]]
 					-- I haven't figured out what the decoration manager is
 					--  doing with the noise functions, but this works ok.
 					if table.contains(water_lily_biomes, biome) and n21[index_2d] > 0.5 and math.random(1,15) == 1 then
@@ -457,9 +468,9 @@ function valc.generate(minp, maxp, seed)
 				if (y < ground - 5 or y < -100) and (data[index_3d] == node["air"] or data[index_3d] == node["river_water_source"] or data[index_3d] == node["water_source"]) then
 					relight = true
 
-					local stone_type = node["stone"]
-					local stone_depth = 1
-					local n23_val = n23[index_2d] + n22[index_2d]
+					stone_type = node["stone"]
+					stone_depth = 1
+					n23_val = n23[index_2d] + n22[index_2d]
 					if n23_val < -0.8 then
 						if y < deep then
 							stone_type = node["ice"]
@@ -509,7 +520,7 @@ function valc.generate(minp, maxp, seed)
 					end
 
 					if data[index_3d] == node["air"] then
-						local sr = math.random(1,1000)
+						sr = math.random(1,1000)
 
 						-- fluids
 						if (not huge_cave) and data[index_3d_below] == node["stone"] and sr < 10 then
@@ -578,8 +589,8 @@ function valc.generate(minp, maxp, seed)
 
 				if data[index_3d] == node["dirt"] or data[index_3d] == node["dirt_with_snow"] or data[index_3d] == node["dirt_with_grass"] or data[index_3d] == node["dirt_with_dry_grass"] or data[index_3d] == node["sand"] then
 					-- Choose biome, by default normal dirt
-					local soil = "dirt"
-					local max = math.max(v13, v14, v15) -- the biome is the maximal of these 3 values.
+					soil = "dirt"
+					max = math.max(v13, v14, v15) -- the biome is the maximal of these 3 values.
 					if max > dirt_threshold then -- if one of these values is bigger than dirt_threshold, make clayey, silty or sandy dirt, depending on the case. If none of clay, silt or sand is predominant, make normal dirt.
 						if v13 == max then
 							if v13 > clay_threshold then
@@ -611,7 +622,7 @@ function valc.generate(minp, maxp, seed)
 						data[index_3d] = soil_translate[soil].dry
 						write = true
 					elseif data[index_3d] == node["sand"] then
-						local sr = math.random(1,50)
+						sr = math.random(1,50)
 						if valc.glow and sr == 1 then
 							data[index_3d] = node["glowing_sand"]
 							write = true
