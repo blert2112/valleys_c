@@ -49,7 +49,7 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 			s.data[i].name = trunk
 		end
 		s.data[i].param1 = 255
-		s.data[i].force_place = true
+		s.data[i].force_place = false
 	end
 
 	-- some leaves for free
@@ -61,7 +61,7 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 			local i = (p.z+radii.z)*width*height + p.y*width + (p.x+radii.x) + 1
 			s.data[i].name = trunk
 			s.data[i].param1 = 255
-			s.data[i].force_place = true
+			s.data[i].force_place = false
 			valc.generate_leaves(s, leaf, p, radii.x, fruit, true)
 		end
 		-- or just do it randomly.
@@ -76,7 +76,7 @@ function valc.generate_tree_schematic(trunk_height, radii, trunk, leaf, fruit, l
 
 							s.data[i].name = trunk
 							s.data[i].param1 = 255
-							s.data[i].force_place = true
+							s.data[i].force_place = false
 							valc.generate_leaves(s, leaf, {x=x, y=trunk_top+y, z=z}, radii.x, fruit, true)
 						end
 					end

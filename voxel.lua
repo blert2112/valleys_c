@@ -296,7 +296,7 @@ function valc.generate(minp, maxp, seed)
 	--print(dump(gennotify))
 	local water_level = 1
 
-	data = vm:get_data(data) -- data is the original array of content IDs (solely or mostly air)
+	vm:get_data(data) -- data is the original array of content IDs (solely or mostly air)
 	-- Be careful: emin ≠ minp and emax ≠ maxp !
 	-- The data array is not limited by minp and maxp. It exceeds it by 16 nodes in the 6 directions.
 	-- The real limits of data array are emin and emax.
