@@ -10,6 +10,13 @@ minetest.add_group("default:jungleleaves", {leafdecay = 4})
 minetest.add_group("default:pine_needles", {leafdecay = 5})
 
 
+-- tree creation code
+dofile(valc.path.."/deco_deciduous.lua")
+dofile(valc.path.."/deco_conifer.lua")
+dofile(valc.path.."/deco_jungle.lua")
+dofile(valc.path.."/deco_banana.lua")
+
+
 -- a list of tree descriptions
 valc.treelist = {
 	{name="banana",
@@ -218,7 +225,7 @@ minetest.register_abm({
 			return
 		end
 
-		for _, sap in valc.saplings do
+		for _, sap in pairs(valc.saplings) do
 			if node.name == sap.sapling then
 				minetest.log("action", "A sapling grows into a tree at "..
 					minetest.pos_to_string(pos))
@@ -234,12 +241,6 @@ minetest.register_abm({
 	end,
 })
 
-
--- tree creation code
-dofile(valc.path.."/deco_deciduous.lua")
-dofile(valc.path.."/deco_conifer.lua")
-dofile(valc.path.."/deco_jungle.lua")
-dofile(valc.path.."/deco_banana.lua")
 
 if valc.glow then
 	dofile(valc.path.."/deco_lumin.lua")
