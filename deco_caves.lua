@@ -355,6 +355,24 @@ minetest.register_node("valleys_c:glow_obsidian_2", {
 })
 
 
+minetest.register_abm({
+	nodenames = {"group:hot"},
+	interval = 2,
+	chance = 1,
+	action = function(pos, node, active_object_count, active_object_count_wider)
+		for _,object in ipairs(minetest.env:get_objects_inside_radius(pos, 0.95)) do
+			if not minetest.registered_nodes[node.name] then
+				return
+			end
+			local dps = minetest.registered_nodes[node.name]["damage_per_second"]
+			if object.set_hp and object.get_hp and dps then
+				--print("damage. "..object:get_hp().." hit points left")
+				object:set_hp(object:get_hp() - dps)
+			end
+		end
+	end})
+
+
 --minetest.register_node("valleys_c:bright_air", {
 --	drawtype = "glasslike",
 --	tiles = {"technic_light.png"},
