@@ -7,28 +7,28 @@
 
 
 -- Define perlin noises used in this mapgen by default
-valc.noises = {}
+local noises = {}
 
 -- Noise 13 : Clayey dirt noise						2D
-valc.noises[13] = {offset = 0, scale = 1, seed = 2835, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
+noises[13] = {offset = 0, scale = 1, seed = 2835, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
 
 -- Noise 14 : Silty dirt noise						2D
-valc.noises[14] = {offset = 0, scale = 1, seed = 6674, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
+noises[14] = {offset = 0, scale = 1, seed = 6674, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
 
 -- Noise 15 : Sandy dirt noise						2D
-valc.noises[15] = {offset = 0, scale = 1, seed = 6940, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
+noises[15] = {offset = 0, scale = 1, seed = 6940, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
 
 -- Noise 16 : Beaches							2D
-valc.noises[16] = {offset = 2, scale = 8, seed = 2349, spread = {x = 256, y = 256, z = 256}, octaves = 3, persist = 0.5, lacunarity = 2}
+noises[16] = {offset = 2, scale = 8, seed = 2349, spread = {x = 256, y = 256, z = 256}, octaves = 3, persist = 0.5, lacunarity = 2}
 
 -- Noise 21 : Water plants							2D
-valc.noises[21] = {offset = 0.0, scale = 1.0, spread = {x = 200, y = 200, z = 200}, seed = 33, octaves = 3, persist = 0.7, lacunarity = 2.0}
+noises[21] = {offset = 0.0, scale = 1.0, spread = {x = 200, y = 200, z = 200}, seed = 33, octaves = 3, persist = 0.7, lacunarity = 2.0}
 
 -- Noise 22 : Cave blend							2D
-valc.noises[22] = {offset = 0.0, scale = 0.1, spread = {x = 8, y = 8, z = 8}, seed = 4023, octaves = 2, persist = 1.0, lacunarity = 2.0}
+noises[22] = {offset = 0.0, scale = 0.1, spread = {x = 8, y = 8, z = 8}, seed = 4023, octaves = 2, persist = 1.0, lacunarity = 2.0}
 
 -- Noise 23 : Cave noise							2D
-valc.noises[23] = {offset = 0.0, scale = 1.0, spread = {x = 400, y = 400, z = 400}, seed = 903, octaves = 3, persist = 0.5, lacunarity = 2.0}
+noises[23] = {offset = 0.0, scale = 1.0, spread = {x = 400, y = 400, z = 400}, seed = 903, octaves = 3, persist = 0.5, lacunarity = 2.0}
 
 -- localize math routines for performance
 local math_random = math.random
@@ -37,8 +37,8 @@ local math_min = math.min
 local math_floor = math.floor
 
 -- function to get noisemaps
-function valc.noisemap(i, minp, chulens)
-	local obj = minetest.get_perlin_map(valc.noises[i], chulens)
+local function noisemap(i, minp, chulens)
+	local obj = minetest.get_perlin_map(noises[i], chulens)
 	if minp.z then
 		return obj:get3dMap_flat(minp)
 	else
@@ -321,13 +321,13 @@ function valc.generate(minp, maxp, seed)
 	local biomemap = minetest.get_mapgen_object("biomemap")
 
 	-- Calculate the noise values
-	local n13 = valc.noisemap(13, minp2d, chulens)
-	local n14 = valc.noisemap(14, minp2d, chulens)
-	local n15 = valc.noisemap(15, minp2d, chulens)
-	local n16 = valc.noisemap(16, minp2d, chulens)
-	local n21 = valc.noisemap(21, minp2d, chulens)
-	local n22 = valc.noisemap(22, minp2d, chulens)
-	local n23 = valc.noisemap(23, minp2d, chulens)
+	local n13 = noisemap(13, minp2d, chulens)
+	local n14 = noisemap(14, minp2d, chulens)
+	local n15 = noisemap(15, minp2d, chulens)
+	local n16 = noisemap(16, minp2d, chulens)
+	local n21 = noisemap(21, minp2d, chulens)
+	local n22 = noisemap(22, minp2d, chulens)
+	local n23 = noisemap(23, minp2d, chulens)
 
 	local node_match_cache = {}
 
