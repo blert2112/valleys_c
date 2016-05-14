@@ -666,13 +666,13 @@ minetest.register_on_generated(function(minp, maxp, seed)
 	end
 
 	local t5 = os.clock()
-
-	table.insert(mapgen_times.noisemaps, 0)
-	table.insert(mapgen_times.preparation, t1 - t0)
-	table.insert(mapgen_times.loops, t2 - t1)
-	table.insert(mapgen_times.writing, t3 - t2 + t5 - t4)
-	table.insert(mapgen_times.liquid_lighting, t4 - t3)
-	table.insert(mapgen_times.make_chunk, t5 - t0)
+	
+	mapgen_times.noisemaps[#mapgen_times.noisemaps+1] = 0
+	mapgen_times.preparation[#mapgen_times.preparation+1] = t1 - t0
+	mapgen_times.loops[#mapgen_times.loops+1] = t2 - t1
+	mapgen_times.writing[#mapgen_times.writing+1] = t3 - t2 + t5 - t4
+	mapgen_times.liquid_lighting[#mapgen_times.liquid_lighting+1] = t4 - t3
+	mapgen_times.make_chunk[#mapgen_times.make_chunk+1] = t5 - t0
 
 	-- Deal with memory issues. This, of course, is supposed to be automatic.
 	local mem = math_floor(collectgarbage("count")/1024)
