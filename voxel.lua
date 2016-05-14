@@ -276,7 +276,7 @@ end
 local data = {}
 
 -- the mapgen function
-function valc.generate(minp, maxp, seed)
+minetest.register_on_generated(function(minp, maxp, seed)
 	local t0 = os.clock()
 
 	-- minp and maxp strings, used by logs
@@ -680,7 +680,7 @@ function valc.generate(minp, maxp, seed)
 		print("Valleys_c is manually collecting garbage as memory use has exceeded 500K.")
 		collectgarbage("collect")
 	end
-end
+end)
 
 local function mean( t )
   local sum = 0
@@ -722,9 +722,3 @@ minetest.register_on_shutdown(function()
 	average = mean(mapgen_times.writing)
 	minetest.log("  writing: - - - - - - - - - - - - - - - -  "..average)
 end)
-
-
--- Call the mapgen function valc.generate on mapgen.
---  (located in voxel.lua)
-minetest.register_on_generated(valc.generate)
-
