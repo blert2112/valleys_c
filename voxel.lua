@@ -18,7 +18,7 @@ noises[14] = {offset = 0, scale = 1, seed = 6674, spread = {x = 256, y = 256, z 
 -- Noise 15 : Sandy dirt noise						2D
 noises[15] = {offset = 0, scale = 1, seed = 6940, spread = {x = 256, y = 256, z = 256}, octaves = 5, persist = 0.5, lacunarity = 4}
 
--- Noise 16 : Beaches							2D
+-- Noise 16 : Beaches								2D
 noises[16] = {offset = 2, scale = 8, seed = 2349, spread = {x = 256, y = 256, z = 256}, octaves = 3, persist = 0.5, lacunarity = 2}
 
 -- Noise 21 : Water plants							2D
@@ -275,7 +275,6 @@ end
 
 local data = {}
 
-
 -- the mapgen function
 function valc.generate(minp, maxp, seed)
 	local t0 = os.clock()
@@ -283,32 +282,35 @@ function valc.generate(minp, maxp, seed)
 	-- minp and maxp strings, used by logs
 	local minps, maxps = minetest.pos_to_string(minp), minetest.pos_to_string(maxp)
 
-	-- The VoxelManipulator, a complicated but speedy method to set many nodes at the same time
-	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
-	local heightmap = minetest.get_mapgen_object("heightmap")
-	-- local heatmap = minetest.get_mapgen_object("heatmap")
-	local gennotify = minetest.get_mapgen_object("gennotify")
-	--print(dump(gennotify))
 	local water_level = 1
 
+	-- The VoxelManipulator, a complicated but speedy method to set many nodes at the same time
+	local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
+	-- The VoxelArea is used to convert a position into an index for the array.
+	local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
 	vm:get_data(data) -- data is the original array of content IDs (solely or mostly air)
 	-- Be careful: emin ≠ minp and emax ≠ maxp !
 	-- The data array is not limited by minp and maxp. It exceeds it by 16 nodes in the 6 directions.
 	-- The real limits of data array are emin and emax.
-	-- The VoxelArea is used to convert a position into an index for the array.
-	local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
-	local ystride = area.ystride -- Tip : the ystride of a VoxelArea is the number to add to the array index to get the index of the position above. It's faster because it avoids to completely recalculate the index.
-	local zstride = area.zstride
-	local chulens = vector.add(vector.subtract(maxp, minp), 1) -- Size of the generated area, used by noisemaps
 
+	-- Tip : the ystride of a VoxelArea is the number to add to the array index to get the index of
+	-- the position above. It's faster because it avoids to completely recalculate the index.
+	local ystride = area.ystride
+	local zstride = area.zstride
+
+	-- local heatmap = minetest.get_mapgen_object("heatmap")
+	local heightmap = minetest.get_mapgen_object("heightmap")
 	-- The biomemap is a table of biome index numbers for each horizontal
 	--  location. It's created in the mapgen, and is right most of the time.
 	--  It's off in about 1% of cases, for various reasons.
 	-- Bear in mind that biomes can change from one voxel to the next.
 	local biomemap = minetest.get_mapgen_object("biomemap")
+	local gennotify = minetest.get_mapgen_object("gennotify")
+	--print(dump(gennotify))
 
 	-- Calculate the noise values
 	local minp2d = {x = minp.x, y = minp.z}
+	local chulens = vector.add(vector.subtract(maxp, minp), 1) -- Size of the generated area
 	local n13 = noisemap(13, minp2d, chulens)
 	local n14 = noisemap(14, minp2d, chulens)
 	local n15 = noisemap(15, minp2d, chulens)
