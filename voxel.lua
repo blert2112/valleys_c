@@ -46,17 +46,6 @@ local function noisemap(i, minp, chulens)
 	end
 end
 
--- useful function to convert a 3D pos to 2D
-function pos2d(pos)
-	if type(pos) == "number" then
-		return {x = pos, y = pos}
-	elseif pos.z then
-		return {x = pos.x, y = pos.z}
-	else
-		return {x = pos.x, y = pos.y}
-	end
-end
-
 -- Check if a chunk contains a huge cave.
 -- This sucks. Use gennotify when possible.
 local function survey(data, area, maxp, minp, lava, water, air)
@@ -310,9 +299,7 @@ function valc.generate(minp, maxp, seed)
 	local area = VoxelArea:new({MinEdge = emin, MaxEdge = emax})
 	local ystride = area.ystride -- Tip : the ystride of a VoxelArea is the number to add to the array index to get the index of the position above. It's faster because it avoids to completely recalculate the index.
 	local zstride = area.zstride
-
 	local chulens = vector.add(vector.subtract(maxp, minp), 1) -- Size of the generated area, used by noisemaps
-	local minp2d = pos2d(minp)
 
 	-- The biomemap is a table of biome index numbers for each horizontal
 	--  location. It's created in the mapgen, and is right most of the time.
@@ -321,6 +308,7 @@ function valc.generate(minp, maxp, seed)
 	local biomemap = minetest.get_mapgen_object("biomemap")
 
 	-- Calculate the noise values
+	local minp2d = {x = minp.x, y = minp.z}
 	local n13 = noisemap(13, minp2d, chulens)
 	local n14 = noisemap(14, minp2d, chulens)
 	local n15 = noisemap(15, minp2d, chulens)
